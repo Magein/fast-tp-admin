@@ -1,6 +1,6 @@
 {
-  "name": "magein/php-tools",
-  "description": "常用类和thinkphp5开发用到的工具类",
+  "name": "fast-tp-admin",
+  "description": "基于tp5的后台管理模块",
   "type": "library",
   "homepage": "https://github.com/magein/php-tools",
   "license": "Apache-2.0",
