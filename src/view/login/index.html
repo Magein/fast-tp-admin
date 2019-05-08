@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+{include file="base/header"}
+<link href="/static/theme/css/login.css" type="text/css" rel="stylesheet">
+<body>
+<div class="login">
+    <div class="message">{$config.app_name}-用户登录</div>
+    <div id="darkbannerwrap"></div>
+    <form action="{:url('login')}"
+          onsubmit="return false;"
+          data-auto="true"
+          method="post"
+          autocomplete="off">
+        <input name="username" placeholder="用户名" value="admin" required="" type="text" class="layui-input">
+        <br/>
+        <input name="password" placeholder="密码" value="123456" required="" type="password" class="layui-input">
+        <br/>
+        <button type="submit" class="layui-btn layui-btn-fluid">登 录</button>
+    </form>
+</div>
+
+{include file="base/footer"}
+</body>
+</html>

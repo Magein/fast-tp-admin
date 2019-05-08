@@ -1,0 +1,95 @@
+<div class="layui-card-body">
+
+    <form class="layui-form layui-card layui-form-pane margin-10"
+          action="{:request()->url()}"
+          data-callback="reload"
+          data-auto="true"
+          method="post"
+          autocomplete="off">
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">上级菜单</label>
+            <div class="layui-input-block">
+                <select name='pid' class='layui-select full-width' lay-ignore>
+                    <option value='0'>一级菜单</option>
+                    {foreach $menus as $menu}
+                    {if $data && $menu['id']==$data['pid']}
+                    <option value='{$menu.id}' selected>{$menu.title}</option>
+                    {else/}
+                    <option value='{$menu.id}'>{$menu.title}</option>
+                    {/if}
+                    {/foreach}
+                </select>
+                <p class="help-block"><b>必选</b>，请选择上级菜单或顶级菜单（目前最多支持三级菜单）</p>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">菜单名称</label>
+            <div class="layui-input-block">
+                <input name="title" value='{$data.title|default=""}' required placeholder="请输入菜单名称" class="layui-input">
+                <p class="help-block"><b>必填</b>，请填写菜单名称（如：系统管理），建议字符不要太长，一般4-6个汉字</p>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">菜单链接</label>
+            <div class="layui-input-block">
+                <input name="url" placeholder="请输入菜单链接"
+                       value="{$data.url|default=''}" class="layui-input">
+                <p class="help-block">
+                    <b>必填</b>，请填写系统节点（如：/admin/user/index)
+                </p>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">链接参数</label>
+            <div class="layui-input-block">
+                <input name="params" placeholder="请输入链接参数" value="{$data.param|default=''}" class="layui-input">
+                <p class="help-block"><b>可选</b>，设置菜单链接的GET访问参数（如：name=1&age=3）</p>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">子菜单</label>
+            <div class="layui-input-block">
+                <input type="checkbox" name="children[add]" title="新增">
+                <input type="checkbox" name="children[edit]" title="编辑">
+                <input type="checkbox" name="children[del]" title="删除">
+                <p class="help-block"><b>可选</b>，设置菜单链接的GET访问参数（如：name=1&age=3）</p>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">菜单图标</label>
+            <div class="layui-input-block">
+                <div class="layui-input-inline">
+                    <input placeholder="请输入或选择图标"
+                           onchange="$(this).parent().next().find('i').get(0).className=this.value" name="icon"
+                           value='{$data.icon|default=""}' class="layui-input">
+                </div>
+                <span style="padding:0 12px;min-width:45px" class='layui-btn layui-btn-primary'>
+                    <i style="font-size:1.2em" class='{$data.icon|default=""} margin-0'></i>
+                </span>
+                <button data-icon='icon' type='button' class='layui-btn layui-btn-primary'>选择图标</button>
+                <p class="help-block"><b>可选</b>，设置菜单选项前置图标，目前只支持 Font Awesome 5.2.0 字体图标</p>
+            </div>
+        </div>
+
+
+        <div class="hr-line-dashed"></div>
+
+        <div class="layui-form-item text-center">
+            <input type='hidden' value='{$data.id|default=""}' name='id'>
+            <button class="layui-btn" type='submit'>保存数据</button>
+            <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+        </div>
+
+    </form>
+
+</div>
+
+<script>
+    window.form.render();
+</script>

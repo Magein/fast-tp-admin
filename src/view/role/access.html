@@ -1,0 +1,130 @@
+{extend name='base/main'}
+
+{block name="content"}
+
+<style>
+    ul.ztree li span.button.switch {
+        margin-right: 5px
+    }
+
+    ul.ztree ul ul li {
+        display: inline-block;
+        white-space: normal
+    }
+
+    ul.ztree > li > ul > li {
+        padding: 5px
+    }
+
+    ul.ztree > li {
+        background: #dae6f0
+    }
+
+    ul.ztree > li:nth-child(even) > ul > li:nth-child(even) {
+        background: #eef5fa
+    }
+
+    ul.ztree > li:nth-child(even) > ul > li:nth-child(odd) {
+        background: #f6fbff
+    }
+
+    ul.ztree > li:nth-child(odd) > ul > li:nth-child(even) {
+        background: #eef5fa
+    }
+
+    ul.ztree > li:nth-child(odd) > ul > li:nth-child(odd) {
+        background: #f6fbff
+    }
+
+    ul.ztree > li > ul {
+        margin-top: 12px
+    }
+
+    ul.ztree > li {
+        padding: 15px;
+        padding-right: 25px
+    }
+
+    ul.ztree li {
+        white-space: normal !important
+    }
+
+    ul.ztree > li > a > span {
+        font-size: 15px;
+        font-weight: 700
+    }
+</style>
+
+<ul id="zTree" class="ztree loading">
+    <li style="height:100px;"></li>
+</ul>
+
+<div class="hr-line-dashed"></div>
+
+<div class="layui-form-item text-center">
+    <button class="layui-btn data-submit-role" type='button'>保存数据</button>
+    <button class="layui-btn layui-btn-danger" type='button' onclick="window.history.back()">取消编辑</button>
+</div>
+{/block}
+
+{block name="script"}
+
+<script>
+    require(['jquery.ztree'], function () {
+
+        let setting = {
+            view: {
+                showLine: false,
+                showIcon: false,
+                dblClickExpand: false
+            },
+            check: {
+                enable: true,
+                nocheck: false,
+                chkboxType: {
+                    "Y": "ps",
+                    "N": "ps"
+                }
+            }
+        };
+
+        let nodes = '{$data}';
+
+        if (typeof nodes === "string") {
+            nodes = JSON.parse(nodes);
+        }
+
+        console.log(nodes);
+
+        $.fn.zTree.init($("#zTree"), setting, nodes);
+
+        $('.data-submit-role').on('click', function () {
+
+            let role_id = '{$id}';
+
+            let nodes = [];
+            let treeObj = $.fn.zTree.getZTreeObj("zTree");
+            let data = treeObj.getCheckedNodes(true);
+            if (data) {
+                for (let i in data) {
+                    nodes.push(data[i].id);
+                }
+            }
+
+            $.ajax({
+                url: '{:url()}',
+                type: 'post',
+                data: {
+                    role_id: role_id,
+                    menu_id: nodes
+                },
+                dataType: 'json',
+                success: function (resp) {
+                    layer.alert(resp.msg);
+                }
+            });
+        });
+    });
+</script>
+
+{/block}

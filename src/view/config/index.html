@@ -1,0 +1,66 @@
+{extend name="base/main"}
+
+{block name="content"}
+
+<form onsubmit="return false;" data-auto="true" method="post" action="{:url('save')}"
+      class='layui-form layui-card layui-form-pane'
+      autocomplete="off">
+    <div class="layui-card-body">
+        <div class="layui-form-item">
+            <label class="layui-form-label">程序名称</label>
+            <div class="layui-input-block">
+                <input name="app_name" placeholder="请输入程序名称" value="{$data.app_name|default=''}"
+                       class="layui-input">
+                <p class="help-block">当前程序名称，在后台主标题上显示</p>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">程序版本</label>
+            <div class="layui-input-block">
+                <input name="app_version" placeholder="请输入程序版本" value="{$data.app_version|default=''}"
+                       class="layui-input">
+                <p class="help-block">当前程序版本号，在后台主标题上标显示</p>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">网站名称</label>
+            <div class="layui-input-block">
+                <input name="site_name" placeholder="请输入网站名称" value="{$data.site_name|default=''}"
+                       class="layui-input">
+                <p class="help-block">网站名称，显示在浏览器标签上</p>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">版权信息</label>
+            <div class="layui-input-block">
+                <input name="site_copy" placeholder="请输入版权信息" value="{$data.site_copy|default=''}"
+                       class="layui-input">
+                <p class="help-block">程序的版权信息设置，在后台登录页面显示</p>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">浏览器图标</label>
+            <div class="layui-input-block">
+                <img src="{$data.site_icon}" style="width: 50px;"/>
+                <button type="button" class="layui-btn">上传图片</button>
+                <p class="help-block">建议上传ICO图标的尺寸为128x128px，此图标用于网站标题前</p>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">网站备案</label>
+            <div class="layui-input-block">
+                <input name="miitbeian" placeholder="请输入网站备案号" value="{$data.miitbeian|default=''}" class="layui-input">
+                <p class="help-block">网站备案号，可以在<a target="_blank" href="http://www.miitbeian.gov.cn">备案管理中心</a>查询获取</p>
+            </div>
+        </div>
+        <div class="hr-line-dashed margin-left-40"></div>
+        <div class="layui-form-item text-center">
+            <div class="layui-row">
+                <div class="layui-col-sm8 layui-col-md6">
+                    <button class="layui-btn" type="submit">保存配置</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{/block}

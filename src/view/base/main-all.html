@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+{/* 包含头部信息 */}
+{include file='admin@base/header'}
+
+{block name="style"}
+
+{/block}
+
+<body class="layui-layout-body">
+{block name='body'}
+<div class="layui-layout layui-layout-admin">
+
+    <!-- 顶部菜单 开始 -->
+    <div class="layui-header notselect">
+        <a href="{:url('@')}" class="layui-logo layui-elip">{$config.app_name} {if
+            $config.app_version}<sup
+                    class="padding-left-5">{$config.app_version}</sup>{/if}</a>
+        <ul class="layui-nav layui-layout-left">
+            {foreach $menus as $oneMenu}
+            <li class="layui-nav-item top-menu">
+                <a data-menu-node="m-{$oneMenu.id}" href="{$oneMenu.url|default='javascript:void(0)'}">
+                    {notempty name='oneMenu.icon'}
+                    <span class='{$oneMenu.icon} padding-right-5'></span>
+                    {/notempty}
+                    <span>{$oneMenu.title|default=''}</span>
+                </a>
+            </li>
+            {/foreach}
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            <!--<li lay-unselect class="layui-nav-item">-->
+            <!--<a data-reload>-->
+            <!--<i class="layui-icon layui-icon-refresh-3"></i>-->
+            <!--</a>-->
+            <!--</li>-->
+            {if $user}
+            <li class="layui-nav-item">
+                <dl class="layui-nav-child">
+                    <dd lay-unselect>
+                        <a data-modal="{:url('admin/user/info',['id'=>$user.id])}">
+                            <i class="layui-icon layui-icon-set-fill margin-right-5"></i>
+                            基本资料
+                        </a>
+                    </dd>
+                    <dd lay-unselect>
+                        <a data-modal="{:url('admin/user/password',['id'=>$user.id])}">
+                            <i class="layui-icon layui-icon-component margin-right-5"></i>
+                            修改密码
+                        </a>
+                    </dd>
+                    <dd lay-unselect>
+                        <a data-confirm="确定要退出登录吗？" data-load="{:url('login/logout')}"><i
+                                class="layui-icon layui-icon-release margin-right-5"></i>退出登录</a>
+                    </dd>
+                </dl>
+                <a>
+                    <span>
+                        <i class="layui-icon layui-icon-username margin-right-5"></i>
+                        {$user.nickname|default=$user.username}
+                    </span>
+                </a>
+            </li>
+            {else}
+            <li class="layui-nav-item">
+                <a href="{:url('login/index')}">
+                    <i class="layui-icon layui-icon-username"></i>
+                    立即登录
+                </a>
+            </li>
+            {/if}
+        </ul>
+    </div>
+    <!-- 顶部菜单 结束 -->
+
+    <!-- 左则菜单 开始 -->
+    <div class="layui-side layui-bg-black notselect">
+        <div class="layui-side-scroll">
+            <ul class="layui-nav layui-nav-tree layui-nav-tree-top">
+                <li class="layui-nav-item" lay-unselect><a class="text-center" data-target-menu-type><i
+                        class="layui-icon layui-icon-spread-left"></i></a></li>
+            </ul>
+            {foreach $menus as $oneMenu}
+
+            {if isset($oneMenu['child'])}
+            <ul class="layui-nav layui-nav-tree layui-hide" data-menu-layout="m-{$oneMenu.id}">
+                {foreach $oneMenu.child as $twoMenu}
+                {empty name='twoMenu.child'}
+                <li class="layui-nav-item">
+                    <a data-target-tips="{$twoMenu.title}"
+                       href="{$twoMenu.url}">
+                        <span class='{$twoMenu.icon|default="layui-icon layui-icon-link"}'></span>
+                        <span class="nav-text padding-left-5">{$twoMenu.title}</span>
+                    </a>
+                </li>
+                {else}
+                <li class="layui-nav-item layui-nav-itemed" data-submenu-layout='m-{$oneMenu.id}-{$twoMenu.id}'>
+                    <a data-target-tips="{$twoMenu.title}" style="background:#393D49">
+                        <span class='nav-icon layui-hide {$twoMenu.icon|default="layui-icon layui-icon-triangle-d"}'></span>
+                        <span class="nav-text padding-left-5">
+                             <i class="{$twoMenu.icon}"></i>
+                            {$twoMenu.title}
+                        </span>
+                    </a>
+                    <dl class="layui-nav-child">
+                        {foreach $twoMenu['child'] as $thrMenu}
+                        <dd>
+                            <a data-target-tips="{$thrMenu.title}" href="{$thrMenu.url}">
+                                <span class='nav-icon padding-left-5 {$thrMenu.icon|default="layui-icon layui-icon-link"}'></span>
+                                <span class="nav-text padding-left-5">{$thrMenu.title}</span>
+                            </a>
+                        </dd>
+                        {/foreach}
+                    </dl>
+                </li>
+                {/empty}
+                {/foreach}
+            </ul>
+            {/if}
+            {/foreach}
+        </div>
+    </div>
+    <!-- 左则菜单 结束 -->
+
+    <!-- 主体内容 开始 -->
+    <div class="layui-body">
+        <div class="layui-card">
+            {notempty name='title'}
+            <div class="layui-card-header layui-anim layui-anim-fadein notselect">
+                <span class="layui-icon font-s10 color-desc margin-right-5">&#xe65b;</span>{$title|default=''}
+                <div class="pull-right">{block name='button'}{/block}</div>
+            </div>
+            {/notempty}
+            <div class="layui-card-body layui-anim layui-anim-fadein">
+
+                {if $tips}
+                {foreach $tips as $item}
+                <blockquote class="layui-elem-quote layui-bg-{$item.color}">{$item.message}</blockquote>
+                {/foreach}
+                {/if}
+
+                {block name='content'}{/block}
+            </div>
+        </div>
+    </div>
+    <!-- 主体内容 结束 -->
+
+</div>
+{/block}
+
+
+{block name='footer'}
+{include file="admin@base/footer"}
+{/block}
+
+{block name="script"}
+
+{/block}
+</body>
+</html>

@@ -1,0 +1,105 @@
+{/* 滚动条样式 默认的滚动条由于不知名原因，显示的是一条线，这里动态修改一下 */}
+<style>
+    ::-webkit-input-placeholder {
+        color: #aaa
+    }
+
+    ::-webkit-scrollbar {
+        width: 3px;
+        height: 8px
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #ccc !important
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #009688 !important
+    }
+</style>
+{/* 滚动条样式结束 */}
+
+{/* 搜索框开始 */}
+{include file='admin@public/search'}
+{/* 搜索框结束 */}
+
+{/* 渲染表格主题区域 */}
+<table id="data-list" lay-filter="data-list">
+
+
+</table>
+{/* 渲染表格主题区域 */}
+
+{/* 分页代码 */}
+{if $page && $page.total!=0}
+<div id="page-container"></div>
+{/if}
+{/* 分页代码 */}
+
+{/* 表格渲染的数据信息 */}
+<script type="">
+
+    /**
+     * 表格数据
+     * @type {{header: string, page: string, list: string}}
+     */
+    var renderData = {
+        // 数据列表
+        list: '{$list|json_encode}',
+        // 头部信息
+        header: '{$header|json_encode}',
+        // 分页数据
+        page: '{$page|json_encode}',
+    };
+
+    /**
+     * 更新字段请求连接
+     * @type {string}
+     */
+    var updateFieldUrl = "{:url('updateField')}";
+
+    // 转化为json数据，上面使用的json_encode是php中的语法，得到的是字符串
+    for (var i in renderData) {
+        renderData[i] = renderData[i] && typeof renderData[i] === 'string' && JSON.parse(renderData[i]);
+    }
+</script>
+{/* 表格渲染的数据信息 */}
+
+{/* 左侧顶部按钮 */}
+<script type="text/html" id="leftTopButtons">
+    <div class="layui-btn-container">
+        {if $leftTopButtons}
+        {foreach $leftTopButtons as $item}
+        <button class="layui-btn {$item.cla|default='layui-btn-sm'}"
+                data-type="{$item.type|default='modal'}"
+                data-url="{:url($item.url)}"
+                data-title="{$item.title}"
+                data-param='{$item.param|default=[]|json_encode}'
+                lay-event="{$item.event|default='leftTopButtonEvent'}">
+            <i class="{$item.icon}"></i>{$item.title}
+        </button>
+        {/foreach}
+        {/if}
+    </div>
+</script>
+{/* 左侧顶部按钮 */}
+
+
+{/* 表格中操作按钮开始 */}
+<script type="text/html" id="operationButtons">
+    {if $operationButtons}
+    {foreach $operationButtons as $item}
+    <a class="layui-btn layui-btn-xs {$item.cla|default=''}"
+       data-type="{$item.type|default='modal'}"
+       data-url="{:url($item.url)}"
+       data-title="{$item.title}"
+       data-param='{$item.param|default=[]|json_encode}'
+       lay-event="{$item.event|default='operationButtonEvent'}">{$item.title}</a>
+    {/foreach}
+    {/if}
+</script>
+{/* 表格中操作按钮开始 */}
+
+<script type="text/html" id="menuIcon">
+    <i class="{{d.icon}}"></i>
+</script>

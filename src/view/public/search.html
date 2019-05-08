@@ -1,0 +1,56 @@
+{if $search}
+<caption class="margin-bottom-10 text-left">
+    <fieldset>
+        <legend class="layui-bg-cyan">条件搜索</legend>
+        <form class="layui-form layui-form-pane form-search" action="{:url('index')}"
+              onsubmit="return false" method="get" autocomplete="off">
+
+            {foreach $search as $item}
+
+            <input type="hidden" name="express[{$item.field}]" value="{$item.origin.express|default='eq'}">
+            <div class="layui-form-item layui-inline">
+                <label class="layui-form-label">{$item.title}</label>
+                <div class="layui-input-inline">
+
+                    {switch name='item.type'}
+
+                    {case value='select' break="1"}
+                    <select class="layui-select" name="status">
+                        <option selected="" value="">-- 全部 --</option>
+                        {if $item['option']}
+                        {foreach $item['option'] as $key=>$option}
+
+                        {if $item.value!=='' && $item.value == $key}
+                        <option value="{$key}" selected>{$option}</option>
+                        {else/}
+                        <option value="{$key}">{$option}</option>
+                        {/if}
+
+
+                        {/foreach}
+                        {/if}
+                    </select>
+                    {/case}
+
+                    {default /}
+                    <input type="{$item.type}" name="{$item.field}" value="{$item.value}" placeholder="请输入{$item.title}"
+                           class="layui-input">
+                    {/switch}
+                </div>
+            </div>
+            {/foreach}
+
+            <div class="layui-form-item layui-inline">
+
+                <button type="submit" class="layui-btn layui-btn-primary">
+                    <i class="layui-icon"></i> 搜 索
+                </button>
+
+                <button type="reset" class="layui-btn layui-btn-primary">
+                    <i class="layui-icon layui-icon-refresh"></i>重 置
+                </button>
+            </div>
+        </form>
+    </fieldset>
+</caption>
+{/if}
