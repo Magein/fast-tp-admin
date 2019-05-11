@@ -4,7 +4,7 @@ namespace app\admin\controller;
 
 use app\admin\component\system_ip\SystemIpConstant;
 use app\admin\component\system_menu\SystemMenuConstant;
-use magein\php_tools\admin\Constant;
+use magein\render\admin\Constant;
 use think\Request;
 
 class Cache extends Main

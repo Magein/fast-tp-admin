@@ -25,7 +25,7 @@ class Login extends Controller
         $config = SystemConfigLogic::instance()->getValue();
         $this->assign('config', $config);
 
-        return $this->fetch('admin@mian/index');
+        return $this->fetch('admin@main/login');
     }
 
     public function login()

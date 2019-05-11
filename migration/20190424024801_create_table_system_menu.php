@@ -3,7 +3,7 @@
 use think\migration\Migrator;
 use think\migration\db\Column;
 
-class CreateSystemMenuTable extends Migrator
+class CreateTableSystemMenu extends Migrator
 {
     /**
      * Change Method.

@@ -29,11 +29,20 @@ class CreateTableSystemIp extends Migrator
     public function change()
     {
         $data = [
-            'title' => '本地网络',
-            'ip' => '127.0.0.1',
-            'remark' => '本地开发环境',
-            'create_time' => time(),
-            'update_time' => time()
+            [
+                'title' => '本地网络',
+                'ip' => '0.0.0.0',
+                'remark' => '本地开发环境',
+                'create_time' => time(),
+                'update_time' => time()
+            ],
+            [
+                'title' => '本地网络',
+                'ip' => '127.0.0.1',
+                'remark' => '本地开发环境',
+                'create_time' => time(),
+                'update_time' => time()
+            ],
         ];
 
         $table = \magein\php_tools\extra\Migrate::get(

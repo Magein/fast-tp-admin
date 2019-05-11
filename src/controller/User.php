@@ -5,12 +5,12 @@ namespace app\admin\controller;
 
 use app\admin\logic\LoginLogic;
 use magein\php_tools\common\Password;
-use magein\php_tools\admin\RenderForm;
-use magein\php_tools\admin\component\Property;
+use magein\render\admin\RenderForm;
+use magein\render\admin\component\Property;
 use app\admin\component\system_role\SystemRoleLogic;
 use app\admin\component\system_user\SystemUserLogic;
 use app\admin\component\system_user\SystemUserValidate;
-use magein\php_tools\admin\Constant;
+use magein\render\admin\Constant;
 use think\Request;
 
 /**
