@@ -40,7 +40,7 @@ class Plugins
     public function icon()
     {
         $field = input('field');
-        return view('', ['field' => $field]);
+        return view('admin@main/icon', ['field' => $field]);
     }
 
 }

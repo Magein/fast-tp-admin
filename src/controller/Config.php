@@ -25,7 +25,7 @@ class Config extends Main
     {
         $data = SystemConfigLogic::instance()->getValue();
 
-        return view('', [
+        return view('main/config', [
             'data' => $data,
         ]);
     }

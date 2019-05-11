@@ -107,16 +107,19 @@ class User extends Main
 
         $data = SystemUserLogic::instance()->get($id);
 
-        $form = new RenderForm($data, $this->getDictionary());
+        $form = new RenderForm($data, $this->getWord());
         $form->setHidden('id');
-        $form->setText('username');
-        $form->setText('nickname');
-        $form->setText('phone');
-        $form->setText('email');
+        $form->setTexts(
+            [
+                'username',
+                'nickname',
+                'email'
+            ]
+        );
 
         $this->setFormItems($form);
 
-        return $this->fetch(self::PUBLIC_FORM);
+        return $this->fetch($this->formTemplate());
     }
 
     public function password()
@@ -168,6 +171,6 @@ class User extends Main
         $form->append((new Property())->setField('password')->setType('password')->setTitle('新密码'));
         $this->setFormItems($form);
 
-        return $this->fetch(self::PUBLIC_FORM);
+        return $this->fetch($this->formTemplate());
     }
 }

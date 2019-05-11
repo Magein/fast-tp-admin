@@ -147,7 +147,7 @@ class Menu extends Main
         // 兼容回填
         $this->assign('data', []);
 
-        return $this->fetch('form');
+        return $this->fetch('admin@main/menu');
     }
 
     public function edit()
@@ -163,7 +163,7 @@ class Menu extends Main
 
         $this->assign('menus', SystemMenuLogic::instance()->getLevelList());
 
-        return $this->fetch('form');
+        return $this->fetch('admin@main/menu');
     }
 
     /**
