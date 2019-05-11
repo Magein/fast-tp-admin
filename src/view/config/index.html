@@ -41,8 +41,8 @@
         <div class="layui-form-item">
             <label class="layui-form-label">浏览器图标</label>
             <div class="layui-input-block">
-                <img src="{$data.site_icon}" style="width: 50px;"/>
-                <button type="button" class="layui-btn">上传图片</button>
+                <a class="layui-btn upload-file" data-name="site_icon"
+                   data-value="{$data.site_icon|default=''}">上传图片</a>
                 <p class="help-block">建议上传ICO图标的尺寸为128x128px，此图标用于网站标题前</p>
             </div>
         </div>

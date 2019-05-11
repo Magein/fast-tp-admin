@@ -20,7 +20,7 @@ use think\Request;
  * @author Anyon <zoujingli@qq.com>
  * @date 2017/02/15 18:12
  */
-class User extends Basic
+class User extends Main
 {
 
     /**

@@ -12,7 +12,7 @@ use app\admin\component\system_ip\SystemIpLogic;
  * @author Anyon <zoujingli@qq.com>
  * @date 2017/02/15 18:12
  */
-class Ip extends Basic
+class Ip extends Main
 {
 
     /**

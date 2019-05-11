@@ -9,7 +9,7 @@ use app\admin\component\system_log\SystemLogLogic;
  * Class Log
  * @package app\admin\controller
  */
-class Log extends Basic
+class Log extends Main
 {
     /**
      * @var array

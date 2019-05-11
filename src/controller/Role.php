@@ -7,7 +7,7 @@ use app\admin\component\system_role\SystemRoleConstant;
 use app\admin\component\system_role\SystemRoleLogic;
 use think\Request;
 
-class Role extends Basic
+class Role extends Main
 {
     protected $operationColWidth = 180;
 

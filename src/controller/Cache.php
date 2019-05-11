@@ -7,7 +7,7 @@ use app\admin\component\system_menu\SystemMenuConstant;
 use magein\php_tools\admin\Constant;
 use think\Request;
 
-class Cache extends Basic
+class Cache extends Main
 {
     /**
      * @var array
@@ -38,8 +38,8 @@ class Cache extends Basic
     {
         return [
             [
-                'message' => '缓存管理需要开发人员在代码中配置',
                 'color' => 'green',
+                'message' => '缓存管理需要开发人员在代码中配置',
             ]
         ];
     }

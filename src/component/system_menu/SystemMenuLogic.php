@@ -106,7 +106,6 @@ class SystemMenuLogic extends Logic
 
         $tree = function ($records) {
 
-            //第二部 遍历数据 生成树状结构
             $result = array();
             foreach ($records as $key => $item) {
                 if (isset($records[$item['pid']])) {

@@ -31,25 +31,24 @@
 {/* 渲染表格主题区域 */}
 
 {/* 分页代码 */}
-{if $page && $page.total!=0}
+{if isset($page) }
 <div id="page-container"></div>
 {/if}
 {/* 分页代码 */}
 
 {/* 表格渲染的数据信息 */}
-<script type="">
-
+<script type="text/javascript">
     /**
      * 表格数据
      * @type {{header: string, page: string, list: string}}
      */
     var renderData = {
         // 数据列表
-        list: '{$list|json_encode}',
+        list: {$list|json_encode},
         // 头部信息
-        header: '{$header|json_encode}',
+        header: {$header|json_encode},
         // 分页数据
-        page: '{$page|json_encode}',
+        page: {$page|json_encode},
     };
 
     /**
@@ -57,11 +56,6 @@
      * @type {string}
      */
     var updateFieldUrl = "{:url('updateField')}";
-
-    // 转化为json数据，上面使用的json_encode是php中的语法，得到的是字符串
-    for (var i in renderData) {
-        renderData[i] = renderData[i] && typeof renderData[i] === 'string' && JSON.parse(renderData[i]);
-    }
 </script>
 {/* 表格渲染的数据信息 */}
 
@@ -100,6 +94,8 @@
 </script>
 {/* 表格中操作按钮开始 */}
 
+{/* 菜单图标的渲染模板开始 */}
 <script type="text/html" id="menuIcon">
     <i class="{{d.icon}}"></i>
 </script>
+{/* 菜单图标的渲染模板结束 */}

@@ -15,14 +15,19 @@ use think\Hook;
 use think\Request;
 use think\View;
 
-class Basic extends Controller
+class Main extends Controller
 {
     use FastBuild;
 
     /**
      * 渲染方式：表单路径
      */
-    const PUBLIC_FORM = 'admin@public/form/modal';
+    const PUBLIC_FORM_MODAL = 'admin@public/form/modal';
+
+    /**
+     * 渲染方式：表单路径
+     */
+    const PUBLIC_FORM_OPEN = 'admin@public/form/open';
 
     /**
      * 渲染方式：表格路径
@@ -39,14 +44,11 @@ class Basic extends Controller
      */
     public function _initialize()
     {
-
-
         $this->init();
     }
 
     protected function init()
     {
-
         /**
          * 如果没有在配置文件中注册验证登录的行为，则自动调用
          */
@@ -101,9 +103,9 @@ class Basic extends Controller
 
         $key = array_search($path, $allow);
 
-        if (false === $key) {
-            $this->error('您没有获取访问改路径的权限');
-        }
+//        if (false === $key) {
+//            $this->error('您没有获取访问改路径的权限');
+//        }
 
         $node = [];
         if (isset($menus[$key])) {
@@ -135,7 +137,7 @@ class Basic extends Controller
                 // 面包削
                 'title' => $this->title,
                 // 页面提示
-                'tips' => $this->tips,
+                'tips' => $this->getTips(),
                 // 菜单
                 'menus' => $menus,
 
@@ -153,6 +155,7 @@ class Basic extends Controller
 
     public function index()
     {
+
         $limit = Request::instance()->get('limit');
         if ($limit) {
             $this->limit = $limit;
@@ -171,19 +174,20 @@ class Basic extends Controller
         /**
          * 获取头部信息在获取数据前执行，以便于处理获取器的值
          */
-        $this->getHeader();
+        $header = $this->buildTable();
+        $this->assign('header', array_values($header));
 
         $queryResult = $this->getList($condition);
         if ($queryResult instanceof QueryResult) {
-            $this->assign('page', $queryResult->getPage());
-            $this->assign('list', $queryResult->getList());
+            $page = $queryResult->getPage();
+            $list = $queryResult->getList();
         } else {
-            $this->assign('page', []);
-            $this->assign('list', $queryResult);
+            $page = [];
+            $list = $queryResult;
         }
 
-
-        $this->assign('header', $this->getHeader());
+        $this->assign('page', array_values($page));
+        $this->assign('list', array_values($list));
 
         // 表格列中的操作按钮
         $this->assign('operationButtons', $this->getOperationButton());
@@ -213,6 +217,18 @@ class Basic extends Controller
     }
 
     /**
+     * @return string
+     */
+    protected function formTemplate()
+    {
+        if (Request::instance()->param('open')) {
+            return self::PUBLIC_FORM_OPEN;
+        }
+
+        return self::PUBLIC_FORM_MODAL;
+    }
+
+    /**
      * 新增页面
      * @return mixed
      */
@@ -223,8 +239,9 @@ class Basic extends Controller
         }
 
         $this->setFormItems($this->buildForm($this->form()));
+        $this->assign('data', []);
 
-        return $this->fetch(self::PUBLIC_FORM);
+        return $this->fetch($this->formTemplate());
     }
 
     /**
@@ -238,12 +255,15 @@ class Basic extends Controller
         }
 
         $id = Request::instance()->param('id');
-
-        $render = $this->buildForm($this->form(), $this->getData($id));
+        $data = $this->getData($id);
+        $render = $this->buildForm($this->form(), $data);
         $render->setHidden('id', $id);
         $this->setFormItems($render);
 
-        return $this->fetch(self::PUBLIC_FORM);
+        // 把获取到的值传递到前段，以适应其他的各种交互操作
+        $this->assign('data', $data);
+
+        return $this->fetch($this->formTemplate());
     }
 
     /**

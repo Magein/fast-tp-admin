@@ -2,13 +2,15 @@
 
 namespace app\admin\controller;
 
-use app\common\extend\Upload;
+use magein\php_tools\extra\Upload;
 use magein\php_tools\extra\UEditor;
 use think\Request;
 use think\response\Json;
+use traits\controller\Jump;
 
 class Plugins
 {
+    use Jump;
 
     public function editor()
     {
@@ -16,6 +18,19 @@ class Plugins
         $ue = new UEditor();
         $result = $ue->init($params);
         return Json::create($result);
+    }
+
+    /**
+     * 文件上传
+     */
+    public function upload()
+    {
+        $result = Upload::instance()->image();
+        if ($result) {
+            $this->success('success', '', $result);
+        }
+
+        $this->error(Upload::instance()->getError());
     }
 
     /**

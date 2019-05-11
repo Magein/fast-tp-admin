@@ -1,8 +1,10 @@
 {extend name='admin@base/main'}
 
 {block name="content"}
-
-{include file="admin@public/form/template"}
+<fieldset class="layui-elem-field">
+    <legend>请填写以下表格</legend>
+    {include file="admin@public/form/template"}
+</fieldset>
 
 {/block}
 

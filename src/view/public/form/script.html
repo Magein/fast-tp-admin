@@ -49,17 +49,34 @@
             })
         })();
 
-        var province_id = '';
+        /**
+         * 城市数据联动，并且回填数据
+         */
+        var province_id = '{$data.province_id|default=""}';
+        var city_id = '{$data.city_id|default=""}';
+        var area_id = '{$data.area_id|default=""}';
+        changeCity(province_id, city_id);
         window.form.on('select(province_id)', function (data) {
             province_id = data.value;
             changeCity(province_id);
         });
 
+        /**
+         * 县区数据联动
+         */
+        changeArea(province_id, city_id, area_id);
         window.form.on('select(city_id)', function (data) {
             changeArea(province_id, data.value);
         });
 
-        function changeCity(province_id) {
+        /**
+         * 切换城市
+         */
+        function changeCity(province_id, value) {
+
+            if (!province_id) {
+                return false;
+            }
 
             let data = REGION[province_id];
             if (data === undefined) {
@@ -80,11 +97,27 @@
 
             $('[name=city_id]').html(option);
 
+            // 回填数据
+            if (value) {
+                $('[name=city_id] option[value=' + value + ']').attr('selected', 'selected');
+            }
+
             window.form.render();
         }
 
-        function changeArea(province_id, city_id) {
-            console.log(province_id, city_id);
+        /**
+         * 切换区域信息
+         * @param province_id
+         * @param city_id
+         * @param value
+         * @returns {boolean}
+         */
+        function changeArea(province_id, city_id, value) {
+
+            if (!province_id || !city_id) {
+                return false;
+            }
+
             let children = REGION[province_id]['children'][city_id]['children'];
             if (children === undefined) {
                 return false;
@@ -97,6 +130,11 @@
             }
 
             $('[name=area_id]').html(option);
+
+            // 回填数据
+            if (value) {
+                $('[name=area_id] option[value=' + value + ']').attr('selected', 'selected');
+            }
 
             window.form.render();
         }

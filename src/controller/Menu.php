@@ -6,7 +6,7 @@ use app\admin\component\system_menu\SystemMenuConstant;
 use app\admin\component\system_menu\SystemMenuLogic;
 use think\Request;
 
-class Menu extends Basic
+class Menu extends Main
 {
 
     protected $title = '系统菜单';
@@ -43,7 +43,7 @@ class Menu extends Basic
             ['field' => 'id', 'width' => 60],
             ['field' => 'icon', 'width' => 60, 'templet' => '#menuIcon'],
             'title',
-            'url',
+            ['field' => 'url', 'edit' => 'text'],
             ['field' => 'sort', 'edit' => 'text'],
         ];
     }
@@ -51,6 +51,12 @@ class Menu extends Basic
     protected function operationAfter($result, $data = [], $class = null)
     {
         \think\Cache::store('file')->rm(SystemMenuConstant::SYSTEM_MENU_TREE_LIST_NAME);
+
+        if ($result) {
+            $this->success('操作成功');
+        }
+
+        $this->error('操作失败');
     }
 
     public function save($data = [], $validate = null)
@@ -60,7 +66,7 @@ class Menu extends Basic
             $data = Request::instance()->post();
         }
 
-        $children = $data['children'];
+        $children = isset($data['children']) ? $data['children'] : [];
 
         unset($data['children']);
 

@@ -4,6 +4,7 @@ namespace app\admin\controller;
 
 use app\admin\component\system_config\SystemConfigLogic;
 use think\Request;
+use think\View;
 
 /**
  * 后台参数配置控制器
@@ -12,7 +13,7 @@ use think\Request;
  * @author Anyon <zoujingli@qq.com>
  * @date 2017/02/15 18:05
  */
-class Config extends Basic
+class Config extends Main
 {
 
     protected $title = '系统参数';
@@ -36,6 +37,11 @@ class Config extends Basic
         $param = [];
         if ($data) {
             foreach ($data as $key => $item) {
+
+                if (is_array($item)) {
+                    $item = array_pop($item);
+                }
+
                 $param[] = [
                     'name' => $key,
                     'value' => $item,
