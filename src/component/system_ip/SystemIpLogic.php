@@ -72,6 +72,8 @@ class SystemIpLogic extends Logic
 
             foreach ($allowIp as $item) {
 
+                $item = trim($item);
+
                 $item = explode('.', $item);
 
                 $diff = array_diff($item, $ip);
