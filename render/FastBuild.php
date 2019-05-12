@@ -49,18 +49,6 @@ trait FastBuild
     protected $primaryKey = 'id';
 
     /**
-     * 表格默认宽度
-     * @var null
-     */
-    protected $width = null;
-
-    /**
-     * 表单的栅格值
-     * @var int
-     */
-    protected $grid = 8;
-
-    /**
      * 隐藏全选框
      * @var bool
      */
@@ -132,6 +120,11 @@ trait FastBuild
      * @var string
      */
     protected $order = 'id desc';
+
+    /**
+     * @var array
+     */
+    protected $origin = [];
 
     /**
      * 获取对应的类
@@ -314,10 +307,10 @@ trait FastBuild
     }
 
     /**
-     * 获取头部信息
+     * 构建表格数据
      * @return array
      */
-    protected function getHeader()
+    protected function buildTable()
     {
         $headers = $this->header();
 
@@ -354,10 +347,6 @@ trait FastBuild
                 }
 
                 $item['title'] = $title;
-
-                if ($this->width) {
-                    $item['width'] = $this->width;
-                }
 
             }
             unset($item);
@@ -400,20 +389,20 @@ trait FastBuild
 
         // 识别一个字符串
         if (is_string($data)) {
-            $property->setField($data);
+            $data = [
+                'field' => $data
+            ];
         } else {
-            // 识别带键值的数据
-            if (isset($data['field'])) {
-                $data['type'] = isset($data['type']) ? $data['type'] : 'select';
-                $property->init($data);
-            } else {
+
+            if (!isset($data['field'])) {
                 /**
                  * 下面是懒到极致的写法
                  *
                  * 不建议用，不限制用
                  */
                 $field = isset($data[0]) ? $data[0] : '';
-                $property->setField($field);
+                $type = 'select';
+                $option = [];
 
                 /**
                  * 兼容
@@ -421,13 +410,12 @@ trait FastBuild
                  * ['intro','textArea']
                  * ['name','text']
                  */
-                $type = isset($data[1]) ? $data[1] : '';
-                if ($type) {
-                    if (is_array($type)) {
-                        $property->setType('select');
-                        $property->setOption($type);
-                    } elseif (is_string($type)) {
-                        $property->setType($type);
+                $second = isset($data[1]) ? $data[1] : '';
+                if ($second) {
+                    if (is_array($second)) {
+                        $option = $second;
+                    } elseif (is_string($second)) {
+                        $type = $second;
                     }
                 }
 
@@ -436,12 +424,24 @@ trait FastBuild
                  * ['scene','select',[1=>'公司',2=>'家']]
                  * ['scene','radio',[1=>'公司',2=>'家']]
                  */
-                $option = isset($data[2]) ? $data[2] : [];
-                if ($option) {
-                    $property->setOption($option);
+                $third = isset($data[2]) ? $data[2] : [];
+                if ($third) {
+                    $option = $third;
                 }
+
+                $data = [
+                    'type' => $type,
+                    'option' => $option,
+                    'field' => $field
+                ];
+
             }
         }
+
+        // 合并表单的其他参数
+        $data = array_merge($this->origin, $data);
+        
+        $property->init($data);
 
         return $property;
     }
