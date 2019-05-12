@@ -52,6 +52,10 @@ class Menu extends Main
     {
         \think\Cache::store('file')->rm(SystemMenuConstant::SYSTEM_MENU_TREE_LIST_NAME);
 
+        if (isset($this->flag) && $this->flag) {
+            return true;
+        }
+
         if ($result) {
             $this->success('操作成功');
         }
@@ -61,7 +65,6 @@ class Menu extends Main
 
     public function save($data = [], $validate = null)
     {
-
         if (empty($data)) {
             $data = Request::instance()->post();
         }
@@ -70,10 +73,11 @@ class Menu extends Main
 
         unset($data['children']);
 
+        $this->flag = true;
+
         $pid = parent::save($data);
 
         $result = true;
-
 
         if ($pid && $children) {
 
@@ -111,7 +115,8 @@ class Menu extends Main
                     'pid' => $pid,
                     'title' => $title,
                     'url' => implode('/', $url),
-                    'icon' => $icon
+                    'icon' => $icon,
+                    'node' => '',
                 ];
 
                 $record = SystemMenuLogic::instance()->setCondition(['url' => $data['url']])->find();

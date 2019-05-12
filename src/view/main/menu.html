@@ -81,6 +81,8 @@
         <div class="hr-line-dashed"></div>
 
         <div class="layui-form-item text-center">
+            {/* 兼容处理tp的修改器，防止修改sort的时候node值为空 */}
+            <input type='hidden' value='' name='node'>
             <input type='hidden' value='{$data.id|default=""}' name='id'>
             <button class="layui-btn" type='submit'>保存数据</button>
             <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>

@@ -13,10 +13,6 @@ class SystemMenuModel extends Model
         'create_time',
     ];
 
-    protected $auto = [
-        'node'
-    ];
-
     /**
      * @param $value
      * @param $data
@@ -59,5 +55,25 @@ class SystemMenuModel extends Model
         }
 
         return [];
+    }
+
+    /**
+     * @param $value
+     * @return bool|string
+     */
+    protected function setUrlAttr($value)
+    {
+        if ($value) {
+
+            $value = trim($value, '/');
+
+            if (!preg_match('/^admin/', $value)) {
+                $value = 'admin/' . $value;
+            }
+
+            return $value;
+        }
+
+        return false;
     }
 }
