@@ -33,7 +33,7 @@ class CreateTableSystemCache extends Migrator
             [
                 ['title', 'string', ['comment' => '名称']],
                 ['key', 'string', ['comment' => '键']],
-                ['store', 'integer', ['limit' => \Phinx\Db\Adapter\MysqlAdapter::INT_TINY, 'comment' => '驱动方式']],
+                ['store', 'string', ['comment' => '驱动方式']],
                 ['description', 'string', ['default' => '', 'comment' => '描述']]
             ]
         );
