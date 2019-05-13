@@ -76,6 +76,8 @@ class Main extends Controller
 
         $path = Request::instance()->path();
 
+        $path = strtolower($path);
+
         $menus = SystemMenuLogic::instance()->getList();
 
         /**
