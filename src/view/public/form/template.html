@@ -120,10 +120,18 @@
         {/* 多行文本域开始 */ }
         {case textArea}
         <div class="layui-input-block">
-            <textarea name="{$item.field}" id="editor-{$item.field}" class="editor" {if $item.required }required{/if}>{$item.value}</textarea>
+            <textarea name="{$item.field}"  class="layui-textarea" {if $item.required }required{/if}>{$item.value}</textarea>
         </div>
         {/case}
         {/* 多行文本域结束 */ }
+
+        {/* 富文本编辑器开始 */ }
+        {case editor}
+        <div class="layui-input-block">
+            <textarea name="{$item.field}" id="editor-{$item.field}" class="editor" {if $item.required }required{/if}>{$item.value}</textarea>
+        </div>
+        {/case}
+        {/* 富文本编辑器开始 */ }
 
         {/* 文件上传开始 */}
         {case file}
@@ -137,7 +145,6 @@
             >
                 选择文件
             </a>
-
         </div>
         {/case}
         {/* 文件上传结束 */}

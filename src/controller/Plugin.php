@@ -8,7 +8,7 @@ use think\Request;
 use think\response\Json;
 use traits\controller\Jump;
 
-class Plugins
+class Plugin
 {
     use Jump;
 

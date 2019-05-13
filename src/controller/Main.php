@@ -101,6 +101,9 @@ class Main extends Controller
             }
         }
 
+        /**
+         * 验证访问的路径是否在 用户角色权限内
+         */
         $key = array_search($path, $allow);
 
 //        if (false === $key) {
@@ -110,18 +113,19 @@ class Main extends Controller
         $node = [];
         if (isset($menus[$key])) {
             $node = $menus[$key]['node'];
+            // 自动注册页面标题
             $this->title = $this->title ?: $menus[$key]['title'];
         }
 
+
         if ($node) {
-
             foreach ($menus as $key => $item) {
-
-                if (empty($item['node'])) {
+                if ($item['pid'] == 0) {
                     continue;
                 }
+                $value = isset($item['node'][0]) ? $item['node'][0] : '';
 
-                if (in_array($item['node'][0], $node)) {
+                if ($value && in_array($value, $node)) {
                     continue;
                 }
                 unset($menus[$key]);

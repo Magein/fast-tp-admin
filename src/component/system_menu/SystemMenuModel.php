@@ -30,17 +30,18 @@ class SystemMenuModel extends Model
      */
     protected function setNodeAttr($value, $data)
     {
-        if (!isset($data['pid'])) {
-            return false;
+        if (empty($value) && isset($data['pid'])) {
+
+            static $records = [];
+
+            if (empty($records)) {
+                $records = SystemMenuLogic::instance()->getLevelList();
+            }
+
+            $value = isset($records[$data['pid']]) ? $records[$data['pid']]['node'] : '';
         }
 
-        static $records = [];
-
-        if (empty($records)) {
-            $records = SystemMenuLogic::instance()->getLevelList();
-        }
-
-        return $value = isset($records[$data['pid']]) ? $records[$data['pid']]['node'] : '';
+        return $value;
     }
 
     /**

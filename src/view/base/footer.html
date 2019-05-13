@@ -37,9 +37,9 @@
                 }
         },
         paths: {
-            'ueditor': ['plugins/ueditor/ueditor.all.min'],
-            'ueditor.config': ['plugins/ueditor/ueditor.config'],
-            'ZeroClipboard': ['plugins/ueditor/third-party/zeroclipboard/ZeroClipboard'],
+            'ueditor': ['plugin/ueditor/ueditor.all.min'],
+            'ueditor.config': ['plugin/ueditor/ueditor.config'],
+            'ZeroClipboard': ['plugin/ueditor/third-party/zeroclipboard/ZeroClipboard'],
             'jquery': ['https://cdn.staticfile.org/jquery/2.2.1/jquery.min.js'],
             'jquery.ztree': ['https://cdn.staticfile.org/zTree.v3/3.5.40/js/jquery.ztree.all.min'],
             // 需要注意版本信息
@@ -603,7 +603,7 @@
 
                 upload.render({
                     elem: '#' + id,
-                    url: '/admin/plugins/upload',
+                    url: '/admin/plugin/upload',
                     field: field,
                     accept: accept,
                     exts: ext,
