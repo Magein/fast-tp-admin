@@ -696,8 +696,13 @@ fieldset {
     margin-top: 10px;
 }
 
+.image-list > div {
+    float: left;
+}
+
 .image-list img {
     width: 80px;
+    height: 80px;
     max-height: 110px;
     margin: 5px 0px;
     padding-left: 10px;

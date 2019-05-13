@@ -119,7 +119,6 @@ class Main extends Controller
             $this->title = $this->title ?: $menus[$key]['title'];
         }
 
-
         if ($node) {
             foreach ($menus as $key => $item) {
                 if ($item['pid'] == 0) {

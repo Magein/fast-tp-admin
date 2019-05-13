@@ -9,7 +9,7 @@ class SystemCacheValidate extends Validate
     protected $rule = [
         'title' => 'require|length:1,255',
         'key' => 'require|length:1,255',
-        'store' => 'require|integer|between:1,127',
+        'store' => 'require|integer|in:1,2,3',
         'description' => 'require|length:1,255',
     ];
 
@@ -20,7 +20,7 @@ class SystemCacheValidate extends Validate
         'key.length' => '键长度不正确,允许的长度1~255',
         'store.require' => '请输入驱动方式',
         'store.integer' => '驱动方式格式错误',
-        'store.between' => '驱动方式取值范围在 1~127',
+        'store.in' => '驱动方式可选值1,2,3',
         'description.require' => '请输入描述',
         'description.length' => '描述长度不正确,允许的长度1~255',
     ];

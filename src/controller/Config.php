@@ -37,11 +37,6 @@ class Config extends Main
         $param = [];
         if ($data) {
             foreach ($data as $key => $item) {
-
-                if (is_array($item)) {
-                    $item = array_pop($item);
-                }
-
                 $param[] = [
                     'name' => $key,
                     'value' => $item,

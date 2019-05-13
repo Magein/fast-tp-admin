@@ -21,7 +21,7 @@ class Cache extends Main
         $this->operationButtons['clear'] = [
             'title' => '清除',
             'url' => 'clear',
-            'param' => ['name' => '__name__', 'store' => '__store__'],
+            'param' => ['key' => '__key__', 'store' => '__store__'],
             'type' => 'other'
         ];
 
@@ -47,7 +47,7 @@ class Cache extends Main
         return [
             'title',
             'key',
-            'store',
+            'store_text',
             'description',
         ];
     }
@@ -60,22 +60,22 @@ class Cache extends Main
         return [
             'title',
             'key',
-            'store',
+            ['store', SystemCacheLogic::instance()->transStore()],
             'description',
         ];
     }
 
     public function clear()
     {
-        $name = Request::instance()->param('name');
+        $key = Request::instance()->param('key');
 
         $store = Request::instance()->param('store');
 
-        if (empty($name) || empty($store)) {
+        if (empty($key) || empty($store)) {
             $this->error('参数错误');
         }
 
-        \think\Cache::store($store)->rm($name);
+        \think\Cache::store($store)->rm($key);
 
         $this->success('已清除完毕');
     }
