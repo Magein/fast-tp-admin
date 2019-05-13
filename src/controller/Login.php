@@ -12,6 +12,7 @@ use app\admin\component\system_user\SystemUserConstant;
 use app\admin\component\system_user\SystemUserLogic;
 use think\Controller;
 use think\Request;
+use think\Env;
 
 /**
  * Class Login
@@ -36,10 +37,15 @@ class Login extends Controller
         /**
          * 验证IP
          */
-        if (false === SystemIpLogic::instance()->checkIp()) {
-            $this->error('登录失败，错误代码：1001');
+        if (Env::get('admin.check_ip')) {
+            if (false === SystemIpLogic::instance()->checkIp()) {
+                $this->error('登录失败，错误代码：1001',
+                    [
+                        'ip' => Request::instance()->ip(),
+                        'check_ip' => Env::get('admin.check_ip')
+                    ]);
+            }
         }
-
 
         $record = SystemUserLogic::instance()->getByUsername($username);
 
