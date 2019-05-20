@@ -2,7 +2,7 @@
 
 namespace app\admin\component\system_menu;
 
-use app\common\extra\TreeStructure;
+use magein\php_tools\common\TreeStructure;
 use magein\php_tools\think\Logic;
 use think\Cache;
 

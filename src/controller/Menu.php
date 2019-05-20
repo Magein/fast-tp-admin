@@ -29,7 +29,7 @@ class Menu extends Main
      */
     protected function getList($condition = [], $query_type = 'paginate')
     {
-        $menus = SystemMenuLogic::instance()->getLevelList();
+        $menus = SystemMenuLogic::instance()->floor();
 
         return array_values($menus);
     }
@@ -147,7 +147,7 @@ class Menu extends Main
             $this->save(Request::instance()->post());
         }
 
-        $this->assign('menus', SystemMenuLogic::instance()->getLevelList());
+        $this->assign('menus', SystemMenuLogic::instance()->floor());
 
         // 兼容回填
         $this->assign('data', []);
@@ -166,7 +166,7 @@ class Menu extends Main
         $data = SystemMenuLogic::instance()->get($id);
         $this->assign('data', $data);
 
-        $this->assign('menus', SystemMenuLogic::instance()->getLevelList());
+        $this->assign('menus', SystemMenuLogic::instance()->floor());
 
         return $this->fetch('admin@main/menu');
     }
