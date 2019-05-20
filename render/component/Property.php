@@ -2,6 +2,7 @@
 
 namespace magein\render\admin\component;
 
+use magein\php_tools\common\Variable;
 use magein\php_tools\traits\ObjectInit;
 
 class Property
@@ -62,8 +63,6 @@ class Property
      */
     public function __construct($data = [])
     {
-        $this->origin = $data;
-
         $this->init($data);
     }
 
@@ -201,11 +200,18 @@ class Property
     }
 
     /**
-     * @return array
+     * @return string
      */
     public function getAttrs()
     {
-        return $this->attrs;
+        $attrs = '';
+        if ($this->attrs) {
+            foreach ($this->attrs as $key => $attr) {
+                $attrs .= $key . '="' . $attr . '"' . ' ';
+            }
+        }
+
+        return $attrs;
     }
 
     /**

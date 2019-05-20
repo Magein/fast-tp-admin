@@ -118,6 +118,7 @@ class RenderForm
          * 暂时全部传递
          */
         $properties['origin'] = $property->getOrigin();
+        $properties['attrs'] = $property->getAttrs();
 
         $this->items[$field] = $properties;
 
@@ -131,6 +132,7 @@ class RenderForm
      * @param bool $required
      * @param null $title
      * @param array $attrs
+     * @param Property
      */
     private function properties($type, $field, $value = '', $required = true, $title = null, $attrs = [])
     {
@@ -142,6 +144,8 @@ class RenderForm
         $property->setRequired($required);
         $property->setAttrs($attrs);
         $this->append($property);
+
+        return $property;
     }
 
     /**
@@ -167,9 +171,25 @@ class RenderForm
      * @param array $attrs
      * @return $this
      */
+    public function setPassword($field, $value = '', $required = true, $title = null, $attrs = [])
+    {
+        $this->properties('password', $field, $title, $required, $value, $attrs);
+
+        return $this;
+    }
+
+
+    /**
+     * @param $field
+     * @param string $value
+     * @param bool $required
+     * @param null $title
+     * @param array $attrs
+     * @return $this
+     */
     public function setDateTime($field, $value = '', $required = true, $title = null, $attrs = [])
     {
-        $properties['dateFormat'] = 'datetime';
+        $attrs['data-format'] = 'datetime';
 
         $this->properties('datetime', $field, $title, $required, $value, $attrs);
 
@@ -186,7 +206,7 @@ class RenderForm
      */
     public function setDate($field, $value = '', $required = true, $title = null, $attrs = [])
     {
-        $properties['dateFormat'] = 'date';
+        $attrs['data-format'] = 'date';
 
         $this->properties('datetime', $field, $title, $required, $value, $attrs);
 
@@ -203,7 +223,7 @@ class RenderForm
      */
     public function setTime($field, $value = '', $required = true, $title = null, $attrs = [])
     {
-        $properties['dateFormat'] = 'time';
+        $attrs['data-format'] = 'time';
 
         $this->properties('datetime', $field, $title, $required, $value, $attrs);
 
@@ -221,8 +241,8 @@ class RenderForm
      */
     public function setDateTimeRange($field, $dateFormat = '', $value = '', $required = true, $title = null, $attrs = [])
     {
-        $properties['dateFormat'] = $dateFormat ? $dateFormat : 'datetime';
-        $properties['range'] = '~';
+        $attrs['data-format'] = $dateFormat ? $dateFormat : 'datetime';
+        $attrs['data-range'] = '~';
 
         $this->properties('datetime', $field, $title, $required, $value, $attrs);
 
@@ -237,7 +257,58 @@ class RenderForm
      */
     public function setHidden($field, $value = '', $attrs = [])
     {
-        $this->properties('hidden', $field, '', false, $value, $attrs);
+        $this->properties('hidden', $field, $value, false, '', $attrs);
+
+        return $this;
+    }
+
+    /**
+     * @param $field
+     * @param string $value
+     * @param array $attrs
+     * @return $this
+     */
+    public function setEditor($field, $value = '', $attrs = [])
+    {
+        $this->properties('editor', $field, $value, false, '', $attrs);
+
+        return $this;
+    }
+
+    /**
+     * @param $field
+     * @param string $value
+     * @param array $attrs
+     * @return $this
+     */
+    public function setFile($field, $value = '', $attrs = [])
+    {
+        $this->properties('file', $field, $value, false, '', $attrs);
+
+        return $this;
+    }
+
+    /**
+     * @param $field
+     * @param array $options
+     * @param string $value
+     * @param bool $required
+     * @param string $title
+     * @param array $attrs
+     * @return $this
+     */
+    public function setRegion($field, $options = [], $value = '', $required = true, $title = '', $attrs = [])
+    {
+        $property = new Property();
+        $property->setType('region');
+        $property->setField($field);
+        $property->setTitle($title);
+        $property->setOption($options);
+        $property->setValue($value);
+        $property->setRequired($required);
+        $property->setAttrs($attrs);
+
+        $this->append($property);
 
         return $this;
     }
@@ -253,9 +324,16 @@ class RenderForm
      */
     public function setRadio($field, $options = [], $value = '', $required = true, $title = '', $attrs = [])
     {
-        $properties['options'] = $options;
+        $property = new Property();
+        $property->setType('radio');
+        $property->setField($field);
+        $property->setTitle($title);
+        $property->setOption($options);
+        $property->setValue($value);
+        $property->setRequired($required);
+        $property->setAttrs($attrs);
 
-        $this->properties('radio', $field, $title, $required, $value, $attrs);
+        $this->append($property);
 
         return $this;
     }
@@ -271,9 +349,16 @@ class RenderForm
      */
     public function setCheckbox($field, $options = [], $value = '', $required = true, $title = '', $attrs = [])
     {
-        $properties['options'] = $options;
+        $property = new Property();
+        $property->setType('checkbox');
+        $property->setField($field);
+        $property->setTitle($title);
+        $property->setOption($options);
+        $property->setValue($value);
+        $property->setRequired($required);
+        $property->setAttrs($attrs);
 
-        $this->properties('checkbox', $field, $title, $required, $value, $attrs);
+        $this->append($property);
 
         return $this;
     }
@@ -289,9 +374,16 @@ class RenderForm
      */
     public function setSelect($field, $options = [], $value = '', $required = true, $title = '', $attrs = [])
     {
-        $properties['options'] = $options;
+        $property = new Property();
+        $property->setType('select');
+        $property->setField($field);
+        $property->setTitle($title);
+        $property->setOption($options);
+        $property->setValue($value);
+        $property->setRequired($required);
+        $property->setAttrs($attrs);
 
-        $this->properties('select', $field, $title, $required, $value, $attrs);
+        $this->append($property);
 
         return $this;
     }
@@ -307,9 +399,16 @@ class RenderForm
      */
     public function setSelectChecked($field, $options = [], $value = '', $required = true, $title = '', $attrs = [])
     {
-        $properties['options'] = $options;
+        $property = new Property();
+        $property->setType('select-checked');
+        $property->setField($field);
+        $property->setTitle($title);
+        $property->setOption($options);
+        $property->setValue($value);
+        $property->setRequired($required);
+        $property->setAttrs($attrs);
 
-        $this->properties('select-checked', $field, $title, $required, $value, $attrs);
+        $this->append($property);
 
         return $this;
     }

@@ -173,6 +173,8 @@
         function transData(data, callback) {
             switch (data.type) {
                 case 'modal':
+                    // 模态对话框
+                    data.param.modal = 1;
                     $.form.modal(data.url, data.param, data.title);
                     break;
                 case 'update':
@@ -190,13 +192,12 @@
                     $.form.load(data.url, data.param, 'get', callback);
                     break;
                 case 'open':
-                    let url = data.url + '?open=1';
+                    let url = data.url;
                     if (data.param) {
-                        url += '&';
+                        url += '?';
                         for (let i in data.param) {
                             url += i + '=' + data.param[i] + '&';
                         }
-                        $.trim(url, '&');
                     }
                     window.location.href = url;
                     break;

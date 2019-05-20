@@ -586,12 +586,14 @@
                 // 上传完成后的回调函数
                 let callback = function (_this, url) {
 
+                    let _name = name;
+
                     if (num > 1) {
-                        name = name + '[]';
+                        _name = _name + '[]';
                     }
 
                     let template = '<div>' +
-                        '<input type="hidden" name="' + name + '" value="' + url + '">' +
+                        '<input type="hidden" name="' + _name + '" value="' + url + '">' +
                         '<img class="w80" src="' + url + '"/>' +
                         '</div>';
 
@@ -643,5 +645,6 @@
                 });
             });
         }
+
     });
 </script>

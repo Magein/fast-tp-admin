@@ -11,7 +11,7 @@
         {if condition="$item['type'] == 'hidden'"}
         <input type="hidden" name="{$item.field}" value="{$item.value}"/>
         {else}
-        <div class="layui-form-item layui-col-xs{$item.origin.grid|default=12}" {if in_array($item[
+        <div class="layui-form-item layui-col-xs{$item.origin.size|default=12}" {if in_array($item[
         'type'],['radio','checkbox'])}pane{/if}>
         <label class="layui-form-label">{$item.title}</label>
         {switch $item['type']}
@@ -22,6 +22,7 @@
                     lay-filter="{$item.field}"
                     data-value="{$item['value']}"
                     {if $item.required }required{/if}
+            {$item['attrs']}
             >
             {if condition="$item['option']"}
             {foreach name="$item['option']" item="option" key="k"}
@@ -109,9 +110,10 @@
                    value="{$item.value}"
                    title="{$item.title}"
                    class="layui-input date-time-field"
-                   date-format="{$item.dateFormat}"
-                   range="{$item.range}"
-                   {if condition="$item.required" }required{/if}
+                   {$item.attrs}
+                   data-format="{$item.origin.format|default=''}"
+                   data-range="{$item.origin.range|default=''}"
+                   {if $item.required}required{/if}
             >
         </div>
         {/case}
@@ -120,7 +122,12 @@
         {/* 多行文本域开始 */ }
         {case textArea}
         <div class="layui-input-block">
-            <textarea name="{$item.field}"  class="layui-textarea" {if $item.required }required{/if}>{$item.value}</textarea>
+            <textarea name="{$item.field}"
+                      class="layui-textarea"
+                      {if $item.required}required{/if}>
+            {$item['attrs']}
+            {$item.value}
+            </textarea>
         </div>
         {/case}
         {/* 多行文本域结束 */ }
@@ -140,6 +147,7 @@
                id="upload-id-{$item.field}"
                data-name="{$item.field}"
                data-value="{$item.value}"
+               {$item.attrs}
                data-size="{$item.origin.size|default=200}"
                data-auto="{$item.origin.auto|default=true}"
                data-num="{$item.origin.num|default=1}"
@@ -190,15 +198,7 @@
                    placeholder="{$item.placeholder}"
                    class="layui-input"
                    {if $item.required }required{/if}
-            {if $item['attrs']}
-            {if is_array($item['attrs'])}
-            {foreach $item['attrs'] as $key=>$item}
-            {$key}="{$item}"
-            {/foreach}
-            {else/}
             {$item['attrs']}
-            {/if}
-            {/if}
             >
 
             {if isset($item.description)}
@@ -213,7 +213,6 @@
 {/if}
 {/foreach}
 {/if}
-
 
 <div class="hr-line-dashed"></div>
 <div class="layui-form-item text-center">

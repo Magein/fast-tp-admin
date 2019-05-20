@@ -2,6 +2,7 @@
 
 namespace app\admin\component\system_menu;
 
+use app\common\extra\TreeStructure;
 use magein\php_tools\think\Logic;
 use think\Cache;
 
@@ -79,98 +80,29 @@ class SystemMenuLogic extends Logic
     }
 
     /**
-     * @param array $node
-     * @return array|mixed
-     */
-    public function getListByNode($node = null)
-    {
-//        $records = $this->setReturnArrayKey('id')->select();
-//
-//
-//        if ($node) {
-//
-//            foreach ($records as $key => $item) {
-//
-//                if (empty($item['node'])) {
-//                    continue;
-//                }
-//
-//                if (in_array($item['node'][0], $node)) {
-//                    continue;
-//                }
-//                unset($records[$key]);
-//            }
-//        }
-
-        $records = $node;
-
-        $tree = function ($records) {
-
-            $result = array();
-            foreach ($records as $key => $item) {
-                if (isset($records[$item['pid']])) {
-                    $records[$item['pid']]['child'][] = &$records[$key];
-                } else {
-                    $result[] = &$records[$key];
-                }
-
-                if ($item['url']) {
-                    $this->menuUrl[$item['url']] = [
-                        'title' => $item['title'],
-                        'pid' => $item['pid']
-                    ];
-                }
-
-            }
-            return $result;
-        };
-
-        $records = $tree($records);
-
-        return $records;
-    }
-
-    /**
-     * 参考：https://blog.csdn.net/tiansidehao/article/details/79025359
-     *
+     * 获取层级关系
      * @param $ids
      * @return array|mixed
      */
-    public function getLevelList($ids = null)
+    public function floor($ids = null)
     {
-        $records = Cache::store('file')->get(SystemMenuConstant::SYSTEM_MENU_TREE_LIST_NAME);
+        $records = Cache::store('file')->get(SystemMenuConstant::SYSTEM_MENU_TREE_FLOOR_NAME);
 
         if (empty($records)) {
 
             $records = $this->select();
 
-            $tree = function ($records, $pid = 0, $level = 1) use (&$tree) {
-                static $result = [];
-                foreach ($records as $key => $val) {
-                    if ($val['pid'] == $pid) {
-                        $flg = str_repeat('  |--  ', $level - 1);
-                        $val['title'] = $flg . $val['title'];
-                        $val['level'] = $level;
-                        /**
-                         * 处理节点管理
-                         */
-                        if (isset($result[$val['pid']]['node'])) {
-                            $val['node'] = $result[$val['pid']]['node'] . '-' . $val['id'];
-                        } else {
-                            $val['node'] = $val['id'];
-                        }
-
-                        $result[$val['id']] = $val;
-
-                        $tree($records, $val['id'], $level + 1);
-                    }
+            $records = TreeStructure::instance()->floor($records, function ($val, $result) {
+                if (isset($result[$val['pid']]['node'])) {
+                    $val['node'] = $result[$val['pid']]['node'] . '-' . $val['id'];
+                } else {
+                    $val['node'] = $val['id'];
                 }
-                return $result;
-            };
 
-            $records = $tree($records);
+                return $val;
+            });
 
-            Cache::store('file')->set(SystemMenuConstant::SYSTEM_MENU_TREE_LIST_NAME, $records);
+            Cache::store('file')->set(SystemMenuConstant::SYSTEM_MENU_TREE_FLOOR_NAME, $records);
         }
 
         if ($ids) {

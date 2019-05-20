@@ -7,13 +7,13 @@
         {/if}
     </a>
     <ul class="layui-nav layui-layout-left">
-        {foreach $menus as $oneMenu}
-        <li class="layui-nav-item {if $active_id==$oneMenu.id}layui-this{/if}">
-            <a data-menu-node="m-{$oneMenu.id}" href="{if $oneMenu.url}/{$oneMenu.url}{else/}javascript:void(0){/if}">
-                {notempty name='oneMenu.icon'}
-                <span class='{$oneMenu.icon} padding-right-5'></span>
+        {foreach $top as $item}
+        <li class="layui-nav-item {if in_array($item.id,$active_menu['node'])}layui-this{/if}">
+            <a data-menu-node="m-{$item.id}" href="{if $item.url}/{$item.url}{else/}javascript:void(0){/if}">
+                {notempty name='item.icon'}
+                <span class='{$item.icon|} padding-right-5'></span>
                 {/notempty}
-                <span>{$oneMenu.title|default=''}</span>
+                <span>{$item.title|default=''}</span>
             </a>
         </li>
         {/foreach}

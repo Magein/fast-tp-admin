@@ -20,5 +20,5 @@ class SystemMenuConstant
     /**
      * 系统菜单缓存名称
      */
-    const SYSTEM_MENU_TREE_LIST_NAME = 'system_menu_tree_list_name';
+    const SYSTEM_MENU_TREE_FLOOR_NAME = 'system_menu_tree_floor_name';
 }

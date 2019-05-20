@@ -2,6 +2,7 @@
 
 namespace magein\render\admin;
 
+use magein\render\admin\component\Button;
 use magein\render\admin\component\Property;
 use magein\php_tools\common\Variable;
 use magein\php_tools\object\QueryResult;
@@ -65,7 +66,8 @@ trait FastBuild
             'type' => 'modal',
             'param' => [],
             'icon' => 'layui-icon layui-icon-add-1',
-            'cla' => ''
+            'cla' => '',
+            'attrs' => ''
         ],
         'del' => [
             'title' => '批量删除',
@@ -73,7 +75,8 @@ trait FastBuild
             'type' => 'del',
             'param' => [],
             'icon' => 'layui-icon layui-icon-delete',
-            'cla' => 'layui-btn layui-btn-sm layui-btn-danger'
+            'cla' => 'layui-btn layui-btn-sm layui-btn-danger',
+            'attrs' => ''
         ],
     ];
 
@@ -87,7 +90,8 @@ trait FastBuild
             'type' => '',
             'param' => ['id' => '__id__'],
             'icon' => '',
-            'cla' => ''
+            'cla' => '',
+            'attrs' => ''
         ],
         'del' => [
             'title' => '删除',
@@ -95,7 +99,8 @@ trait FastBuild
             'type' => 'del',
             'param' => ['id' => '__id__'],
             'icon' => '',
-            'cla' => 'layui-btn-danger'
+            'cla' => 'layui-btn-danger',
+            'attrs' => ''
         ]
     ];
 
@@ -124,7 +129,7 @@ trait FastBuild
     /**
      * @var array
      */
-    protected $origin = [];
+    protected $attr = [];
 
     /**
      * 获取对应的类
@@ -224,6 +229,50 @@ trait FastBuild
     protected function getOperationButton()
     {
         return $this->operationButtons;
+    }
+
+    /**
+     * @param string $title
+     * @param string $url
+     * @param string $type
+     * @param array $param
+     * @param string $icon
+     * @param string $cla
+     * @param array $attrs
+     * @return array
+     */
+    protected function setButton($title = '按钮', $url = '', $type = Button::TYPE_OPEN, $param = ['id' => '__id__'], $icon = '', $cla = '', $attrs = [])
+    {
+        $toString = '';
+        if ($attrs) {
+            foreach ($attrs as $key => $item) {
+                $toString .= $key . '="' . $item . '"';
+            }
+        }
+
+        return [
+            'title' => $title,
+            'url' => $url,
+            'type' => $type,
+            'param' => $param,
+            'icon' => $icon,
+            'cla' => $cla,
+            'attrs' => $toString
+        ];
+    }
+
+    /**
+     * @param string $title
+     * @param string $url
+     * @param array $param
+     * @param string $icon
+     * @param string $cla
+     * @param array $attrs
+     * @return array
+     */
+    protected function setButtonModal($title = '按钮', $url = '', $param = ['id' => '__id__'], $icon = '', $cla = '', $attrs = [])
+    {
+        return $this->setButton($title, $url, Button::TYPE_MODAL, $param, $icon, $cla, $attrs);
     }
 
     /**
@@ -385,6 +434,10 @@ trait FastBuild
      */
     protected function property($data)
     {
+        if ($data instanceof Property) {
+            return $data;
+        }
+
         $property = new Property();
 
         // 识别一个字符串
@@ -434,14 +487,16 @@ trait FastBuild
                     'option' => $option,
                     'field' => $field
                 ];
-
             }
         }
 
-        // 合并表单的其他参数
-        $data = array_merge($this->origin, $data);
-        
+        // 合并设置的默认属性
+        $data = array_merge($this->attr, $data);
+
         $property->init($data);
+
+        // 合并额外的参数到attrs中，在前段页面中使用 attrs.xx取值
+        // $property->setAttrs(array_merge($property->getOrigin(), $property->getAttrs()));
 
         return $property;
     }
@@ -465,6 +520,9 @@ trait FastBuild
         foreach ($items as $item) {
             $render->append($this->property($item));
         }
+
+//        var_dump($render);
+//        die();
 
         return $render;
     }

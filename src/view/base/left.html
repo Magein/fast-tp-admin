@@ -4,43 +4,29 @@
             <li class="layui-nav-item" lay-unselect><a class="text-center" data-target-menu-type><i
                     class="layui-icon layui-icon-spread-left"></i></a></li>
         </ul>
-        {foreach $menus as $oneMenu}
-
-        {if isset($oneMenu['child'])}
-        <ul class="layui-nav layui-nav-tree" data-menu-layout="m-{$oneMenu.id}">
-            {foreach $oneMenu.child as $twoMenu}
-            {empty name='twoMenu.child'}
-            <li class="layui-nav-item">
-                <a data-target-tips="{$twoMenu.title}"
-                   href="{$twoMenu.url}">
-                    <span class='{$twoMenu.icon|default="layui-icon layui-icon-link"}'></span>
-                    <span class="nav-text padding-left-5">{$twoMenu.title}</span>
-                </a>
-            </li>
-            {else}
-            <li class="layui-nav-item layui-nav-itemed" data-submenu-layout='m-{$oneMenu.id}-{$twoMenu.id}'>
-                <a data-target-tips="{$twoMenu.title}" style="background:#393D49">
-                    <span class='nav-icon layui-hide {$twoMenu.icon|default="layui-icon layui-icon-triangle-d"}'></span>
+        {foreach $left as $item}
+        <ul class="layui-nav layui-nav-tree">
+            <li class="layui-nav-item layui-nav-itemed">
+                <a data-target-tips="{$item.title}" style="background:#393D49">
+                    <span class='nav-icon layui-hide {$item.icon|default="layui-icon layui-icon-triangle-d"}'></span>
                     <span class="nav-text padding-left-5">
-                             <i class="{$twoMenu.icon}"></i>
-                            {$twoMenu.title}
+                             <i class="{$item.icon}"></i>
+                            {$item.title}
                         </span>
                 </a>
                 <dl class="layui-nav-child">
-                    {foreach $twoMenu['child'] as $thrMenu}
-                    <dd class='{if $thrMenu.url=="$path" || substr($thrMenu.url,0,strrpos($thrMenu.url,"/")) ==substr($path,0,strrpos($path,"/"))}layui-this{/if}'>
-                        <a data-target-tips="{$thrMenu.title}" href="/{$thrMenu.url}">
-                            <span class='nav-icon padding-left-5 {$thrMenu.icon|default="layui-icon layui-icon-link"}'></span>
-                            <span class="nav-text padding-left-5">{$thrMenu.title}</span>
+                    {foreach $item['child'] as $vo}
+                    <dd class='{if $vo.url==$active_menu.url }layui-this{/if}'>
+                        <a data-target-tips="{$vo.title}" href="/{$vo.url}">
+                            <span class='nav-icon padding-left-5 {$vo.icon|default="layui-icon layui-icon-link"}'></span>
+                            <span class="nav-text padding-left-5">{$vo.title}</span>
                         </a>
                     </dd>
                     {/foreach}
                 </dl>
             </li>
             {/empty}
-            {/foreach}
         </ul>
-        {/if}
         {/foreach}
     </div>
 </div>

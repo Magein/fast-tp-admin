@@ -9,16 +9,19 @@ class Button
     use ObjectInit;
 
     /**
+     * 标题
      * @var string
      */
     private $title = '';
 
     /**
+     * url
      * @var string
      */
     private $url = '';
 
     /**
+     * 类型
      * @var string
      */
     private $type = '';
@@ -38,9 +41,38 @@ class Button
      */
     private $attrs = [];
 
-    public function __construct($data)
+    /**
+     * 页面打开
+     */
+    const TYPE_OPEN = 'open';
+
+    /**
+     * 模态对话框
+     */
+    const TYPE_MODAL = 'modal';
+
+    /**
+     * 重定向
+     */
+    const TYPE_REDIRECT = 'redirect';
+
+    /**
+     * Button constructor.
+     * @param $title
+     * @param string $url
+     * @param string $type
+     * @param array $param
+     * @param string $icon
+     * @param array $attrs
+     */
+    public function __construct($title = '按钮', $url = '', $type = 'open', $param = ['id' => '__id'], $icon = '', $attrs = [])
     {
-        $this->init($data);
+        $this->setTitle($title);
+        $this->setUrl($url);
+        $this->setType($type);
+        $this->setParam($param);
+        $this->setIcon($icon);
+        $this->setAttrs($attrs);
     }
 
     /**
@@ -50,7 +82,6 @@ class Button
     {
         return $this->title;
     }
-
 
     /**
      * @param $title

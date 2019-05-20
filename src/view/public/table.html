@@ -43,13 +43,14 @@
      * @type {{header: string, page: string, list: string}}
      */
     var renderData = {
-        // 数据列表
-        list: {$list|json_encode},
+            // 数据列表
+            list: {$list | json_encode
+        },
         // 头部信息
         header: {$header|json_encode},
         // 分页数据
         page: {$page|json_encode},
-    };
+        };
 
     /**
      * 更新字段请求连接
@@ -69,6 +70,7 @@
                 data-url="{:url($item.url)}"
                 data-title="{$item.title}"
                 data-param='{$item.param|default=[]|json_encode}'
+                {$item.attrs|default="" }
                 lay-event="{$item.event|default='leftTopButtonEvent'}">
             <i class="{$item.icon}"></i>{$item.title}
         </button>
@@ -88,6 +90,7 @@
        data-url="{:url($item.url)}"
        data-title="{$item.title}"
        data-param='{$item.param|default=[]|json_encode}'
+       {$item.attrs|default="" }
        lay-event="{$item.event|default='operationButtonEvent'}">{$item.title}</a>
     {/foreach}
     {/if}

@@ -73,10 +73,21 @@ class SystemRoleLogic extends Logic
 
     /**
      * @param $ids
-     * @return mixed
+     * @return array
      */
-    public function getAuthByIds($ids)
+    public function getMenuIdByRoleIds($ids)
     {
-        return $this->setCondition(['id' => ['in', $ids]])->value('auth');
+        $records = $this->setCondition(['id' => ['in', $ids]])->column('auth');
+
+        $menu_ids = [];
+        if ($records) {
+            foreach ($records as $item) {
+                if ($item) {
+                    $menu_ids = array_merge($menu_ids, explode(',', $item));
+                }
+            }
+        }
+
+        return $menu_ids;
     }
 }

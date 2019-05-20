@@ -15,7 +15,7 @@
                  * 获取时间格式,通过input的date-format设置
                  * @type {jQuery}
                  */
-                let dateFormat = $(this).attr('date-format');
+                let dateFormat = $(this).data('format');
                 if (dateFormat === '') {
                     dateFormat = 'datetime';
                 }
@@ -24,7 +24,7 @@
                  * 是否使用时间区间
                  * @type {jQuery}
                  */
-                let range = $(this).attr('range');
+                let range = $(this).data('range');
                 if (range === '') {
                     range = false;
                 }
@@ -55,6 +55,9 @@
         var province_id = '{$data.province_id|default=""}';
         var city_id = '{$data.city_id|default=""}';
         var area_id = '{$data.area_id|default=""}';
+
+        getProvince(province_id);
+
         changeCity(province_id, city_id);
         window.form.on('select(province_id)', function (data) {
             province_id = data.value;
@@ -68,6 +71,33 @@
         window.form.on('select(city_id)', function (data) {
             changeArea(province_id, data.value);
         });
+
+        /**
+         * 获取省份数据
+         */
+        function getProvince(province_id) {
+
+            let obj = $('[name=province_id]');
+
+            if (obj.find('option').length > 1) {
+                return false;
+            }
+
+            let option = '<option value="">请选择省份</option>';
+            for (let i in REGION) {
+                let data = REGION[i];
+                option += '<option value="' + data.id + '">' + data.name + '</option>';
+            }
+
+            obj.html(option);
+
+            // 回填数据
+            if (province_id) {
+                $('[name=province_id] option[value=' + province_id + ']').attr('selected', 'selected');
+            }
+
+            window.form.render();
+        }
 
         /**
          * 切换城市
@@ -152,3 +182,6 @@
         window.form.render();
     });
 </script>
+
+{/* 多选组件 */}
+{include file="admin@public/formSelect"}
