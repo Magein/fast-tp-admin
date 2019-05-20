@@ -6,7 +6,8 @@ use app\admin\logic\LoginLogic;
 use app\admin\component\system_config\SystemConfigLogic;
 use app\admin\component\system_menu\SystemMenuLogic;
 use app\admin\component\system_role\SystemRoleLogic;
-use app\common\extra\TreeStructure;
+use magein\php_tools\common\TreeStructure;
+use magein\php_tools\common\Variable;
 use magein\php_tools\object\QueryResult;
 use magein\php_tools\think\Logic;
 use magein\render\admin\FastBuild;
@@ -42,6 +43,12 @@ class Main extends Controller
     protected $title = '';
 
     /**
+     * 当前访问的路径信息
+     * @var string
+     */
+    protected $path = '';
+
+    /**
      * 当前访问菜单
      * @var array
      */
@@ -65,6 +72,8 @@ class Main extends Controller
     public function _initialize()
     {
         $this->checkLogin();
+
+        $this->path();
 
         $this->config();
 
@@ -107,7 +116,7 @@ class Main extends Controller
         // 顶部菜单
         $top = TreeStructure::instance()->getParent();
         // 左侧菜单
-        if ($this->active_menu) {
+        if ($this->active_menu['node']) {
             $left = $menus[$this->active_menu['node'][0]]['child'];
         } else {
             $left = array_shift($menus)['child'];
@@ -131,14 +140,24 @@ class Main extends Controller
         );
     }
 
+    /**
+     * 当前访问的路径
+     * @return string
+     */
+    protected function path()
+    {
+        $dispatch = Request::instance()->dispatch()['module'];
+        $dispatch[1] = (new Variable())->transToUnderline($dispatch[1]);
+        $this->path = implode('/', $dispatch);
+
+        return $this->path;
+    }
+
+    /**
+     * @return array|mixed
+     */
     protected function checkMenus()
     {
-        /**
-         * 当前访问的路径
-         */
-        $path = Request::instance()->path();
-        $path = strtolower($path);
-
         /**
          * 获取系统的菜单列表，以及获取系统菜单的链接
          */
@@ -147,7 +166,7 @@ class Main extends Controller
         if ($menus) {
             foreach ($menus as $key => $item) {
                 $menu_url[] = $item['url'];
-                if ($item['url'] == $path && $item['node']) {
+                if ($item['url'] == $this->path && $item['node']) {
                     // 这是页面标题
                     $this->title = $this->title ?: $item['title'];
                     // 这里的待优化，为了兼容xxx/add 这种新窗口打开后，左侧菜单没有选中的状态
@@ -173,9 +192,9 @@ class Main extends Controller
             }
         }
 
-        $this->checkAuth($path, $menu_url);
+        $this->checkAuth($menu_url);
 
-        $this->getActiveMenu($path, $menus);
+        $this->getActiveMenu($menus);
 
         return $menus;
     }
@@ -197,13 +216,16 @@ class Main extends Controller
     }
 
     /**
-     * @param $path
-     * @param $menu
+     * @param $menu_url
      * @return bool
      */
-    protected function checkAuth($path, $menu_url)
+    protected function checkAuth($menu_url)
     {
-        if (!in_array($path, $menu_url)) {
+        if (empty($menu_url)) {
+            return true;
+        }
+
+        if (!in_array($this->path, $menu_url)) {
             $this->error('您尚未获得访问该路劲的权限');
         }
 
@@ -215,7 +237,7 @@ class Main extends Controller
      * @param array $menus
      * @return string
      */
-    protected function getActiveMenu($path, $menus)
+    protected function getActiveMenu($menus)
     {
         $removeAction = function ($path) {
             $path = substr($path, 0, strrpos($path, '/'));
@@ -224,7 +246,7 @@ class Main extends Controller
         };
 
         if (empty($this->active_menu)) {
-            $path = $removeAction($path);
+            $path = $removeAction($this->path);
             foreach ($menus as $key => $item) {
                 $url = $removeAction($item['url']);
                 if ($url == $path && $item['node']) {
@@ -262,6 +284,11 @@ class Main extends Controller
         $this->assign('header', array_values($header));
 
         $queryResult = $this->getList($condition);
+
+        if (Request::instance()->param('debug')) {
+            halt($queryResult);
+        }
+
         if ($queryResult instanceof QueryResult) {
             $page = $queryResult->getPage();
             $list = $queryResult->getList();

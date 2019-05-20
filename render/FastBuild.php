@@ -56,6 +56,12 @@ trait FastBuild
     protected $hiddenCheckbox = false;
 
     /**
+     * 展示为图片的字段信息
+     * @var array
+     */
+    protected $images = [];
+
+    /**
      * 左上角的按钮
      * @var array
      */
@@ -275,6 +281,20 @@ trait FastBuild
         return $this->setButton($title, $url, Button::TYPE_MODAL, $param, $icon, $cla, $attrs);
     }
 
+    protected function imageTemplate($field, $data)
+    {
+        return <<<EOF
+<div>
+{{#  if(typeof d.$field ==="string"){ }}
+{{#  var images=d.$field.split(',')}}
+{{#  layui.each(images, function(index, item){ }}
+<img src="{{item}}" class="table-image"/>
+{{#  }); }}
+{{#  } }}
+</div>
+EOF;
+    }
+
     /**
      * @return array
      */
@@ -357,9 +377,10 @@ trait FastBuild
 
     /**
      * 构建表格数据
+     * @param null $callback 处理表头的回调函数
      * @return array
      */
-    protected function buildTable()
+    protected function buildTable($callback = null)
     {
         $headers = $this->header();
 
@@ -385,14 +406,24 @@ trait FastBuild
                     ];
                 }
 
-                if ($this->autoAppend && preg_match('/_text/', $item['field'])) {
-                    $this->append[] = $item['field'];
+                $field = $item['field'];
+
+                if ($this->autoAppend && preg_match('/_text/', $field)) {
+                    $this->append[] = $field;
                 }
 
                 $title = isset($item['title']) ? $item['title'] : '';
 
                 if (empty($title)) {
-                    $title = isset($word[$item['field']]) ? $word[$item['field']] : '';
+                    $title = isset($word[$field]) ? $word[$field] : '';
+                }
+
+                if ($this->images && in_array($item['field'], $this->images)) {
+                    $item['templet'] = $this->imageTemplate($field, $this->images);
+                }
+
+                if ($callback) {
+                    $item = call_user_func($callback, $item);
                 }
 
                 $item['title'] = $title;
