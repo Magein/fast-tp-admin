@@ -526,9 +526,6 @@ EOF;
 
         $property->init($data);
 
-        // 合并额外的参数到attrs中，在前段页面中使用 attrs.xx取值
-        // $property->setAttrs(array_merge($property->getOrigin(), $property->getAttrs()));
-
         return $property;
     }
 
@@ -551,9 +548,6 @@ EOF;
         foreach ($items as $item) {
             $render->append($this->property($item));
         }
-
-//        var_dump($render);
-//        die();
 
         return $render;
     }
