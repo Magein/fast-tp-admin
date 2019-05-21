@@ -122,7 +122,7 @@ class Menu extends Main
                 $record = SystemMenuLogic::instance()->setCondition(['url' => $data['url']])->find();
 
                 if ($record) {
-                    continue;
+                    SystemMenuLogic::instance()->delete($record['id']);
                 }
 
                 $result = parent::save($data);
