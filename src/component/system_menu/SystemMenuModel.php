@@ -35,7 +35,7 @@ class SystemMenuModel extends Model
             static $records = [];
 
             if (empty($records)) {
-                $records = SystemMenuLogic::instance()->getLevelList();
+                $records = SystemMenuLogic::instance()->floor();
             }
 
             $value = isset($records[$data['pid']]) ? $records[$data['pid']]['node'] : '';

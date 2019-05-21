@@ -68,7 +68,15 @@ class SystemMenuLogic extends Logic
      */
     public function getList()
     {
-        return $this->setReturnArrayKey('id')->select();
+        $records = Cache::store('file')->get(SystemMenuConstant::SYSTEM_MENU_LIST);
+
+        if (empty($records)) {
+
+            $records = $this->setReturnArrayKey('id')->select();
+
+        }
+
+        return $records;
     }
 
     /**
@@ -84,25 +92,13 @@ class SystemMenuLogic extends Logic
      * @param $ids
      * @return array|mixed
      */
-    public function floor($ids = null)
+    public function floor($ids = null, $limit = 3)
     {
-        $records = Cache::store('file')->get(SystemMenuConstant::SYSTEM_MENU_TREE_FLOOR_NAME);
-
         if (empty($records)) {
 
             $records = $this->select();
 
-            $records = TreeStructure::instance()->floor($records, function ($val, $result) {
-                if (isset($result[$val['pid']]['node'])) {
-                    $val['node'] = $result[$val['pid']]['node'] . '-' . $val['id'];
-                } else {
-                    $val['node'] = $val['id'];
-                }
-
-                return $val;
-            });
-
-            Cache::store('file')->set(SystemMenuConstant::SYSTEM_MENU_TREE_FLOOR_NAME, $records);
+            Cache::store('file')->set(SystemMenuConstant::SYSTEM_MENU_LIST, $records);
         }
 
         if ($ids) {
@@ -112,6 +108,16 @@ class SystemMenuLogic extends Logic
                 }
             }
         }
+
+        $records = TreeStructure::instance()->floor($records, function ($val, $result) {
+            if (isset($result[$val['pid']]['node'])) {
+                $val['node'] = $result[$val['pid']]['node'] . '-' . $val['id'];
+            } else {
+                $val['node'] = $val['id'];
+            }
+
+            return $val;
+        }, $limit);
 
         return $records;
     }

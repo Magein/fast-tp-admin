@@ -29,7 +29,7 @@ class Menu extends Main
      */
     protected function getList($condition = [], $query_type = 'paginate')
     {
-        $menus = SystemMenuLogic::instance()->floor();
+        $menus = SystemMenuLogic::instance()->floor(null, 4);
 
         return array_values($menus);
     }
@@ -50,7 +50,7 @@ class Menu extends Main
 
     protected function operationAfter($result, $data = [], $class = null)
     {
-        \think\Cache::store('file')->rm(SystemMenuConstant::SYSTEM_MENU_TREE_LIST_NAME);
+        \think\Cache::store('file')->rm(SystemMenuConstant::SYSTEM_MENU_LIST);
 
         if (isset($this->flag) && $this->flag) {
             return true;
