@@ -115,12 +115,9 @@ class Main extends Controller
 
         // 顶部菜单
         $top = TreeStructure::instance()->getParent();
-
         // 左侧菜单
         if ($this->active_menu['node']) {
-            $node = $this->active_menu['node'];
-            $child = isset($menus[$node[0]]) ? $menus[$node[0]] : [];
-            $left = $child['child'];
+            $left = $menus[$this->active_menu['node'][0]]['child'];
         } else {
             $left = array_shift($menus)['child'];
         }
@@ -165,7 +162,6 @@ class Main extends Controller
          * 获取系统的菜单列表，以及获取系统菜单的链接
          */
         $menus = SystemMenuLogic::instance()->getList();
-
         $menu_url = [];
         if ($menus) {
             foreach ($menus as $key => $item) {
@@ -229,10 +225,6 @@ class Main extends Controller
             return true;
         }
 
-        if ($this->user['id'] == 1) {
-            return true;
-        }
-
         if (!in_array($this->path, $menu_url)) {
             $this->error('您尚未获得访问该路劲的权限');
         }
@@ -252,7 +244,6 @@ class Main extends Controller
             $path = str_replace('/', '/', $path);
             return $path;
         };
-
 
         if (empty($this->active_menu)) {
             $path = $removeAction($this->path);

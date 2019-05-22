@@ -110,6 +110,10 @@ trait FastBuild
         ]
     ];
 
+    /**
+     * 页面提示信息
+     * @var array
+     */
     protected $tips = [];
 
     /**
@@ -281,6 +285,12 @@ trait FastBuild
         return $this->setButton($title, $url, Button::TYPE_MODAL, $param, $icon, $cla, $attrs);
     }
 
+    /**
+     * 渲染图片模板
+     * @param $field
+     * @param $data
+     * @return string
+     */
     protected function imageTemplate($field, $data)
     {
         return <<<EOF
