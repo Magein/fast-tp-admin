@@ -17,7 +17,7 @@
   ],
   "require": {
     "php": ">=7.0",
-    "magein/php-tools": "~"
+    "magein/php-tools": "@dev"
   },
   "autoload": {
     "psr-4": {
