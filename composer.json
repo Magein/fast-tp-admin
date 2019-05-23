@@ -1,6 +1,11 @@
 {
   "name": "magein/think-admin",
   "description": "基于tp5的后台管理模块",
+  "keywords": [
+    "think",
+    "admin",
+    "fast"
+  ],
   "type": "library",
   "homepage": "https://github.com/magein/php-tools",
   "license": "Apache-2.0",
@@ -11,7 +16,8 @@
     }
   ],
   "require": {
-    "php": ">=7.0"
+    "php": ">=7.0",
+    "magein/php-tools": "*@dev"
   },
   "autoload": {
     "psr-4": {
