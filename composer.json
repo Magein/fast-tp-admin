@@ -15,9 +15,10 @@
       "email": "1154699897@qq.com"
     }
   ],
+  "minimum-stability": "dev",
   "require": {
     "php": ">=7.0",
-    "magein/php-tools": "dev-master"
+    "magein/php-tools": "@dev"
   },
   "autoload": {
     "psr-4": {
