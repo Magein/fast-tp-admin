@@ -110,10 +110,6 @@ trait FastBuild
         ]
     ];
 
-    /**
-     * 页面提示信息
-     * @var array
-     */
     protected $tips = [];
 
     /**
@@ -251,7 +247,7 @@ trait FastBuild
      * @param array $attrs
      * @return array
      */
-    protected function setButton($title = '按钮', $url = '', $type = Button::TYPE_OPEN, $param = ['id' => '__id__'], $icon = '', $cla = '', $attrs = [])
+    protected function setButton($title = '按钮', $url = '', $param = ['id' => '__id__'], $type = Button::TYPE_OPEN, $icon = '', $cla = '', $attrs = [])
     {
         $toString = '';
         if ($attrs) {
@@ -282,16 +278,15 @@ trait FastBuild
      */
     protected function setButtonModal($title = '按钮', $url = '', $param = ['id' => '__id__'], $icon = '', $cla = '', $attrs = [])
     {
-        return $this->setButton($title, $url, Button::TYPE_MODAL, $param, $icon, $cla, $attrs);
+        return $this->setButton($title, $url, $param, Button::TYPE_MODAL, $icon, $cla, $attrs);
     }
 
     /**
-     * 渲染图片模板
+     * 图片模板
      * @param $field
-     * @param $data
      * @return string
      */
-    protected function imageTemplate($field, $data)
+    protected function imageTemplate($field)
     {
         return <<<EOF
 <div>
@@ -429,7 +424,7 @@ EOF;
                 }
 
                 if ($this->images && in_array($item['field'], $this->images)) {
-                    $item['templet'] = $this->imageTemplate($field, $this->images);
+                    $item['templet'] = $this->imageTemplate($field);
                 }
 
                 if ($callback) {
