@@ -3,6 +3,13 @@
  * thinkphp5.0~
  * php-tools   github地址：https://github.com/Magein/php-tools
 
+ > php-tools 已经加入包依赖中， thinkphp5.0未加入后包依赖中，请安装~th5.0后，使用composer安装
+
+
+ [看云文档](https://www.kancloud.cn/magein/think-admin/1083978) 
+ 
+ <font color="red">文档待完善</font>
+
 ### 说明
 
  > 基于thinkphp5的后台管理模块，没办法单独使用
