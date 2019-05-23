@@ -154,8 +154,11 @@
             let postData = {};
             if (param) {
                 for (let i in param) {
-                    if ('__' + i + '__' === param[i] && obj.data[i]) {
-                        postData[i] = $.trim(obj.data[i]);
+                    let value = param[i];
+                    let reg = /__[\w]+__/;
+                    if (reg.test(value)) {
+                        value = value.slice(2, -2);
+                        postData[i] = $.trim(obj.data[value]);
                     } else {
                         postData[i] = param[i];
                     }
