@@ -1,21 +1,25 @@
-{if $search}
+{if $formItems}
 <caption class="margin-bottom-10 text-left">
     <fieldset>
         <legend class="layui-bg-cyan">条件搜索</legend>
-        <form class="layui-form layui-form-pane form-search" action="{:url('index')}"
-              onsubmit="return false" method="get" autocomplete="off">
+        <form class="layui-form layui-form-pane form-search"
+              action="{:url('index')}"
+              onsubmit="return false"
+              method="get"
+              autocomplete="off">
 
-            {foreach $search as $item}
+            {foreach $formItems as $item}
 
             <input type="hidden" name="express[{$item.field}]" value="{$item.origin.express|default='eq'}">
+
             <div class="layui-form-item layui-inline">
-                <label class="layui-form-label">{$item.title}</label>
+                <label class="layui-form-label">
+                    {$item.title}
+                </label>
                 <div class="layui-input-inline">
-
                     {switch name='item.type'}
-
                     {case value='select' break="1"}
-                    <select class="layui-select" name="status">
+                    <select class="layui-select" name="{$item.field}">
                         <option selected="" value="">-- 全部 --</option>
                         {if $item['option']}
                         {foreach $item['option'] as $key=>$option}
@@ -26,11 +30,61 @@
                         <option value="{$key}">{$option}</option>
                         {/if}
 
-
                         {/foreach}
                         {/if}
                     </select>
                     {/case}
+
+                    {/* 多选下拉框开始 */ }
+                    {case select-checked}
+                    <select name="{$item.field}"
+                            class="layui-select"
+                            {if $item.required }required{/if}
+                    xm-select="select_{$item.field}"
+                    lay-filter="{$item.field}"
+                    >
+                    <option value="">全部</option>
+                    {if $item['option']}
+                    {foreach $item['option'] as $k=>$val }
+
+                    {if is_array($val)}
+                    <option value="{$val.value}"
+                            {if $item['value'] && in_array($k,$item['value'])}
+                    selected="selected"
+                    {/if}
+
+                    {if isset($val['disabled'])}disabled="disabled"{/if}
+                    >
+                    {$val['name']}
+                    {else}
+                    <option value="{$k}"
+                            {if $item['value'] && in_array($k,$item['value'])}
+                    selected="selected"
+                    {/if}
+
+                    {if isset($val['disabled'])}disabled="disabled"{/if}
+                    >{$val}{/if}</option>
+
+
+                    {/foreach}
+                    {/if}
+                    </select>
+                    {/case}
+                    {/* 多选下拉框结束 */ }
+
+                    {/* 时间框开始 */ }
+                    {case datetime}
+                    <input type="text"
+                           name="{$item.field}"
+                           value="{$item.value}"
+                           title="{$item.title}"
+                           class="layui-input date-time-field"
+                           {$item.attrs}
+                           data-format="{$item.origin.format|default=''}"
+                           data-range="{$item.origin.range|default=''}"
+                    >
+                    {/case}
+                    {/* 时间框结束 */ }
 
                     {default /}
                     <input type="{$item.type}" name="{$item.field}" value="{$item.value}" placeholder="请输入{$item.title}"

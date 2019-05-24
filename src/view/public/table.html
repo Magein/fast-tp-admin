@@ -19,9 +19,14 @@
 </style>
 {/* 滚动条样式结束 */}
 
-{/* 搜索框开始 */}
-{include file='admin@public/search'}
-{/* 搜索框结束 */}
+{/*todo 表格图片显示不全 暂时解决办法*/}
+<style>
+    .layui-table-cell img{
+        height: 100%;
+        max-height: 100%;
+    }
+</style>
+{/*表格图片显示不全*/}
 
 {/* 渲染表格主题区域 */}
 <table id="data-list" lay-filter="data-list">
@@ -44,13 +49,12 @@
      */
     var renderData = {
             // 数据列表
-            list: {$list|json_encode},
+        list: {$list|json_encode},
         // 头部信息
         header: {$header|json_encode},
         // 分页数据
         page: {$page|json_encode}
-    }
-    ;
+    };
 
     /**
      * 更新字段请求连接

@@ -52,22 +52,24 @@
         /**
          * 城市数据联动，并且回填数据
          */
-        var province_id = '{$data.province_id|default=""}';
-        var city_id = '{$data.city_id|default=""}';
-        var area_id = '{$data.area_id|default=""}';
-
+        var province_id = '{$data.province_id|default=0}';
+        var city_id = '{$data.city_id|default=0}';
+        var area_id = '{$data.area_id|default=0}';
+        
         getProvince(province_id);
 
-        changeCity(province_id, city_id);
+        if (city_id !== '0') {
+            changeCity(province_id, city_id);
+        }
+
+        if (area_id !== '0') {
+            changeArea(province_id, city_id, area_id);
+        }
+
         window.form.on('select(province_id)', function (data) {
             province_id = data.value;
             changeCity(province_id);
         });
-
-        /**
-         * 县区数据联动
-         */
-        changeArea(province_id, city_id, area_id);
         window.form.on('select(city_id)', function (data) {
             changeArea(province_id, data.value);
         });

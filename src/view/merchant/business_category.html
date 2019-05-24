@@ -1,0 +1,29 @@
+{extend name='admin@public/form/open'}
+
+{block name="script"}
+
+{include file='admin@public/form/script'}
+
+<script type="text/javascript">
+    $(function () {
+        var category = {$data};
+        layui.form.on('select(top)', function (data) {
+            let cate_id = data.value;
+            let child = category[cate_id]['child'];
+            let option = [];
+            if (child) {
+                for (let i in child) {
+                    option.push({
+                        "name": child[i],
+                        "value": i
+                    });
+                }
+            }
+            formSelects.data('select_cate_id', 'local', {
+                arr: option
+            });
+        });
+    })
+</script>
+
+{/block}

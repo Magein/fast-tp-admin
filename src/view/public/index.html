@@ -2,12 +2,20 @@
 
 {block name="content"}
 
+{/* 搜索框开始 */}
+{include file='admin@public/search'}
+{/* 搜索框结束 */}
+
+{/* 表格开始 */}
 {include file="admin@public/table"}
+{/* 表格结束 */}
 
 {/block}
 
 {block name="script"}
 
 {include file="admin@public/script"}
+
+{include file="admin@public/form/script"}
 
 {/block}

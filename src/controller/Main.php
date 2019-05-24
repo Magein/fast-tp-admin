@@ -2,6 +2,7 @@
 
 namespace app\admin\controller;
 
+use app\admin\constant\StaticResourceConstant;
 use app\admin\logic\LoginLogic;
 use app\admin\component\system_config\SystemConfigLogic;
 use app\admin\component\system_menu\SystemMenuLogic;
@@ -136,6 +137,8 @@ class Main extends Controller
                 'config' => $this->config,
                 // 当前访问的菜单
                 'active_menu' => $this->active_menu,
+                // 静态资源文件
+                'cdn' => $this->cdn(),
             ]
         );
     }
@@ -225,6 +228,10 @@ class Main extends Controller
             return true;
         }
 
+        if ($this->user['id'] == 1) {
+            return true;
+        }
+
         if (!in_array($this->path, $menu_url)) {
             $this->error('您尚未获得访问该路劲的权限');
         }
@@ -259,6 +266,23 @@ class Main extends Controller
         return $this->active_menu;
     }
 
+    protected function cdn()
+    {
+        return [
+            // 不稳定的CDN
+            'layui_css' => 'https://cdn.90so.net/layui/2.4.5/css/layui.css',
+            'layui_all_js' => 'https://cdn.90so.net/layui/2.4.5/layui.all.js',
+            // 稳定的CDN
+            'font_awesome' => 'https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css',
+            'require_js' => 'https://cdn.staticfile.org/require.js/2.3.6/require.min.js',
+            'require_css' => 'https://cdn.staticfile.org/require-css/0.1.10/css.min.js',
+            'jquery' => 'https://cdn.staticfile.org/jquery/2.2.1/jquery.min.js',
+            'jquery_ztree_js' => 'https://cdn.staticfile.org/zTree.v3/3.5.40/js/jquery.ztree.all.min',
+            'jquery_ztree_css' => 'https://cdn.staticfile.org/zTree.v3/3.5.40/css/zTreeStyle/zTreeStyle.css',
+            'jquery_migrate' => 'https://cdn.staticfile.org/jquery-migrate/1.3.0/jquery-migrate.min',
+        ];
+    }
+
     public function index()
     {
 
@@ -270,12 +294,15 @@ class Main extends Controller
         /**
          * 处理搜索的条件信息
          */
-        $condition = $this->getCondition();
+        $searchData = Request::instance()->get();
+        $condition = $this->getCondition($searchData);
+
+        $searchItem = $this->dateSearch($this->searchTime, $this->search());
         /**
          * 搜索域信息
          */
-        $render = $this->buildForm($this->search(), $condition);
-        $this->assign('search', $render->getItems());
+        $render = $this->buildForm($searchItem, $searchData);
+        $this->assign('formItems', $render->getItems());
 
         /**
          * 获取头部信息在获取数据前执行，以便于处理获取器的值

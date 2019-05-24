@@ -138,6 +138,11 @@ trait FastBuild
     protected $attr = [];
 
     /**
+     * @var string
+     */
+    protected $searchTime = '';
+
+    /**
      * 获取对应的类
      * 可选项: logic(业务类),dictionary(字典类),validate(验证类)
      * @param string $type
@@ -601,11 +606,45 @@ EOF;
     }
 
     /**
+     * @param array $data
      * @return array
      */
-    protected function search()
+    protected function search($data = [])
     {
-        return [];
+        return $data;
+    }
+
+    /**
+     * @param array|string $params
+     * @param array $other
+     * @return array
+     */
+    protected function dateSearch($params, $other = [])
+    {
+        $trans = function ($field, $title = '', $type = 'datetime') {
+            return [
+                'field' => $field,
+                'type' => $type,
+                'title' => $title
+            ];
+        };
+
+        $data = [];
+        if ($params) {
+            if (is_array($params)) {
+                $data[] = [
+                    'field' => 'time_field',
+                    'type' => 'select',
+                    'option' => $params,
+                    'title' => '时间类型'
+                ];
+            }
+
+            $data[] = $trans('start_time', '起始时间');
+            $data[] = $trans('end_time', '终止时间');
+        }
+
+        return array_merge($data, $other);
     }
 
     /**
@@ -613,7 +652,7 @@ EOF;
      * @param array $data
      * @return array
      */
-    public function getCondition($data = [])
+    protected function getCondition($data = [])
     {
         $condition = [];
         if (empty($data)) {
@@ -626,12 +665,37 @@ EOF;
         $express = isset($data['express']) ? $data['express'] : [];
         unset($data['express']);
 
+        $toUnixTime = function ($time) {
+
+            if (preg_match('/^1[\d]{9}/', $time)) {
+                return $time;
+            }
+
+            $time = strtotime($time);
+
+            if ($time === false || $time < 0 || !preg_match('/^1[\d]{9}/', $time)) {
+                return false;
+            }
+
+
+            return $time;
+        };
+
+        /**
+         * 处理时间
+         */
+        if (isset($data['time_field'])) {
+            $start = $toUnixTime($data['start_time']) ?: -1;
+            $end = $toUnixTime($data['end_time']) ?: -1;
+            $condition[$data['time_field']] = ['between', [$start, $end]];
+            unset($data['time_field'], $data['end_time'], $data['start_time']);
+        }
+
         if ($data) {
             foreach ($data as $name => $value) {
-
+                $name = trim($name);
                 if (isset($express[$name]) && $express[$name] && $value !== '') {
-
-                    switch ($express[$name]) {
+                    switch (trim($express[$name])) {
                         case 'eq':
                             $condition[$name] = $value;
                             break;
@@ -640,6 +704,15 @@ EOF;
                             break;
                         case 'in':
                             $condition[$name] = ['in', $value];
+                            break;
+                        case 'day':
+                            $value = substr($value, 0, 10);
+                            $start = $toUnixTime($value . ' 00:00:00');
+                            $end = $toUnixTime($value . ' 23:59:59');
+                            $condition[$name] = ['between', [$start, $end]];
+                            break;
+                        case 'create_time':
+
                             break;
                     }
                 }
