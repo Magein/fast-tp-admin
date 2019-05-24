@@ -20,11 +20,12 @@
                     {switch name='item.type'}
                     {case value='select' break="1"}
                     <select class="layui-select" name="{$item.field}">
-                        <option selected="" value="">-- 全部 --</option>
+                        <option value="">-- 全部 --</option>
                         {if $item['option']}
+
                         {foreach $item['option'] as $key=>$option}
 
-                        {if $item.value!=='' && $item.value == $key}
+                        {if strlen($item.value) >0 && $item.value == $key}
                         <option value="{$key}" selected>{$option}</option>
                         {else/}
                         <option value="{$key}">{$option}</option>
@@ -49,7 +50,8 @@
 
                     {if is_array($val)}
                     <option value="{$val.value}"
-                            {if $item['value'] && in_array($k,$item['value'])}
+                            {if $item[
+                    'value'] && in_array($k,$item['value'])}
                     selected="selected"
                     {/if}
 
@@ -58,7 +60,8 @@
                     {$val['name']}
                     {else}
                     <option value="{$k}"
-                            {if $item['value'] && in_array($k,$item['value'])}
+                            {if $item[
+                    'value'] && in_array($k,$item['value'])}
                     selected="selected"
                     {/if}
 

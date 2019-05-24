@@ -10,6 +10,7 @@ use app\admin\component\system_config\SystemConfigLogic;
 use app\admin\component\system_log\SystemLogLogic;
 use app\admin\component\system_user\SystemUserConstant;
 use app\admin\component\system_user\SystemUserLogic;
+use magein\render\admin\Cdn;
 use think\Controller;
 use think\Request;
 use think\Env;
@@ -21,11 +22,13 @@ use think\Env;
 class Login extends Controller
 {
 
+    use Cdn;
+
     public function index()
     {
         $config = SystemConfigLogic::instance()->getValue();
         $this->assign('config', $config);
-
+        $this->assign('cdn', $this->cdn());
         return $this->fetch('admin@main/login');
     }
 

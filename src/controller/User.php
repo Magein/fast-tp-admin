@@ -55,9 +55,10 @@ class User extends Main
     }
 
     /**
+     * @param array $data
      * @return array
      */
-    protected function search()
+    protected function search($data = [])
     {
         return [
             'username',
