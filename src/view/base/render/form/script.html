@@ -55,7 +55,7 @@
         var province_id = '{$data.province_id|default=0}';
         var city_id = '{$data.city_id|default=0}';
         var area_id = '{$data.area_id|default=0}';
-        
+
         getProvince(province_id);
 
         if (city_id !== '0') {
@@ -186,4 +186,4 @@
 </script>
 
 {/* 多选组件 */}
-{include file="admin@public/formSelect"}
+{include file="admin@base/render/formSelect"}

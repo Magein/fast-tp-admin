@@ -25,19 +25,34 @@ class Main extends Controller
     use Cdn;
 
     /**
-     * 渲染方式：表单路径
+     * 基础文件路径
      */
-    const PUBLIC_FORM_MODAL = 'admin@public/form/modal';
+    const VIEW_BASE = 'admin@base/';
+
+    /**
+     *  基础文件路径
+     */
+    const VEW_BASE_MAIN = 'admin@base/main/';
+
+    /**
+     * 基础渲染模板路径
+     */
+    const VIEW_BASE_RENDER = 'admin@base/render/';
 
     /**
      * 渲染方式：表单路径
      */
-    const PUBLIC_FORM_OPEN = 'admin@public/form/open';
+    const PUBLIC_FORM_MODAL = 'admin@base/render/form/modal';
+
+    /**
+     * 渲染方式：表单路径
+     */
+    const PUBLIC_FORM_OPEN = 'admin@base/render/form/open';
 
     /**
      * 渲染方式：表格路径
      */
-    const PUBLIC_TABLE = 'admin@public/index';
+    const PUBLIC_TABLE = 'admin@base/render/index';
 
     /**
      * 当前访问页面标题
@@ -108,6 +123,9 @@ class Main extends Controller
         return $this->config = SystemConfigLogic::instance()->getValue();
     }
 
+    /**
+     * 系统初始化
+     */
     protected function init()
     {
         $menus = $this->checkMenus();
@@ -141,8 +159,22 @@ class Main extends Controller
                 'active_menu' => $this->active_menu,
                 // 静态资源文件
                 'cdn' => $this->cdn(),
+                // 上传路径
+                'upload' => $this->upload()
             ]
         );
+    }
+
+    /**
+     * 上传路径
+     * @return array
+     */
+    protected function upload()
+    {
+        return [
+            'UEditor' => url('plugin/editor'),
+            'file' => url('plugin/upload'),
+        ];
     }
 
     /**
@@ -271,9 +303,9 @@ class Main extends Controller
     public function index()
     {
 
-        $limit = Request::instance()->get('limit');
-        if ($limit) {
-            $this->limit = $limit;
+        $pageSize = Request::instance()->get('page_size', \think\Config::get('paginate.list_rows'));
+        if ($pageSize) {
+            $this->limit = $pageSize;
         }
 
         /**
@@ -309,7 +341,9 @@ class Main extends Controller
             $list = $queryResult;
         }
 
-        $this->assign('page', array_values($page));
+        $page['var_page'] = \think\Config::get('paginate.var_page');
+
+        $this->assign('page', $page);
         $this->assign('list', array_values($list));
 
         // 表格列中的操作按钮

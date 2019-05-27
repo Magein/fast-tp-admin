@@ -163,7 +163,8 @@
                data-name="{$item.field}"
                data-value="{$item.value}"
                {$item.attrs}
-               data-size="{$item.origin.size|default=200}"
+               data-ext="{$item.origin.ext|default=''}"
+               data-size="{$item.origin.size|default=1024}"
                data-auto="{$item.origin.auto|default=true}"
                data-num="{$item.origin.num|default=1}"
             >

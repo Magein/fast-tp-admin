@@ -10,8 +10,6 @@ use think\View;
  * 后台参数配置控制器
  * Class Config
  * @package app\admin\controller
- * @author Anyon <zoujingli@qq.com>
- * @date 2017/02/15 18:05
  */
 class Config extends Main
 {
@@ -25,7 +23,7 @@ class Config extends Main
     {
         $data = SystemConfigLogic::instance()->getValue();
 
-        return view('main/config', [
+        return view('base/main/config', [
             'data' => $data,
         ]);
     }

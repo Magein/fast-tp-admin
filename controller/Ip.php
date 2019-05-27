@@ -9,8 +9,6 @@ use app\admin\component\system_ip\SystemIpLogic;
  * 系统日志管理
  * Class Log
  * @package app\admin\controller
- * @author Anyon <zoujingli@qq.com>
- * @date 2017/02/15 18:12
  */
 class Ip extends Main
 {

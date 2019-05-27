@@ -29,7 +29,7 @@ class Login extends Controller
         $config = SystemConfigLogic::instance()->getValue();
         $this->assign('config', $config);
         $this->assign('cdn', $this->cdn());
-        return $this->fetch('admin@main/login');
+        return $this->fetch('admin@base/main/login');
     }
 
     public function login()

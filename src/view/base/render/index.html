@@ -3,19 +3,19 @@
 {block name="content"}
 
 {/* 搜索框开始 */}
-{include file='admin@public/search'}
+{include file='admin@base/render/search'}
 {/* 搜索框结束 */}
 
 {/* 表格开始 */}
-{include file="admin@public/table"}
+{include file="admin@base/render/table"}
 {/* 表格结束 */}
 
 {/block}
 
 {block name="script"}
 
-{include file="admin@public/script"}
+{include file="admin@base/render/script"}
 
-{include file="admin@public/form/script"}
+{include file="admin@base/render/form/script"}
 
 {/block}

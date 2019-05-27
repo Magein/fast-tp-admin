@@ -90,7 +90,7 @@ class Role extends Main
         $this->assign('id', $id);
         $this->assign('data', json_encode($result, JSON_UNESCAPED_UNICODE));
 
-        return $this->fetch('admin@main/access');
+        return $this->fetch('admin@base/main/access');
     }
 
     /**

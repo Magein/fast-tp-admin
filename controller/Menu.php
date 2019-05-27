@@ -152,7 +152,7 @@ class Menu extends Main
         // 兼容回填
         $this->assign('data', []);
 
-        return $this->fetch('admin@main/menu');
+        return $this->fetch('admin@base/main/menu');
     }
 
     public function edit()
@@ -168,7 +168,7 @@ class Menu extends Main
 
         $this->assign('menus', SystemMenuLogic::instance()->floor());
 
-        return $this->fetch('admin@main/menu');
+        return $this->fetch('admin@base/main/menu');
     }
 
     /**

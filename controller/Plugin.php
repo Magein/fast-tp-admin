@@ -12,6 +12,9 @@ class Plugin
 {
     use Jump;
 
+    /**
+     * @return \think\Response|Json|\think\response\Jsonp|\think\response\Redirect|\think\response\View|\think\response\Xml
+     */
     public function editor()
     {
         $params = Request::instance()->param();
@@ -25,7 +28,12 @@ class Plugin
      */
     public function upload()
     {
-        $result = Upload::instance()->image();
+        $field = Request::instance()->param('field');
+        $size = Request::instance()->param('size');
+        $ext = Request::instance()->param('ext');
+
+        $result = Upload::instance()->file($field, $size * 1024, $ext);
+
         if ($result) {
             $this->success('success', '', $result);
         }
@@ -40,7 +48,7 @@ class Plugin
     public function icon()
     {
         $field = input('field');
-        return view('admin@main/icon', ['field' => $field]);
+        return view('admin@base/main/icon', ['field' => $field]);
     }
 
 }

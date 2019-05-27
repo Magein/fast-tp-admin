@@ -22,11 +22,7 @@
                 count: renderData.page.total,
                 // 每页数量
                 limit: renderData.page.per_page,
-                limits: [
-                    15,
-                    30,
-                    100
-                ],
+                limits: [15],
                 // 当前页
                 curr: renderData.page.current_page,
                 prev: '<',
@@ -44,16 +40,24 @@
                         href += '?';
                     }
 
-                    if (href.indexOf('&page=') === -1) {
-                        href += '&page=' + obj.curr;
+                    /**
+                     * 处理分页字段
+                     */
+                    let var_page = '&' + renderData.page.var_page + '=';
+                    if (href.indexOf(var_page) === -1) {
+                        href += var_page + obj.curr;
                     } else {
-                        href = href.replace(/&page=[0-9]+/, '&page=' + obj.curr);
+                        href = href.replace(new RegExp(var_page + '[0-9]+'), var_page + obj.curr);
                     }
 
-                    if (href.indexOf('&limit=') === -1) {
-                        href += '&limit=' + obj.limit;
+                    /**
+                     * 处理每页显示数量
+                     */
+                    let page_size = '&page_size=';
+                    if (href.indexOf(page_size) === -1) {
+                        href += page_size + obj.limit;
                     } else {
-                        href = href.replace(/&limit=[0-9]+/, '&limit=' + obj.limit);
+                        href = href.replace(new RegExp(page_size + '[0-9]+'), page_size + obj.limit);
                     }
 
                     window.location.href = href;
