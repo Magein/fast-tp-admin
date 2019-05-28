@@ -629,7 +629,7 @@
 
                 upload.render({
                     elem: '#' + id,
-                    url: '{$upload.file}',
+                    url: '{$upload.file|default=""}',
                     field: field,
                     accept: accept,
                     exts: ext,
