@@ -14,7 +14,7 @@ class LoginLogic
         Session::init(
             [
                 'expire' => 86400,
-               // 'id' => 'admin-user-' . date('Ymd'),
+                // 'id' => 'admin-user-' . date('Ymd'),
                 'prefix' => 'user_',
             ]
         );

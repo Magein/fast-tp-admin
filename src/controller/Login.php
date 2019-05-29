@@ -21,11 +21,16 @@ use think\Env;
  */
 class Login extends Controller
 {
-
     use Cdn;
 
     public function index()
     {
+        $loginInfo = LoginLogic::instance()->getLogin();
+
+        if ($loginInfo) {
+            $this->redirect($this->loginSuccessRedirect());
+        }
+
         $config = SystemConfigLogic::instance()->getValue();
         $this->assign('config', $config);
         $this->assign('cdn', $this->cdn());
@@ -73,7 +78,7 @@ class Login extends Controller
 
         SystemLogLogic::instance()->create('login', $record['id']);
 
-        $this->success('登录成功', 'config/index');
+        $this->success('登录成功', $this->loginSuccessRedirect());
     }
 
     public function logout()
@@ -81,5 +86,12 @@ class Login extends Controller
         LoginLogic::instance()->setLogin();
 
         $this->success('success', 'index');
+    }
+
+    private function loginSuccessRedirect()
+    {
+        $redirect = \think\Config::get('login_success_redirect');
+
+        return $redirect ?: 'admin/config/index';
     }
 }

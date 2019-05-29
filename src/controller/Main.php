@@ -183,9 +183,14 @@ class Main extends Controller
      */
     protected function path()
     {
-        $dispatch = Request::instance()->dispatch()['module'];
-        $dispatch[1] = (new Variable())->transToUnderline($dispatch[1]);
-        $this->path = implode('/', $dispatch);
+        $request = Request::instance();
+
+        $module = $request->module();
+        $controller = $request->controller();
+        $action = $request->action();
+
+        $controller = (new Variable())->transToUnderline($controller);
+        $this->path = $module . '/' . $controller . '/' . $action;
 
         return $this->path;
     }

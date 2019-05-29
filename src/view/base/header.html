@@ -13,19 +13,9 @@
     <link rel="stylesheet" href="{$cdn.font_awesome}">
     <link rel="stylesheet" href="{$cdn.layui_css}">
     <link rel="stylesheet" href="__STATIC__/theme/css/console.css">
-
-    <!--
-    引入layui.js的时候需要注意配置的问题
-    如果引入的是layui.js需要使用layui.use()进行模块化加载（不包含js），
-    使用layui.all.js的时候加载全部，包含jquery
-    -->
-
-    <script src="{$cdn.layui_all_js}"></script>
-    <script src="{$cdn.require_js}"></script>
-
     <script>
         window.ROOT_URL = '__ROOT__';
         window.PATH = '{$path|default=""}';
-        window.UEDITOR_HOME_URL = '{$upload.UEditor}';
+        window.UEDITOR_HOME_URL = '{$upload.UEditor|default=""}';
     </script>
 </head>
