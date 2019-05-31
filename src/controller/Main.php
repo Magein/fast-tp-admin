@@ -2,7 +2,6 @@
 
 namespace app\admin\controller;
 
-use app\admin\constant\StaticResourceConstant;
 use app\admin\logic\LoginLogic;
 use app\admin\component\system_config\SystemConfigLogic;
 use app\admin\component\system_menu\SystemMenuLogic;
