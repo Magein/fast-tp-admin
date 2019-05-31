@@ -72,8 +72,9 @@ class SystemMenuLogic extends Logic
 
         if (empty($records)) {
 
-            $records = $this->setReturnArrayKey('id')->select();
+            $records = $this->setReturnArrayKey('id')->setOrder('sort asc')->select();
 
+            Cache::store('file')->set(SystemMenuConstant::SYSTEM_MENU_LIST, $records);
         }
 
         return $records;
@@ -90,16 +91,12 @@ class SystemMenuLogic extends Logic
     /**
      * 获取层级关系
      * @param $ids
+     * @param $limit
      * @return array|mixed
      */
     public function floor($ids = null, $limit = 3)
     {
-        if (empty($records)) {
-
-            $records = $this->select();
-
-            Cache::store('file')->set(SystemMenuConstant::SYSTEM_MENU_LIST, $records);
-        }
+        $records = $this->getList();
 
         if ($ids) {
             foreach ($records as &$item) {
@@ -132,7 +129,7 @@ class SystemMenuLogic extends Logic
 
     public function getAuthList($auth)
     {
-        $records = $this->setReturnArrayKey('id')->select();
+        $records = $this->getList();
 
         $result = array();
         foreach ($records as $key => &$item) {
