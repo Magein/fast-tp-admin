@@ -1,6 +1,8 @@
 <script src="{$cdn.layui_all_js}"></script>
 <script src="{$cdn.require_js}"></script>
+
 {include file="admin@base/region"}
+
 <script type="text/javascript">
     // IE兼容提示
     (function (w) {
@@ -77,16 +79,6 @@
                 if ($menu.hasClass(miniClass)) $(this).attr('index', layer.tips($(this).attr('data-target-tips') || '', this));
             }).mouseleave(function () {
                 layer.close($(this).attr('index'));
-            });
-
-            $('[data-target-tips]').on('click', function () {
-                let cla = 'layui-nav-itemed';
-                let _this = $(this).parent('li');
-                if (_this.hasClass(cla)) {
-                    _this.removeClass('layui-nav-itemed')
-                } else {
-                    _this.addClass('layui-nav-itemed')
-                }
             });
 
         })($('.layui-layout-admin'), 'layui-layout-left-mini');

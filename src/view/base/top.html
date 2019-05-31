@@ -1,5 +1,5 @@
 <div class="layui-header notselect">
-    <a href="{:url('admin/login/index')}"
+    <a href="{:url('@')}"
        class="layui-logo layui-elip">
         {$config.app_name}
         {if $config.app_version}
@@ -26,7 +26,7 @@
         <!--</li>-->
         {if $user}
         <li class="layui-nav-item">
-            <dl class="layui-nav-child layui-anim layui-anim-upbit">
+            <dl class="layui-nav-child">
                 <dd lay-unselect>
                     <a data-modal="{:url('admin/user/info',['id'=>$user.id])}">
                         <i class="layui-icon layui-icon-set-fill margin-right-5"></i>
@@ -40,20 +40,20 @@
                     </a>
                 </dd>
                 <dd lay-unselect>
-                    <a data-confirm="确定要退出登录吗？" data-load="{:url('admin/login/logout')}"><i
+                    <a data-confirm="确定要退出登录吗？" data-load="{:url('login/logout')}"><i
                             class="layui-icon layui-icon-release margin-right-5"></i>退出登录</a>
                 </dd>
             </dl>
             <a>
-                <span>
-                    <i class="layui-icon layui-icon-username margin-right-5"></i>
-                    {$user.nickname|default=$user.username}
-                </span>
+                    <span>
+                        <i class="layui-icon layui-icon-username margin-right-5"></i>
+                        {$user.nickname|default=$user.username}
+                    </span>
             </a>
         </li>
         {else}
         <li class="layui-nav-item">
-            <a href="{:url('admin/login/index')}">
+            <a href="{:url('login/index')}">
                 <i class="layui-icon layui-icon-username"></i>
                 立即登录
             </a>
