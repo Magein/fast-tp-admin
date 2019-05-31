@@ -158,7 +158,7 @@ class RenderForm
      */
     public function setText($field, $value = '', $required = true, $title = null, $attrs = [])
     {
-        $this->properties('text', $field, $title, $required, $value, $attrs);
+        $this->properties('text', $field, $value, $required, $title, $attrs);
 
         return $this;
     }
@@ -173,7 +173,7 @@ class RenderForm
      */
     public function setPassword($field, $value = '', $required = true, $title = null, $attrs = [])
     {
-        $this->properties('password', $field, $title, $required, $value, $attrs);
+        $this->properties('password', $field, $value, $required, $title, $attrs);
 
         return $this;
     }
@@ -191,7 +191,7 @@ class RenderForm
     {
         $attrs['data-format'] = 'datetime';
 
-        $this->properties('datetime', $field, $title, $required, $value, $attrs);
+        $this->properties('datetime', $field, $value, $required, $title, $attrs);
 
         return $this;
     }
@@ -208,7 +208,7 @@ class RenderForm
     {
         $attrs['data-format'] = 'date';
 
-        $this->properties('datetime', $field, $title, $required, $value, $attrs);
+        $this->properties('datetime', $field, $value, $required, $title, $attrs);
 
         return $this;
     }
@@ -225,7 +225,7 @@ class RenderForm
     {
         $attrs['data-format'] = 'time';
 
-        $this->properties('datetime', $field, $title, $required, $value, $attrs);
+        $this->properties('datetime', $field, $value, $required, $title, $attrs);
 
         return $this;
     }
@@ -244,7 +244,7 @@ class RenderForm
         $attrs['data-format'] = $dateFormat ? $dateFormat : 'datetime';
         $attrs['data-range'] = '~';
 
-        $this->properties('datetime', $field, $title, $required, $value, $attrs);
+        $this->properties('datetime', $field, $value, $required, $title, $attrs);
 
         return $this;
     }
@@ -442,7 +442,7 @@ class RenderForm
      */
     public function setTextArea($field, $value = '', $required = true, $title = null, $attrs = [])
     {
-        $this->properties('textArea', $field, $title, $required, $value, $attrs);
+        $this->properties('textArea', $field, $value, $required, $title, $attrs);
 
         return $this;
     }
