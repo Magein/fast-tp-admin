@@ -92,6 +92,10 @@ class Login extends Controller
     {
         $redirect = \think\Config::get('login_success_redirect');
 
-        return $redirect ?: 'admin/config/index';
+        if (empty($redirect)) {
+            $redirect = 'admin/index/index';
+        }
+
+        return $redirect;
     }
 }
