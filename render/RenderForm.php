@@ -132,7 +132,7 @@ class RenderForm
      * @param bool $required
      * @param null $title
      * @param array $attrs
-     * @param Property
+     * @return Property
      */
     private function properties($type, $field, $value = '', $required = true, $title = null, $attrs = [])
     {

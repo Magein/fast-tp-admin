@@ -397,16 +397,7 @@ EOF;
         if ($headers) {
 
             // 获取字典
-            $dictionary = $this->getDictionary();
-
-            $property = 'word';
-            if ($dictionary && property_exists($dictionary, $property)) {
-                $word = $dictionary->$property;
-            } else {
-                $word = [];
-            }
-
-            $word = array_merge((new Dictionary())->word, $word);
+            $word = $this->getWord();
 
             foreach ($headers as &$item) {
 
