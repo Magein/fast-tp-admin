@@ -35,6 +35,9 @@ class SystemMenuModel extends Model
      */
     protected function setNodeAttr($value, $data)
     {
+        if (isset($data['node']) && $data['node']) {
+            return $data['node'];
+        }
 
         static $records = [];
 
