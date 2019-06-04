@@ -35,30 +35,18 @@ class SystemMenuModel extends Model
      */
     protected function setNodeAttr($value, $data)
     {
-        if (isset($data['node']) && $data['node']) {
-            return $data['node'];
+
+        if (isset($data['pid']) && $data['pid']) {
+
+            $record = SystemMenuLogic::instance()->setCondition(['id' => $data['pid']])->find();
+
+            if ($record && $record['node']) {
+                $value = implode('-', $record['node']) . '-' . $record['id'];
+            }
+
         }
 
-        static $records = [];
-
-        // 修改的时候不从缓冲中获取，直接查询，防止节点信息更新错误
-        if (empty($records)) {
-
-            $records = SystemMenuLogic::instance()->select();
-
-            $records = TreeStructure::instance()->floor($records, function ($val, $result) {
-                if (isset($result[$val['pid']]['node'])) {
-                    $val['node'] = $result[$val['pid']]['node'] . '-' . $val['id'];
-                } else {
-                    $val['node'] = $val['id'];
-                }
-                return $val;
-            }, 99);
-        }
-
-        $value = isset($records[$data['pid']]) ? $records[$data['pid']]['node'] : '';
-
-        return $value;
+        return $value ?: '';
     }
 
     /**

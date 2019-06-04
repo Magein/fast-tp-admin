@@ -87,7 +87,9 @@ class Menu extends Main
 
                 $url = explode('/', $data['url']);
 
-                array_pop($url);
+                if (count($url) >= 3) {
+                    unset($url[2]);
+                }
 
                 switch ($key) {
                     case 'add':

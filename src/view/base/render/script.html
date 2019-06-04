@@ -203,6 +203,10 @@
                             url += i + '=' + data.param[i] + '&';
                         }
                     }
+                    let reg = /\?$/;
+                    if (reg.test(url)) {
+                        url = url.replace('?', '');
+                    }
                     window.location.href = url;
                     break;
                 default:
