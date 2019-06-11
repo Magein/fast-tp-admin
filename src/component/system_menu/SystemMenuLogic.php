@@ -5,13 +5,13 @@ namespace app\admin\component\system_menu;
 use magein\php_tools\common\TreeStructure;
 use magein\php_tools\think\Logic;
 use think\Cache;
+use think\Config;
 
 class SystemMenuLogic extends Logic
 {
     protected $fields = [
         'id',
         'pid',
-        'node',
         'title',
         'icon',
         'url',
@@ -74,7 +74,11 @@ class SystemMenuLogic extends Logic
 
             $records = $this->setReturnArrayKey('id')->setOrder('sort asc')->select();
 
-            Cache::store('file')->set(SystemMenuConstant::SYSTEM_MENU_LIST, $records);
+            // 使用缓存
+            if ($records && Config::get('system_menu_use_cache')) {
+                Cache::store('file')->set(SystemMenuConstant::SYSTEM_MENU_LIST, $records);
+            }
+
         }
 
         return $records;
@@ -106,15 +110,7 @@ class SystemMenuLogic extends Logic
             }
         }
 
-        $records = TreeStructure::instance()->floor($records, function ($val, $result) {
-            if (isset($result[$val['pid']]['node'])) {
-                $val['node'] = $result[$val['pid']]['node'] . '-' . $val['id'];
-            } else {
-                $val['node'] = $val['id'];
-            }
-
-            return $val;
-        }, $limit);
+        $records = TreeStructure::instance()->floor($records);
 
         return $records;
     }
@@ -127,6 +123,11 @@ class SystemMenuLogic extends Logic
         return $this->menuUrl;
     }
 
+    /**
+     * 授权状态
+     * @param $auth
+     * @return array
+     */
     public function getAuthList($auth)
     {
         $records = $this->getList();

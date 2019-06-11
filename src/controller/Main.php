@@ -129,6 +129,7 @@ class Main extends Controller
     {
         $menus = $this->checkMenus();
 
+        // 处理成树结构
         if ($menus) {
             $menus = TreeStructure::instance()->tree($menus);
         }
@@ -152,6 +153,8 @@ class Main extends Controller
                 // 菜单
                 'top' => $top,
                 'left' => $left,
+                //当前访问路径
+                'path' => $this->path,
                 // 配置信息
                 'config' => $this->config,
                 // 当前访问的菜单
@@ -203,13 +206,29 @@ class Main extends Controller
          * 获取系统的菜单列表，以及获取系统菜单的链接
          */
         $menus = SystemMenuLogic::instance()->getList();
+
+        // 处理成层级关系
+        $menus = TreeStructure::instance()->floor($menus, function ($item, $data) {
+            if ($item['pid'] == 0) {
+                $item['node'][] = $item['id'];
+            } else {
+                $item['node'] = $data[$item['pid']]['node'];
+                $item['node'][] = $item['id'];
+            }
+
+            $item['title'] = trim($item['title'], '|--');
+
+            return $item;
+        }, 4);
+
+
         $menu_url = [];
         if ($menus) {
             foreach ($menus as $key => $item) {
                 $menu_url[] = $item['url'];
+                // 自动设置页面标题
+                $this->title = $this->title ?: $item['title'];
                 if ($item['url'] == $this->path && $item['node']) {
-                    // 这是页面标题
-                    $this->title = $this->title ?: $item['title'];
                     // 这里的待优化，为了兼容xxx/add 这种新窗口打开后，左侧菜单没有选中的状态
                     $this->active_menu = count($item['node']) > 2 ? null : $item;
                 }
@@ -235,6 +254,9 @@ class Main extends Controller
 
         $this->checkAuth($menu_url);
 
+        /**
+         * 获取当前访问路径信息
+         */
         $this->getActiveMenu($menus);
 
         return $menus;
@@ -248,7 +270,7 @@ class Main extends Controller
     protected function getUserAuth($role_id = [])
     {
         if (empty($role_id)) {
-            $role_id = isset($this->user['role_id']) ? $this->user['role_id'] : [];
+            $role_id = isset($this->user['role']) ? $this->user['role'] : [];
         }
 
         $menu_ids = SystemRoleLogic::instance()->getMenuIdByRoleIds($role_id);
@@ -257,12 +279,17 @@ class Main extends Controller
     }
 
     /**
+     * 检测权限
      * @param $menu_url
      * @return bool
      */
     protected function checkAuth($menu_url)
     {
         if (empty($menu_url)) {
+            return true;
+        }
+
+        if ($this->path == 'admin/index/index') {
             return true;
         }
 
@@ -294,7 +321,7 @@ class Main extends Controller
             $path = $removeAction($this->path);
             foreach ($menus as $key => $item) {
                 $url = $removeAction($item['url']);
-                if ($url == $path && $item['node']) {
+                if ($url == $path && count($item['node']) > 1) {
                     $this->active_menu = $item;
                     break;
                 }

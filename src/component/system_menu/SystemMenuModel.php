@@ -35,18 +35,7 @@ class SystemMenuModel extends Model
      */
     protected function setNodeAttr($value, $data)
     {
-
-        if (isset($data['pid']) && $data['pid']) {
-
-            $record = SystemMenuLogic::instance()->setCondition(['id' => $data['pid']])->find();
-
-            if ($record && $record['node']) {
-                $value = implode('-', $record['node']) . '-' . $record['id'];
-            }
-
-        }
-
-        return $value ?: '';
+        return '';
     }
 
     /**
