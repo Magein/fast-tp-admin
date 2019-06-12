@@ -12,6 +12,7 @@ class SystemMenuLogic extends Logic
     protected $fields = [
         'id',
         'pid',
+//        'node',
         'title',
         'icon',
         'url',
@@ -110,7 +111,7 @@ class SystemMenuLogic extends Logic
             }
         }
 
-        $records = TreeStructure::instance()->floor($records);
+        $records = TreeStructure::instance()->floor($records, null, $limit);
 
         return $records;
     }
