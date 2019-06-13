@@ -51,12 +51,16 @@
 
         /**
          * 城市数据联动，并且回填数据
+         *
+         * 1. 用于表单回填，表单回填的值从 data中去
+         * 2. 回填搜索框的值，搜索框的值从 url中获取
          */
-        var province_id = '{$data.province_id|default=0}';
-        var city_id = '{$data.city_id|default=0}';
-        var area_id = '{$data.area_id|default=0}';
+        var province_id = parseInt('{$data.province_id|default=0}') || '{$Think.get.province_id}';
+        var city_id = parseInt('{$data.city_id|default=0}') || '{$Think.get.city_id}';
+        var area_id = parseInt('{$data.area_id|default=0}') || '{$Think.get.area_id}';
 
         getProvince(province_id);
+
 
         if (city_id !== '0') {
             changeCity(province_id, city_id);
@@ -171,6 +175,57 @@
             window.form.render();
         }
 
+        /**
+         * 二级联动切换
+         */
+        window.form.on('select()', function (data) {
+            let elem = data.elem;
+            let child_data = $(elem).data('child-data');
+            if (child_data !== undefined) {
+                let child_name = $(elem).data('child-name');
+                linkage(data.value, child_data, child_name);
+            }
+        });
+
+        /**
+         * 二级联动回填
+         */
+        $('select[data-child-data]').each(function () {
+            let child_data = $(this).data('child-data');
+            let child_name = $(this).data('child-name');
+            let value = $(this).val();
+            linkage(value, child_data, child_name);
+        });
+
+        /**
+         * 二级联动的方法
+         */
+        function linkage(key, data, name) {
+            if (typeof data === "string") {
+                data = JSON.parse(data);
+            }
+            let category = data[key];
+            if (category) {
+
+                let child = $('select[name=' + name + ']');
+                let value = child.data('value');
+
+                let option = '<option value=""> --全部-- </option>';
+                for (let i in category) {
+                    if (i == value) {
+                        option += '<option value="' + i + '" selected>' + category[i] + '</option>'
+                    } else {
+                        option += '<option value="' + i + '">' + category[i] + '</option>'
+                    }
+                }
+                child.html(option);
+                window.form.render();
+            }
+        }
+
+        /**
+         * 富文本编辑器
+         */
         if ($('textarea.editor').length > 0) {
             require(['ZeroClipboard'], function (ZeroClipboard) {
                 window.ZeroClipboard = ZeroClipboard;

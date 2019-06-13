@@ -1,239 +1,244 @@
 <form class="layui-form layui-card layui-form-pane"
-          action="{:url()}"
-          data-auto="true"
-          data-callback="reload"
-          method="post"
-          autocomplete="off">
+      action="{:url()}"
+      data-auto="true"
+      data-callback="reload"
+      method="post"
+      autocomplete="off">
 
-        {if $formItems}
-        {foreach $formItems as $item}
-        {if condition="$item['type'] == 'hidden'"}
-        <input type="hidden" name="{$item.field}" value="{$item.value}"/>
+    {if $formItems}
+    {foreach $formItems as $item}
+    {if condition="$item['type'] == 'hidden'"}
+    <input type="hidden" name="{$item.field}" value="{$item.value}"/>
+    {else}
+    <div class="layui-form-item layui-col-xs{$item.origin.size|default=12}"
+         {if in_array($item[
+    'type'],['radio','checkbox'])}pane{/if}>
+    <label class="layui-form-label">
+        {$item.title}
+    </label>
+    {switch $item['type']}
+    {/* 下拉框开始 */ }
+    {case select}
+    <div class="layui-input-block">
+        <select name="{$item.field}"
+                lay-filter="{$item.field}"
+                data-value="{$item['value']}"
+                {if $item.required }required{/if}
+        {$item['attrs']}
+        >
+        {if condition="$item['option']"}
+        {foreach name="$item['option']" item="option" key="k"}
+        {if condition="$k eq $item['value']"}
+        <option value="{$k}" selected>{$option}</option>
         {else}
-        <div class="layui-form-item layui-col-xs{$item.origin.size|default=12}"
-             {if in_array($item['type'],['radio','checkbox'])}pane{/if}>
-        <label class="layui-form-label">
-            {$item.title}
-        </label>
-        {switch $item['type']}
-        {/* 下拉框开始 */ }
-        {case select}
-        <div class="layui-input-block">
-            <select name="{$item.field}"
-                    lay-filter="{$item.field}"
-                    data-value="{$item['value']}"
-                    {if $item.required }required{/if}
-            {$item['attrs']}
-            >
-            {if condition="$item['option']"}
-            {foreach name="$item['option']" item="option" key="k"}
-            {if condition="$k eq $item['value']"}
-            <option value="{$k}" selected>{$option}</option>
-            {else}
-            <option value="{$k}">{$option}</option>
-            {/if}
-            {/foreach}
-            {/if}
-            </select>
-        </div>
-        {/case}
-        {/* 下拉框结束 */ }
-
-        {/* 单选框开始 */ }
-        {case radio}
-
-        {if condition="$item['option']"}
-        <div class="layui-input-block">
-            {foreach name="$item['option']" item="option" key="k"}
-            <input type="radio"
-                   name="{$item.field}"
-                   value="{$k}"
-                   title="{$option}"
-                   {if condition="$k eq $item['value']" }
-                   checked
-                   {/if}
-            >
-            {/foreach}
-        </div>
+        <option value="{$k}">{$option}</option>
         {/if}
-        {/case}
-        {/* 单选框结束 */ }
-
-        {/* 多选框开始 */ }
-        {case checkbox}
-        {if condition="$item['option']"}
-        <div class="layui-input-block">
-            {foreach name="$item['option']" item="option" key="k"}
-            <input type="checkbox"
-                   name="{$item.field}[]"
-                   value="{$k}"
-                   title="{$option}"
-                   {if $item.required }required{/if}
-            {if $item['value'] && is_array($item['value']) && in_array($k,$item['value'])}
-            checked
-            {/if}
-            >
-            {/foreach}
-        </div>
+        {/foreach}
         {/if}
-        {/case}
-        {/* 多选框结束 */ }
+        </select>
+    </div>
+    {/case}
+    {/* 下拉框结束 */ }
 
-        {/* 多选下拉框开始 */ }
-        {case select-checked}
-        <div class="layui-input-block">
-            <select name="{$item.field}"
-                    class="layui-select"
-                    {if $item.required }required{/if}
-            xm-select="select_{$item.field}"
-            lay-filter="{$item.field}"
-            >
-            <option value="">全部</option>
-            {if $item['option']}
-            {foreach $item['option'] as $k=>$val }
+    {/* 单选框开始 */ }
+    {case radio}
 
-            {if is_array($val)}
-            <option value="{$val.value}"
-                    {if $item['value'] && in_array($k,$item['value'])}
-                    selected="selected"
-                    {/if}
+    {if condition="$item['option']"}
+    <div class="layui-input-block">
+        {foreach name="$item['option']" item="option" key="k"}
+        <input type="radio"
+               name="{$item.field}"
+               value="{$k}"
+               title="{$option}"
+               {if condition="$k eq $item['value']" }
+               checked
+               {/if}
+        >
+        {/foreach}
+    </div>
+    {/if}
+    {/case}
+    {/* 单选框结束 */ }
 
-                    {if isset($val['disabled'])}disabled="disabled"{/if}
-            >
-            {$val['name']}
-            {else}
-            <option value="{$k}"
-                    {if $item['value'] && in_array($k,$item['value'])}
-                    selected="selected"
-                    {/if}
+    {/* 多选框开始 */ }
+    {case checkbox}
+    {if condition="$item['option']"}
+    <div class="layui-input-block">
+        {foreach name="$item['option']" item="option" key="k"}
+        <input type="checkbox"
+               name="{$item.field}[]"
+               value="{$k}"
+               title="{$option}"
+               {if $item.required }required{/if}
+        {if $item['value'] && is_array($item['value']) && in_array($k,$item['value'])}
+        checked
+        {/if}
+        >
+        {/foreach}
+    </div>
+    {/if}
+    {/case}
+    {/* 多选框结束 */ }
 
-                    {if isset($val['disabled'])}disabled="disabled"{/if}
-            >{$val}{/if}</option>
+    {/* 多选下拉框开始 */ }
+    {case select-checked}
+    <div class="layui-input-block">
+        <select name="{$item.field}"
+                class="layui-select"
+                {if $item.required }required{/if}
+        xm-select="select_{$item.field}"
+        lay-filter="{$item.field}"
+        >
+        <option value="">全部</option>
+        {if $item['option']}
+        {foreach $item['option'] as $k=>$val }
+
+        {if is_array($val)}
+        <option value="{$val.value}"
+                {if $item[
+        'value'] && in_array($k,$item['value'])}
+        selected="selected"
+        {/if}
+
+        {if isset($val['disabled'])}disabled="disabled"{/if}
+        >
+        {$val['name']}
+        {else}
+        <option value="{$k}"
+                {if $item[
+        'value'] && in_array($k,$item['value'])}
+        selected="selected"
+        {/if}
+
+        {if isset($val['disabled'])}disabled="disabled"{/if}
+        >{$val}{/if}</option>
 
 
-            {/foreach}
-            {/if}
-            </select>
-        </div>
-        {/case}
-        {/* 多选下拉框结束 */ }
+        {/foreach}
+        {/if}
+        </select>
+    </div>
+    {/case}
+    {/* 多选下拉框结束 */ }
 
-        {/* 时间框开始 */ }
-        {case datetime}
-        <div class="layui-input-block">
-            <input type="text"
-                   name="{$item.field}"
-                   value="{$item.value}"
-                   title="{$item.title}"
-                   class="layui-input date-time-field"
-                   {$item.attrs}
-                   data-format="{$item.origin.format|default=''}"
-                   data-range="{$item.origin.range|default=''}"
-                   {if $item.required}required{/if}
-            >
-        </div>
-        {/case}
-        {/* 时间框结束 */ }
+    {/* 时间框开始 */ }
+    {case datetime}
+    <div class="layui-input-block">
+        <input type="text"
+               name="{$item.field}"
+               value="{$item.value}"
+               title="{$item.title}"
+               class="layui-input date-time-field"
+               {$item.attrs}
+               data-format="{$item.origin.format|default=''}"
+               data-range="{$item.origin.range|default=''}"
+               {if $item.required}required{/if}
+        >
+    </div>
+    {/case}
+    {/* 时间框结束 */ }
 
-        {/* 多行文本域开始 */ }
-        {case textArea}
-        <div class="layui-input-block">
+    {/* 多行文本域开始 */ }
+    {case textArea}
+    <div class="layui-input-block">
             <textarea name="{$item.field}"
                       class="layui-textarea"
                       {if $item.required}required{/if}
-            {$item['attrs']}
-            >{$item.value}</textarea>
-        </div>
-        {/case}
-        {/* 多行文本域结束 */ }
+        {$item['attrs']}
+        >{$item.value}</textarea>
+    </div>
+    {/case}
+    {/* 多行文本域结束 */ }
 
-        {/* 富文本编辑器开始 */ }
-        {case editor}
-        <div class="layui-input-block">
-            <textarea name="{$item.field}" id="editor-{$item.field}" class="editor" {if $item.required }required{/if}>{$item.value}</textarea>
-        </div>
-        {/case}
-        {/* 富文本编辑器开始 */ }
+    {/* 富文本编辑器开始 */ }
+    {case editor}
+    <div class="layui-input-block">
+        <textarea name="{$item.field}" id="editor-{$item.field}" class="editor" {if $item.required }required{/if}>{$item.value}</textarea>
+    </div>
+    {/case}
+    {/* 富文本编辑器开始 */ }
 
-        {/* 文件上传开始 */}
-        {case file}
-        <div class="layui-input-block">
-            <a class="layui-btn upload-file"
-               id="upload-id-{$item.field}"
-               data-name="{$item.field}"
-               data-value="{$item.value}"
-               {$item.attrs}
-               data-ext="{$item.origin.ext|default=''}"
-               data-size="{$item.origin.file_size|default=1024}"
-               data-auto="{$item.origin.auto|default=true}"
-               data-num="{$item.origin.num|default=1}"
-            >
-                选择文件
-            </a>
-            <p class="help-block">上传最大限制为{$item.origin.file_size|default=1024}KB</p>
-        </div>
-        {/case}
-        {/* 文件上传结束 */}
+    {/* 文件上传开始 */}
+    {case file}
+    <div class="layui-input-block">
+        <a class="layui-btn upload-file"
+           id="upload-id-{$item.field}"
+           data-name="{$item.field}"
+           data-value="{$item.value}"
+           {$item.attrs}
+           data-ext="{$item.origin.ext|default=''}"
+           data-size="{$item.origin.file_size|default=1024}"
+           data-auto="{$item.origin.auto|default=true}"
+           data-num="{$item.origin.num|default=1}"
+        >
+            选择文件
+        </a>
 
-        {/* 地区筛选开始 */ }
-        {case region}
-        <div class="layui-input-inline">
-            <select name="province_id" lay-filter="province_id" data-value="{$item.value}" {if $item.required
-                    }required{/if}>
-            <option value="">请选择省份</option>
-            {if condition="$item['option']"}
-            {foreach name="$item['option']" item="option" key="k"}
-            {if condition="$k eq $item['value']"}
-            <option value="{$k}" selected>{$option}</option>
-            {else}
-            <option value="{$k}">{$option}</option>
-            {/if}
-            {/foreach}
-            {/if}
-            </select>
-        </div>
-        <div class="layui-input-inline">
-            <select name="city_id" lay-filter="city_id" data-value="{$item.value}">
-                <option value="">请选择市</option>
-            </select>
-        </div>
-        <div class="layui-input-inline">
-            <select name="area_id" lay-filter="area_id" data-value="{$item.value}">
-                <option value="">请选择县/区</option>
-            </select>
-        </div>
-        {/case}
-        {/* 地区筛选结束 */ }
-
-        {/* 其他开始 */ }
-        {default /}
-        <div class="layui-input-block">
-            <input type="{$item.type}"
-                   name="{$item.field}"
-                   value="{$item.value}"
-                   title="{$item.title}"
-                   placeholder="{$item.placeholder}"
-                   class="layui-input"
-                   {if $item.required }required{/if}
-            {$item['attrs']}
-            >
-
-            {if isset($item.description)}
-            <div class="layui-form-mid layui-word-aux">{$item.description}</div>
-            {/if}
-        </div>
-        {/* 其他结束 */ }
-        {/switch}
+        <p class="help-block">
+            上传最大限制为{$item.origin.file_size|default=1024}KB
+            {$item.origin.suggest|default=""}
+        </p>
 
 
-</div>
-{/if}
-{/foreach}
-{/if}
+    </div>
+    {/case}
+    {/* 文件上传结束 */}
 
-<div class="hr-line-dashed"></div>
-<div class="layui-form-item text-center">
-    <button class="layui-btn" type='submit'>保存数据</button>
-    <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
-</div>
+    {/* 地区筛选开始 */ }
+    {case region}
+    <div class="layui-input-inline">
+        <select name="province_id" lay-filter="province_id" data-value="{$item.value}" {if $item.required
+                }required{/if}>
+        <option value="">请选择省份</option>
+        {if condition="$item['option']"}
+        {foreach name="$item['option']" item="option" key="k"}
+        {if condition="$k eq $item['value']"}
+        <option value="{$k}" selected>{$option}</option>
+        {else}
+        <option value="{$k}">{$option}</option>
+        {/if}
+        {/foreach}
+        {/if}
+        </select>
+    </div>
+    <div class="layui-input-inline">
+        <select name="city_id" lay-filter="city_id" data-value="{$item.value}">
+            <option value="">请选择市</option>
+        </select>
+    </div>
+    <div class="layui-input-inline">
+        <select name="area_id" lay-filter="area_id" data-value="{$item.value}">
+            <option value="">请选择县/区</option>
+        </select>
+    </div>
+    {/case}
+    {/* 地区筛选结束 */ }
+
+    {/* 其他开始 */ }
+    {default /}
+    <div class="layui-input-block">
+        <input type="{$item.type}"
+               name="{$item.field}"
+               value="{$item.value}"
+               title="{$item.title}"
+               placeholder="{$item.placeholder}"
+               class="layui-input"
+               {if $item.required }required{/if}
+        {$item['attrs']}
+        >
+    </div>
+    {/* 其他结束 */ }
+    {/switch}
+
+
+    </div>
+    {/if}
+    {/foreach}
+    {/if}
+
+    <div class="hr-line-dashed"></div>
+    <div class="layui-form-item text-center">
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
 </form>

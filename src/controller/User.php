@@ -5,6 +5,7 @@ namespace app\admin\controller;
 
 use app\admin\logic\LoginLogic;
 use magein\php_tools\common\Password;
+use magein\php_tools\common\Phone;
 use magein\render\admin\RenderForm;
 use magein\render\admin\component\Property;
 use app\admin\component\system_role\SystemRoleLogic;
@@ -42,7 +43,7 @@ class User extends Main
 
             $id = Request::instance()->param('id');
             $rules = [
-                'username' => 'require|length:1,30|unique:system_user,username,' . $id,
+                'username' => 'require|length:1,30|alphaDash|unique:system_user,username,' . $id,
             ];
             $validate = new SystemUserValidate();
             $validate->rule($rules);
@@ -88,10 +89,19 @@ class User extends Main
             'username',
             'nickname',
             'phone',
-            'email',
+            ['field' => 'email', 'required' => false],
             ['status', 'radio', SystemUserLogic::instance()->transStatus()],
             ['field' => 'remark', 'required' => false]
         ];
+    }
+
+    protected function save($data = [], $validate = null)
+    {
+        if (!Phone::instance()->checkPhone($data['phone'])) {
+            $this->error('请输入正确的手机号码');
+        }
+
+        return parent::save($data);
     }
 
     public function info()
