@@ -164,12 +164,13 @@
                data-value="{$item.value}"
                {$item.attrs}
                data-ext="{$item.origin.ext|default=''}"
-               data-size="{$item.origin.size|default=1024}"
+               data-size="{$item.origin.file_size|default=1024}"
                data-auto="{$item.origin.auto|default=true}"
                data-num="{$item.origin.num|default=1}"
             >
                 选择文件
             </a>
+            <p class="help-block">上传最大限制为{$item.origin.file_size|default=1024}KB</p>
         </div>
         {/case}
         {/* 文件上传结束 */}
