@@ -86,7 +86,7 @@ class Main extends Controller
     /**
      * 初始化
      */
-    public function _initialize()
+    protected function _initialize()
     {
         $this->checkLogin();
 
