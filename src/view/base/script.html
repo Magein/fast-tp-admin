@@ -82,6 +82,20 @@
                 layer.close($(this).attr('index'));
             });
 
+            /**
+             * 左侧菜单，点击显示隐藏
+             */
+            $('.layui-side li.layui-nav-item a').on('click', function () {
+
+                let li = $(this).parent('li');
+
+                if (li.hasClass('layui-nav-itemed')) {
+                    li.removeClass('layui-nav-itemed');
+                } else {
+                    li.addClass('layui-nav-itemed');
+                }
+            })
+
         })($('.layui-layout-admin'), 'layui-layout-left-mini');
 
         /*! 消息组件实例 */
