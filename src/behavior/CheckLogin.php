@@ -18,12 +18,12 @@ class CheckLogin
             return true;
         }
 
-        $loginInfo = LoginLogic::instance()->getLogin();
-        if (empty($loginInfo)) {
+        $id = LoginLogic::instance()->id();
+        if (empty($id)) {
             throw new HttpResponseException(redirect('admin/login/index'));
         }
 
-        !defined('UID') && define('UID', $loginInfo['id']);
+        !defined('UID') && define('UID', $id);
 
         return true;
     }
