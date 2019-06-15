@@ -41,4 +41,18 @@ class LoginLogic
     {
         return Session::get('user');
     }
+
+    /**
+     * @return null
+     */
+    public function id()
+    {
+        $info = $this->getLogin();
+
+        if (isset($info['id']) && $info['id']) {
+            return $info['id'];
+        }
+
+        return null;
+    }
 }
