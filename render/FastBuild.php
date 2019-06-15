@@ -62,54 +62,27 @@ trait FastBuild
     protected $images = [];
 
     /**
-     * 左上角的按钮
-     * @var array
+     * 按钮类型
+     * @var string
      */
-    protected $leftTopButtons = [
-        'add' => [
-            'title' => '新增',
-            'url' => 'add',
-            'type' => 'modal',
-            'param' => [],
-            'icon' => 'layui-icon layui-icon-add-1',
-            'cla' => '',
-            'attrs' => ''
-        ],
-        'del' => [
-            'title' => '批量删除',
-            'url' => 'del',
-            'type' => 'del',
-            'param' => [],
-            'icon' => 'layui-icon layui-icon-delete',
-            'cla' => 'layui-btn layui-btn-sm layui-btn-danger',
-            'attrs' => ''
-        ],
-    ];
+    protected $buttonType = Button::TYPE_MODAL;
 
     /**
+     * 设置为false则关闭
+     * @var bool|string
+     */
+    protected $leftTopButton = true;
+
+    /**
+     * 设置为false则关闭
+     * @var bool|string
+     */
+    protected $operationButton = true;
+
+    /**
+     * 页面提示信息
      * @var array
      */
-    protected $operationButtons = [
-        'edit' => [
-            'title' => '编辑',
-            'url' => 'edit',
-            'type' => '',
-            'param' => ['id' => '__id__'],
-            'icon' => '',
-            'cla' => '',
-            'attrs' => ''
-        ],
-        'del' => [
-            'title' => '删除',
-            'url' => 'del',
-            'type' => 'del',
-            'param' => ['id' => '__id__'],
-            'icon' => '',
-            'cla' => 'layui-btn-danger',
-            'attrs' => ''
-        ]
-    ];
-
     protected $tips = [];
 
     /**
@@ -231,15 +204,41 @@ trait FastBuild
      */
     protected function getLeftTopButton()
     {
-        return $this->leftTopButtons;
+        if (false === $this->leftTopButton) {
+            return [];
+        }
+
+        $default = [
+            'add' => $this->setButton('新增', 'add', [], $this->buttonType, 'layui-icon layui-icon-add-1'),
+            'del' => $this->setButton('批量删除', 'del', [], 'del', 'layui-icon layui-icon-delete', 'layui-btn layui-btn-sm layui-btn-danger'),
+        ];
+
+        if (is_string($this->leftTopButton)) {
+            return isset($default[$this->leftTopButton]) ? [$default[$this->leftTopButton]] : [];
+        }
+
+        return $default;
     }
 
     /**
-     * @return array
+     * @return array|mixed
      */
     protected function getOperationButton()
     {
-        return $this->operationButtons;
+        if (false === $this->operationButton) {
+            return [];
+        }
+
+        $default = [
+            'edit' => $this->setButton('编辑', 'edit', ['id' => '__id__'], $this->buttonType),
+            'del' => $this->setButton('删除', 'del', ['id' => '__id__'], 'del', '', 'layui-btn-danger'),
+        ];
+
+        if (is_string($this->operationButton)) {
+            return isset($default[$this->operationButton]) ? [$default[$this->operationButton]] : [];
+        }
+
+        return $default;
     }
 
     /**
@@ -284,6 +283,20 @@ trait FastBuild
     protected function setButtonModal($title = '按钮', $url = '', $param = ['id' => '__id__'], $icon = '', $cla = '', $attrs = [])
     {
         return $this->setButton($title, $url, $param, Button::TYPE_MODAL, $icon, $cla, $attrs);
+    }
+
+    /**
+     * @param string $title
+     * @param string $url
+     * @param string $confirm
+     * @param array $param
+     * @param string $icon
+     * @param string $cla
+     * @return array
+     */
+    protected function setButtonConfirm($title = '按钮', $url = '', $confirm = '', $param = ['id' => '__id__'], $icon = '', $cla = '')
+    {
+        return $this->setButton($title, $url, $param, Button::TYPE_MODAL, $icon, $cla, ['data-confirm' => $confirm ?: '请您再次确认？']);
     }
 
     /**
@@ -440,7 +453,7 @@ EOF;
             ]);
         }
 
-        if ($this->operationButtons) {
+        if ($this->operationButton) {
             $headers[] = [
                 'fixed' => 'right',
                 'title' => '操作',

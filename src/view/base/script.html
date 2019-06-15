@@ -556,7 +556,20 @@
 
         /*! 注册 data-modal 事件行为 */
         $body.on('click', '[data-modal]', function () {
-            return $.form.modal($(this).attr('data-modal'), 'open_type=modal', $(this).attr('data-title') || $(this).text() || '编辑');
+            let _this = $(this);
+            if (!_this.data('modal')) {
+                return false;
+            }
+            let callback = function () {
+                return $.form.modal(_this.attr('data-modal'), {}, _this.attr('data-title') || _this.text() || '编辑');
+            };
+            if (_this.attr('data-confirm')) {
+                return $.msg.confirm($(this).attr('data-confirm'), function () {
+                    return callback();
+                })
+            } else {
+                return callback();
+            }
         });
 
         // 删除上传照片
@@ -664,3 +677,15 @@
 
     });
 </script>
+
+{if $cdn.script}
+
+{foreach $cdn['script'] as $item}
+
+{if isset($item['src'])}
+<script src="{$item.src}"></script>
+{/if}
+
+{/foreach}
+
+{/if}

@@ -36,7 +36,6 @@ class CreateTableSystemMenu extends Migrator
             0 => array(
                 'id' => 1,
                 'pid' => 0,
-                'node' => '',
                 'title' => '系统管理',
                 'icon' => 'fa fa-cog',
                 'url' => 'admin/config/index',
@@ -50,7 +49,6 @@ class CreateTableSystemMenu extends Migrator
             1 => array(
                 'id' => 2,
                 'pid' => 1,
-                'node' => '1',
                 'title' => '系统配置',
                 'icon' => 'layui-icon layui-icon-set-fill',
                 'url' => '',
@@ -64,7 +62,6 @@ class CreateTableSystemMenu extends Migrator
             2 => array(
                 'id' => 3,
                 'pid' => 2,
-                'node' => '1-2',
                 'title' => '网站参数',
                 'icon' => 'fa fa-apple',
                 'url' => 'admin/config/index',
@@ -78,7 +75,6 @@ class CreateTableSystemMenu extends Migrator
             3 => array(
                 'id' => 4,
                 'pid' => 6,
-                'node' => '1-6',
                 'title' => '菜单管理',
                 'icon' => 'fa fa-save',
                 'url' => 'admin/menu/index',
@@ -92,7 +88,6 @@ class CreateTableSystemMenu extends Migrator
             4 => array(
                 'id' => 5,
                 'pid' => 2,
-                'node' => '1-2',
                 'title' => '缓存管理',
                 'icon' => 'fa fa-ban',
                 'url' => 'admin/cache/index',
@@ -106,7 +101,6 @@ class CreateTableSystemMenu extends Migrator
             5 => array(
                 'id' => 6,
                 'pid' => 1,
-                'node' => '1',
                 'title' => '权限管理',
                 'icon' => 'fa fa-user-secret',
                 'url' => 'admin/auth/index',
@@ -120,7 +114,6 @@ class CreateTableSystemMenu extends Migrator
             6 => array(
                 'id' => 7,
                 'pid' => 6,
-                'node' => '1-6',
                 'title' => '角色管理',
                 'icon' => 'layui-icon layui-icon-user',
                 'url' => 'admin/role/index',
@@ -134,7 +127,6 @@ class CreateTableSystemMenu extends Migrator
             7 => array(
                 'id' => 9,
                 'pid' => 6,
-                'node' => '1-6',
                 'title' => '用户管理',
                 'icon' => 'layui-icon layui-icon-username',
                 'url' => 'admin/user/index',
@@ -148,7 +140,6 @@ class CreateTableSystemMenu extends Migrator
             8 => array(
                 'id' => 10,
                 'pid' => 2,
-                'node' => '1-2',
                 'title' => '操作日志',
                 'icon' => 'layui-icon layui-icon-note',
                 'url' => 'admin/log/index',
@@ -162,7 +153,6 @@ class CreateTableSystemMenu extends Migrator
             9 => array(
                 'id' => 11,
                 'pid' => 6,
-                'node' => '1-6',
                 'title' => '登录限制',
                 'icon' => 'layui-icon layui-icon-location',
                 'url' => 'admin/ip/index',
@@ -177,7 +167,6 @@ class CreateTableSystemMenu extends Migrator
 
         $this->table($this->table)
             ->addColumn('pid', 'integer', ['comment' => '父类ID'])
-            ->addColumn('node', 'string', ['limit' => 60, 'comment' => '节点信息'])
             ->addColumn('title', 'string', ['limit' => 60, 'comment' => '菜单名称'])
             ->addColumn('icon', 'string', ['limit' => 60, 'comment' => '图标', 'default' => ''])
             ->addColumn('url', 'string', ['limit' => 100, 'comment' => '链接', 'default' => ''])

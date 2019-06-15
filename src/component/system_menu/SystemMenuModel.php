@@ -30,30 +30,6 @@ class SystemMenuModel extends Model
 
     /**
      * @param $value
-     * @param $data
-     * @return mixed|string
-     */
-    protected function setNodeAttr($value, $data)
-    {
-        return '';
-    }
-
-    /**
-     * @param $value
-     * @param $data
-     * @return array
-     */
-    protected function getNodeAttr($value, $data)
-    {
-        if ($data['node']) {
-            return explode('-', $data['node']);
-        }
-
-        return [];
-    }
-
-    /**
-     * @param $value
      * @return bool|string
      */
     protected function setUrlAttr($value)

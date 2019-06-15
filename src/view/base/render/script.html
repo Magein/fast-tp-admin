@@ -124,9 +124,24 @@
          * 监听操作栏事件
          */
         table.on('tool(data-list)', function (obj) {
-            let data = getData($(this), obj);
-            transData(data);
-            return false;
+
+            let _this = $(this);
+
+            let callback = function () {
+                let data = getData(_this, obj);
+                transData(data);
+                return false;
+            };
+
+            let confirm = $(this).data('confirm');
+            if (confirm) {
+                $.msg.confirm(confirm, function () {
+                    return callback();
+                });
+                return false;
+            }
+
+            return callback();
         });
 
         /**

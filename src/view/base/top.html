@@ -19,11 +19,10 @@
         {/foreach}
     </ul>
     <ul class="layui-nav layui-layout-right">
-        <!--<li lay-unselect class="layui-nav-item">-->
-        <!--<a data-reload>-->
-        <!--<i class="layui-icon layui-icon-refresh-3"></i>-->
-        <!--</a>-->
-        <!--</li>-->
+
+        {/* 可以动态设置顶部导航的内容 */}
+        {$set_right_top_navigation|default=''}
+
         {if $user}
         <li class="layui-nav-item">
             <dl class="layui-nav-child">

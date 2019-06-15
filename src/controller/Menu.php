@@ -118,7 +118,6 @@ class Menu extends Main
                     'title' => $title,
                     'url' => implode('/', $url),
                     'icon' => $icon,
-                    'node' => '',
                 ];
 
                 $record = SystemMenuLogic::instance()->setCondition(['url' => $data['url']])->find();

@@ -162,7 +162,8 @@ class Main extends Controller
                 // 静态资源文件
                 'cdn' => $this->cdn(),
                 // 上传路径
-                'upload' => $this->upload()
+                'upload' => $this->upload(),
+                'set_right_top_navigation' => $this->setRightTopNavigation()
             ]
         );
     }
@@ -177,6 +178,15 @@ class Main extends Controller
             'UEditor' => url('plugin/editor'),
             'file' => url('plugin/upload'),
         ];
+    }
+
+    /**
+     * // 右上角的导航信息
+     * @return string
+     */
+    protected function setRightTopNavigation()
+    {
+        return '';
     }
 
     /**

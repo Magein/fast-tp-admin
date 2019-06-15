@@ -12,7 +12,6 @@ class SystemMenuLogic extends Logic
     protected $fields = [
         'id',
         'pid',
-//        'node',
         'title',
         'icon',
         'url',
