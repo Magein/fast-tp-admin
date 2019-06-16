@@ -207,7 +207,7 @@ class Property
         $attrs = '';
         if ($this->attrs) {
             foreach ($this->attrs as $key => $attr) {
-                $attrs .= $key . '="' . $attr . '"' . ' ';
+                $attrs .= $key . '=\'' . $attr . '\'' . ' ';
             }
         }
 
