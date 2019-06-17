@@ -243,7 +243,7 @@ trait FastBuild
 
     /**
      * @param string $title
-     * @param string $url
+     * @param string $url 这里的按钮不使用url方法转化，也不在前段使用{:url}转化，如果需要请，自己在传递参数的时候调用url方法转化
      * @param string $type
      * @param array $param
      * @param string $icon

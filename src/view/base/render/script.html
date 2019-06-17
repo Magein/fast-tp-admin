@@ -174,7 +174,11 @@
                     let reg = /__[\w]+__/;
                     if (reg.test(value)) {
                         value = value.slice(2, -2);
-                        postData[i] = $.trim(obj.data[value]);
+                        try {
+                            postData[i] = $.trim(obj.data[value]);
+                        } catch (e) {
+
+                        }
                     } else {
                         postData[i] = param[i];
                     }
@@ -190,6 +194,17 @@
         }
 
         function transData(data, callback) {
+            let url = data.url;
+            if (data.param) {
+                url += '?';
+                for (let i in data.param) {
+                    url += i + '=' + data.param[i] + '&';
+                }
+            }
+            let reg = /\?$/;
+            if (reg.test(url)) {
+                url = url.replace('?', '');
+            }
             switch (data.type) {
                 case 'modal':
                     // 模态对话框
@@ -211,18 +226,10 @@
                     $.form.load(data.url, data.param, 'get', callback);
                     break;
                 case 'open':
-                    let url = data.url;
-                    if (data.param) {
-                        url += '?';
-                        for (let i in data.param) {
-                            url += i + '=' + data.param[i] + '&';
-                        }
-                    }
-                    let reg = /\?$/;
-                    if (reg.test(url)) {
-                        url = url.replace('?', '');
-                    }
                     window.location.href = url;
+                    break;
+                case 'redirect':
+                    window.open(url);
                     break;
                 default:
                     $.form.load(data.url, data.param, 'post', callback);
