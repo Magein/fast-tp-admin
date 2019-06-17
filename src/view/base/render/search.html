@@ -24,7 +24,9 @@
                             data-child-data='{$item.origin.child_data|default=""|json_encode}'
                             data-child-name="{$item.origin.child_name|default=''}"
                             data-value="{$item.value}"
-                            lay-filter="{$item.field}">
+                            lay-filter="{$item.field}"
+                            lay-search
+                    >
                         <option value="">-- 全部 --</option>
                         {if $item['option']}
 
@@ -47,6 +49,7 @@
                 <div class="layui-input-inline">
                     <select name="{$item.field}"
                             class="layui-select"
+                            xm-select-search
                             {if $item.required }required{/if}
                     xm-select="select_{$item.field}"
                     lay-filter="{$item.field}"
@@ -102,19 +105,19 @@
                 {/* 地区筛选开始 */ }
                 {case region}
                 <div class="layui-input-inline">
-                    <select name="province_id" lay-filter="province_id" data-value="{$Think.get.province_id}">
+                    <select name="province_id" lay-filter="province_id" data-value="{$Think.get.province_id}" lay-search>
                         <option value="">请选择省份</option>
                     </select>
                 </div>
                 <div class="layui-input-inline">
                     <input type="hidden" name="express[city_id]" value="eq">
-                    <select name="city_id" lay-filter="city_id" data-value="{$Think.get.city_id}">
+                    <select name="city_id" lay-filter="city_id" data-value="{$Think.get.city_id}" lay-search>
                         <option value="">请选择市</option>
                     </select>
                 </div>
                 <div class="layui-input-inline">
                     <input type="hidden" name="express[area_id]" value="eq">
-                    <select name="area_id" lay-filter="area_id" data-value="{$Think.get.area_id}">
+                    <select name="area_id" lay-filter="area_id" data-value="{$Think.get.area_id}" lay-search>
                         <option value="">请选择县/区</option>
                     </select>
                 </div>

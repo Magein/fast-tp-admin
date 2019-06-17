@@ -692,7 +692,7 @@
     });
 </script>
 
-{if $cdn.script}
+{if isset($cdn.script) && is_array($cdn.script)}
 
 {foreach $cdn['script'] as $item}
 

@@ -15,6 +15,7 @@
     <select name="{$item.field}"
             lay-filter="{$item.field}"
             data-value="{$item['value']}"
+            lay-search
             {if $item.required }required{/if}
     {$item['attrs']}
     >
@@ -77,9 +78,11 @@
 <div class="layui-input-block">
     <select name="{$item.field}"
             class="layui-select"
+            xm-select-height="{$item.height|default=36}px"
+            xm-select="select_{$item.field}"
+            xm-select-search=""
+            lay-filter="{$item.field}"
             {if $item.required }required{/if}
-    xm-select="select_{$item.field}"
-    lay-filter="{$item.field}"
     >
     <option value="">全部</option>
     {if $item['option']}
@@ -179,7 +182,7 @@
 {/* 地区筛选开始 */ }
 {case region}
 <div class="layui-input-inline">
-    <select name="province_id" lay-filter="province_id" data-value="{$item.value}" {if $item.required
+    <select name="province_id" lay-filter="province_id" data-value="{$item.value}" lay-search {if $item.required
             }required{/if}>
     <option value="">请选择省份</option>
     {if condition="$item['option']"}
@@ -194,12 +197,12 @@
     </select>
 </div>
 <div class="layui-input-inline">
-    <select name="city_id" lay-filter="city_id" data-value="{$item.value}">
+    <select name="city_id" lay-filter="city_id" data-value="{$item.value}" lay-search>
         <option value="">请选择市</option>
     </select>
 </div>
 <div class="layui-input-inline">
-    <select name="area_id" lay-filter="area_id" data-value="{$item.value}">
+    <select name="area_id" lay-filter="area_id" data-value="{$item.value}" lay-search>
         <option value="">请选择县/区</option>
     </select>
 </div>
