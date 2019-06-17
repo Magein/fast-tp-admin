@@ -14,10 +14,6 @@ class SystemMenuModel extends Model
         'create_time',
     ];
 
-    protected $auto = [
-        'node'
-    ];
-
     /**
      * @param $value
      * @param $data
