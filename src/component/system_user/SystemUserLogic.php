@@ -2,6 +2,7 @@
 
 namespace app\admin\component\system_user;
 
+use magein\php_tools\common\Password;
 use magein\php_tools\think\Logic;
 use think\Request;
 
@@ -51,16 +52,26 @@ class SystemUserLogic extends Logic
 
     /**
      * @param $username
+     * @param $password
      * @return array|bool|null
      */
-    public function getByUsername($username)
+    public function getByUsername($username, $password = '')
     {
         if (empty($username)) {
             return false;
         }
-        $this->fields[] = 'password';
 
-        return $this->setCondition(['username' => $username])->setFields($this->fields)->find();
+        $condition['username'] = $username;
+
+        if ($password) {
+            $condition['password'] = (new Password())->encrypt($password);
+        }
+        
+        $record = $this->setCondition($condition)->find();
+
+        unset($record['password']);
+
+        return $record;
     }
 
     /**

@@ -18,21 +18,7 @@ class SystemUserModel extends Model
     protected $insert = [
         'password'
     ];
-
-    /**
-     * 设置密码
-     * @param $value
-     * @return string
-     */
-    protected function setPasswordAttr($value)
-    {
-        if (empty($value)) {
-            $value = 123456;
-        }
-
-        return (new Password())->encrypt($value);
-    }
-
+    
     /**
      * @param $value
      * @param $data

@@ -130,11 +130,11 @@ class RenderForm
      * @param $field
      * @param string $value
      * @param bool $required
-     * @param null $title
+     * @param string $title
      * @param array $attrs
      * @return Property
      */
-    private function properties($type, $field, $value = '', $required = true, $title = null, $attrs = [])
+    private function properties($type, $field, $value = '', $required = true, $title = '', $attrs = [])
     {
         $property = new Property();
         $property->setType($type);
@@ -152,11 +152,11 @@ class RenderForm
      * @param $field
      * @param string $value
      * @param bool $required
-     * @param null $title
+     * @param string $title
      * @param array $attrs
      * @return $this
      */
-    public function setText($field, $value = '', $required = true, $title = null, $attrs = [])
+    public function setText($field, $value = '', $required = true, $title = '', $attrs = [])
     {
         $this->properties('text', $field, $value, $required, $title, $attrs);
 
@@ -167,11 +167,11 @@ class RenderForm
      * @param $field
      * @param string $value
      * @param bool $required
-     * @param null $title
+     * @param string $title
      * @param array $attrs
      * @return $this
      */
-    public function setPassword($field, $value = '', $required = true, $title = null, $attrs = [])
+    public function setPassword($field, $value = '', $required = true, $title = '', $attrs = [])
     {
         $this->properties('password', $field, $value, $required, $title, $attrs);
 
@@ -183,11 +183,11 @@ class RenderForm
      * @param $field
      * @param string $value
      * @param bool $required
-     * @param null $title
+     * @param string $title
      * @param array $attrs
      * @return $this
      */
-    public function setDateTime($field, $value = '', $required = true, $title = null, $attrs = [])
+    public function setDateTime($field, $value = '', $required = true, $title = '', $attrs = [])
     {
         $attrs['data-format'] = 'datetime';
 
@@ -200,11 +200,11 @@ class RenderForm
      * @param $field
      * @param string $value
      * @param bool $required
-     * @param null $title
+     * @param string $title
      * @param array $attrs
      * @return $this
      */
-    public function setDate($field, $value = '', $required = true, $title = null, $attrs = [])
+    public function setDate($field, $value = '', $required = true, $title = '', $attrs = [])
     {
         $attrs['data-format'] = 'date';
 
@@ -217,11 +217,11 @@ class RenderForm
      * @param $field
      * @param string $value
      * @param bool $required
-     * @param null $title
+     * @param string $title
      * @param array $attrs
      * @return $this
      */
-    public function setTime($field, $value = '', $required = true, $title = null, $attrs = [])
+    public function setTime($field, $value = '', $required = true, $title = '', $attrs = [])
     {
         $attrs['data-format'] = 'time';
 
@@ -235,11 +235,11 @@ class RenderForm
      * @param string $dateFormat
      * @param string $value
      * @param bool $required
-     * @param null $title
+     * @param string $title
      * @param array $attrs
      * @return $this
      */
-    public function setDateTimeRange($field, $dateFormat = '', $value = '', $required = true, $title = null, $attrs = [])
+    public function setDateTimeRange($field, $dateFormat = '', $value = '', $required = true, $title = '', $attrs = [])
     {
         $attrs['data-format'] = $dateFormat ? $dateFormat : 'datetime';
         $attrs['data-range'] = '~';
@@ -434,13 +434,13 @@ class RenderForm
 
     /**
      * @param string $field
-     * @param string|null $title
+     * @param string|string $title
      * @param bool $required
      * @param mixed $value
      * @param array $attrs
      * @return $this
      */
-    public function setTextArea($field, $value = '', $required = true, $title = null, $attrs = [])
+    public function setTextArea($field, $value = '', $required = true, $title = '', $attrs = [])
     {
         $this->properties('textArea', $field, $value, $required, $title, $attrs);
 

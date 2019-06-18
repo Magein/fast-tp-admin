@@ -114,18 +114,16 @@ class User extends Main
 
         $id = Request::instance()->param('id');
         $data = SystemUserLogic::instance()->get($id);
-        $render = new RenderForm($data, $this->getWord());
-        $render->setHidden('id');
-        $render->setTexts(
-            [
-                'username',
-                'nickname',
-                'phone',
-                'email',
-            ]
-        );
 
-        $this->setFormItems($render);
+        $items = [
+            ['field' => 'id', 'type' => 'hidden', 'value' => $id],
+            'username',
+            'nickname',
+            'phone',
+            ['field' => 'email', 'required' => false]
+        ];
+
+        $this->setFormItems($this->buildForm($items, $data));
 
         return $this->fetch(self::PUBLIC_FORM_MODAL);
     }
@@ -141,6 +139,7 @@ class User extends Main
         }
 
         if (Request::instance()->isPost()) {
+
             $oldPassword = Request::instance()->post('old_password');
             $password = Request::instance()->post('password');
 
@@ -152,14 +151,10 @@ class User extends Main
                 $this->error('新密码不能与旧密码相同');
             }
 
-            $passwordLogic = new Password();
+            $instance = new Password();
 
-            if ($passwordLogic->encrypt($oldPassword) !== $data['password']) {
-                $this->error('您的密码不正确，请重试');
-            }
-
-            if ($passwordLogic->encrypt($password) === $data['password']) {
-                $this->success('更新成功');
+            if (!$instance->check($oldPassword, $data)) {
+                $this->error('您的旧密码不正确，请重试');
             }
 
             $result = SystemUserLogic::instance()->updateField('password', $password, $id);
@@ -172,12 +167,13 @@ class User extends Main
         }
 
 
-        $form = new RenderForm();
+        $render = new RenderForm();
 
-        $form->setHidden('id', $id);
-        $form->append((new Property())->setField('old_password')->setType('password')->setTitle('旧密码'));
-        $form->append((new Property())->setField('password')->setType('password')->setTitle('新密码'));
-        $this->setFormItems($form);
+        $render->setHidden('id', $id);
+        $render->append((new Property())->setField('old_password')->setType('password')->setTitle('旧密码'));
+        $render->append((new Property())->setField('password')->setType('password')->setTitle('新密码'));
+
+        $this->setFormItems($render);
 
         return $this->fetch(self::PUBLIC_FORM_MODAL);
     }

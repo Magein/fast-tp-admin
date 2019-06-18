@@ -55,13 +55,9 @@ class Login extends Controller
             }
         }
 
-        $record = SystemUserLogic::instance()->getByUsername($username);
+        $record = SystemUserLogic::instance()->getByUsername($username, $password);
 
         if (empty($record)) {
-            $this->error('用户不存在');
-        }
-
-        if (false === (new Password())->check($password, $record['password'])) {
             $this->error('用户不存在');
         }
 
