@@ -163,6 +163,7 @@ class Main extends Controller
                 'cdn' => $this->cdn(),
                 // 上传路径
                 'upload' => $this->upload(),
+                // 右上角的导航信息
                 'set_right_top_navigation' => $this->setRightTopNavigation()
             ]
         );
@@ -238,9 +239,8 @@ class Main extends Controller
                 $menu_url[] = $item['url'];
                 // 自动设置页面标题
                 $this->title = $this->title ?: $item['title'];
-                if ($item['url'] == $this->path && $item['node']) {
-                    // 这里的待优化，为了兼容xxx/add 这种新窗口打开后，左侧菜单没有选中的状态
-                    $this->active_menu = count($item['node']) > 2 ? null : $item;
+                if ($item['url'] == $this->path) {
+                    $this->active_menu = $item;
                 }
             }
         }
@@ -317,7 +317,7 @@ class Main extends Controller
     /**
      * 获取当前访问的菜单信息，用户在前段高亮显示菜单
      * @param array $menus
-     * @return string
+     * @return array
      */
     protected function getActiveMenu($menus)
     {
@@ -327,15 +327,8 @@ class Main extends Controller
             return $path;
         };
 
-        if (empty($this->active_menu)) {
-            $path = $removeAction($this->path);
-            foreach ($menus as $key => $item) {
-                $url = $removeAction($item['url']);
-                if ($url == $path && count($item['node']) > 1) {
-                    $this->active_menu = $item;
-                    break;
-                }
-            }
+        if (count($this->active_menu['node']) > 3) {
+            $this->active_menu['url'] = $removeAction($this->active_menu['url']) . '/index';
         }
 
         return $this->active_menu;
