@@ -319,6 +319,50 @@ EOF;
     }
 
     /**
+     * 开关模板
+     * 包含字段信息：field字段名称  option 开关名称  value  默认选中的值
+     * @param array $data
+     * @param bool $toArray
+     * @return string|array
+     */
+    protected function switchTemplate($data, $toArray = false)
+    {
+        $field = isset($data['field']) ? $data['field'] : '';
+
+        if (empty($field)) {
+            return '';
+        }
+
+        $option = isset($data['option']) ? $data['option'] : ['开', '关'];
+
+        if (is_array($option)) {
+            $option = implode('|', $option);
+        }
+
+        $check_value = isset($data['value']) ? (int)$data['value'] : 1;
+
+        $template = <<<EOF
+<div>
+
+{{# if(d.$field==$check_value){ }}
+ <input type="checkbox" name="$field" data-id="{{d.id}}" lay-skin="switch" lay-text="$option"checked>
+{{# } else {  }}
+ <input type="checkbox" name="$field" data-id="{{d.id}}" lay-skin="switch" lay-text="$option">
+{{# }  }}
+</div>
+EOF;
+
+        if ($toArray) {
+            return [
+                'field' => $field,
+                'templet' => $template,
+            ];
+        }
+
+        return $template;
+    }
+
+    /**
      * @return array
      */
     protected function getTips()
@@ -434,6 +478,10 @@ EOF;
 
                 if ($this->images && in_array($item['field'], $this->images)) {
                     $item['templet'] = $this->imageTemplate($field);
+                }
+
+                if (isset($item['type']) && $item['type'] == 'switch') {
+                    $item['templet'] = $this->switchTemplate($item);
                 }
 
                 if ($callback) {
