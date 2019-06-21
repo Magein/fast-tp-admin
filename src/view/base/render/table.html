@@ -49,7 +49,7 @@
      */
     var renderData = {
             // 数据列表
-            list: {$list|json_encode},
+        list: {$list|json_encode},
         // 头部信息
         header: {$header|json_encode},
         // 分页数据
@@ -71,7 +71,7 @@
         {foreach $leftTopButtons as $item}
         <button class="layui-btn {$item.cla|default='layui-btn-sm'}"
                 data-type="{$item.type|default='modal'}"
-                data-url="{$item.url}"
+                data-url="{:url($item.url)}"
                 data-title="{$item.title}"
                 data-param='{$item.param|default=[]|json_encode}'
                 {$item.attrs|default="" }

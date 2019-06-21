@@ -252,5 +252,14 @@
             }
             return ids;
         }
+
+        //监听指定开关
+        window.form.on('switch()', function (data) {
+            let elem = data.elem;
+            let name = $(elem).attr('name');
+            let value = this.checked ? 1 : 0;
+            let id = $(elem).data('id');
+            $.form.load('{:url(updateField)}', {id: id, field: name, value: value}, 'post');
+        });
     });
 </script>
