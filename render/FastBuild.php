@@ -345,7 +345,7 @@ EOF;
 <div>
 
 {{# if(d.$field==$check_value){ }}
- <input type="checkbox" name="$field" data-id="{{d.id}}" lay-skin="switch" lay-text="$option"checked>
+ <input type="checkbox" name="$field" data-id="{{d.id}}" lay-skin="switch" lay-text="$option" checked>
 {{# } else {  }}
  <input type="checkbox" name="$field" data-id="{{d.id}}" lay-skin="switch" lay-text="$option">
 {{# }  }}
