@@ -345,7 +345,7 @@ EOF;
 <div>
 
 {{# if(d.$field==$check_value){ }}
- <input type="checkbox" name="$field" data-id="{{d.id}}" lay-skin="switch" lay-text="$option" checked>
+ <input type="checkbox" name="$field" data-id="{{d.id}}" lay-skin="switch" lay-text="$option"checked>
 {{# } else {  }}
  <input type="checkbox" name="$field" data-id="{{d.id}}" lay-skin="switch" lay-text="$option">
 {{# }  }}
@@ -756,6 +756,9 @@ EOF;
                             break;
                         case 'in':
                             $condition[$name] = ['in', $value];
+                            break;
+                        case 'between':
+                            $condition[$name] = ['between', $value];
                             break;
                         case 'day':
                             $value = substr($value, 0, 10);

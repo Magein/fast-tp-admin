@@ -259,7 +259,7 @@
             let name = $(elem).attr('name');
             let value = this.checked ? 1 : 0;
             let id = $(elem).data('id');
-            $.form.load('{:url(updateField)}', {id: id, field: name, value: value}, 'post');
+            $.form.load('{:url("updateField")}', {id: id, field: name, value: value}, 'post');
         });
     });
 </script>
