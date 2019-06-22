@@ -378,7 +378,7 @@ class Main extends Controller
         $page['var_page'] = \think\Config::get('paginate.var_page');
 
         $this->assign('page', $page);
-        $this->assign('list', array_values($list));
+        $this->assign('list', $list ? array_values($list) : []);
 
         // 表格列中的操作按钮
         $this->assign('operationButtons', $this->getOperationButton());
