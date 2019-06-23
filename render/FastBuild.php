@@ -56,6 +56,12 @@ trait FastBuild
     protected $hiddenCheckbox = false;
 
     /**
+     * 只展示数据
+     * @var bool
+     */
+    protected $isShow = false;
+
+    /**
      * 展示为图片的字段信息
      * @var array
      */
@@ -204,9 +210,10 @@ trait FastBuild
      */
     protected function getLeftTopButton()
     {
-        if (false === $this->leftTopButton) {
+        if (false === $this->leftTopButton || $this->isShow) {
             return [];
         }
+
 
         $default = [
             'add' => $this->setButton('新增', 'add', [], $this->buttonType, 'layui-icon layui-icon-add-1'),
@@ -225,7 +232,7 @@ trait FastBuild
      */
     protected function getOperationButton()
     {
-        if (false === $this->operationButton) {
+        if (false === $this->operationButton || $this->isShow) {
             return [];
         }
 
@@ -494,14 +501,14 @@ EOF;
             unset($item);
         }
 
-        if (false === $this->hiddenCheckbox) {
+        if (false === $this->hiddenCheckbox && false === $this->isShow) {
             array_unshift($headers, [
                 'type' => 'checkbox',
                 'field' => $this->primaryKey
             ]);
         }
 
-        if ($this->operationButton) {
+        if ($this->operationButton && false === $this->isShow) {
             $headers[] = [
                 'fixed' => 'right',
                 'title' => '操作',
@@ -750,6 +757,18 @@ EOF;
                     switch (trim($express[$name])) {
                         case 'eq':
                             $condition[$name] = $value;
+                            break;
+                        case 'gt':
+                            $condition[$name] = ['gt', $value];
+                            break;
+                        case 'egt':
+                            $condition[$name] = ['egt', $value];
+                            break;
+                        case 'lt':
+                            $condition[$name] = ['lt', $value];
+                            break;
+                        case 'elt':
+                            $condition[$name] = ['elt', $value];
                             break;
                         case 'like':
                             $condition[$name] = ['like', '%' . $value . '%'];
