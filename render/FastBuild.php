@@ -2,6 +2,7 @@
 
 namespace magein\render\admin;
 
+use magein\php_tools\common\UnixTime;
 use magein\render\admin\component\Button;
 use magein\render\admin\component\Property;
 use magein\php_tools\common\Variable;
@@ -587,6 +588,10 @@ EOF;
                     'option' => $option,
                     'field' => $field
                 ];
+            } else {
+                if (isset($data['option'])) {
+                    $data['type'] = isset($data['type']) ? $data['type'] : 'select';
+                }
             }
         }
 
@@ -707,15 +712,43 @@ EOF;
     }
 
     /**
-     * 获取赛选的条件信息
+     * 获取筛选条件信息
+     *
+     * 筛选条件的值以及筛选所用的表达式有两种来源
+     *
+     * 1. 页面传递的搜索参数
+     * 2. search方法中定义的参数
+     *
+     * 前端页面传递了值后，在从search中获取获取默认值
+     *
      * @param array $data
      * @return array
      */
     protected function getCondition($data = [])
     {
-        $condition = [];
+        // 没有传递值的时候，则自动从连接中获取
         if (empty($data)) {
             $data = Request::instance()->get();
+        }
+
+        if (empty($data)) {
+            return [];
+        }
+
+        // 前端没有传递值的时候，则验证是否声明了搜索参数，取里面的默认值以及表达式
+        $search = $this->search();
+        if ($search) {
+            foreach ($search as $item) {
+                $field = isset($item['field']) ? $item['field'] : '';
+                $value = isset($item['value']) ? $item['value'] : null;
+                // 如果search中指定了默认值，则验证data中是否设置，如果没有设置，则自动追加
+                if ($field && $value !== null) {
+                    if (!isset($data[$field])) {
+                        $data[$field] = $item['value'];
+                        $data['express'][$field] = isset($item['express']) ? $item['express'] : 'eq';
+                    }
+                }
+            }
         }
 
         /**
@@ -724,37 +757,29 @@ EOF;
         $express = isset($data['express']) ? $data['express'] : [];
         unset($data['express']);
 
-        $toUnixTime = function ($time) {
-
-            if (preg_match('/^1[\d]{9}/', $time)) {
-                return $time;
-            }
-
-            $time = strtotime($time);
-
-            if ($time === false || $time < 0 || !preg_match('/^1[\d]{9}/', $time)) {
-                return false;
-            }
-
-
-            return $time;
-        };
-
         /**
-         * 处理时间
+         * 处理时间，
+         * 处理多字段作为筛选时间，值只有一个，
+         *
+         * 则一个表示使用的字段信息，另一个表示时间值
          */
         if (isset($data['time_field'])) {
-            $start = $toUnixTime($data['start_time']) ?: -1;
-            $end = $toUnixTime($data['end_time']) ?: -1;
+            $start = UnixTime::instance()->unix($data['start_time']) ?: -1;
+            $end = UnixTime::instance()->unix($data['end_time']) ?: -1;
             $condition[$data['time_field']] = ['between', [$start, $end]];
             unset($data['time_field'], $data['end_time'], $data['start_time']);
         }
 
+        $condition = [];
         if ($data) {
             foreach ($data as $name => $value) {
+
                 $name = trim($name);
-                if (isset($express[$name]) && $express[$name] && $value !== '') {
-                    switch (trim($express[$name])) {
+
+                $exp = isset($express[$name]) ? $express[$name] : 'eq';
+
+                if ($value !== '') {
+                    switch (trim($exp)) {
                         case 'eq':
                             $condition[$name] = $value;
                             break;
@@ -781,8 +806,8 @@ EOF;
                             break;
                         case 'day':
                             $value = substr($value, 0, 10);
-                            $start = $toUnixTime($value . ' 00:00:00');
-                            $end = $toUnixTime($value . ' 23:59:59');
+                            $start = UnixTime::instance()->startDay($value);
+                            $end = UnixTime::instance()->endDay($value);
                             $condition[$name] = ['between', [$start, $end]];
                             break;
                         case 'create_time':
