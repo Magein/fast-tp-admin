@@ -238,7 +238,6 @@ class Main extends Controller
             foreach ($menus as $key => $item) {
                 $menu_url[] = $item['url'];
                 // 自动设置页面标题
-                $this->title = $this->title ?: $item['title'];
                 if ($item['url'] == $this->path) {
                     $this->active_menu = $item;
                 }
@@ -327,8 +326,13 @@ class Main extends Controller
             return $path;
         };
 
+
         if (count($this->active_menu['node']) > 3) {
             $this->active_menu['url'] = $removeAction($this->active_menu['url']) . '/index';
+        }
+
+        if (isset($this->active_menu['title'])) {
+            $this->title = $this->title ?: $this->active_menu['title'];
         }
 
         return $this->active_menu;
