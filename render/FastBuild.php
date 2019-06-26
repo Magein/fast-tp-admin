@@ -731,10 +731,6 @@ EOF;
             $data = Request::instance()->get();
         }
 
-        if (empty($data)) {
-            return [];
-        }
-
         // 前端没有传递值的时候，则验证是否声明了搜索参数，取里面的默认值以及表达式
         $search = $this->search();
         if ($search) {
@@ -749,6 +745,10 @@ EOF;
                     }
                 }
             }
+        }
+
+        if (empty($data)) {
+            return [];
         }
 
         /**
@@ -810,8 +810,8 @@ EOF;
                             $end = UnixTime::instance()->endDay($value);
                             $condition[$name] = ['between', [$start, $end]];
                             break;
-                        case 'create_time':
-
+                        case 'exp':
+                            $condition[$name] = ['exp', $value];
                             break;
                     }
                 }
