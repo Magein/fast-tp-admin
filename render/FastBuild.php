@@ -731,6 +731,9 @@ EOF;
             $data = Request::instance()->get();
         }
 
+        // 自动过滤掉分页参数
+        unset($data['page_id'], $data['page_size']);
+
         // 前端没有传递值的时候，则验证是否声明了搜索参数，取里面的默认值以及表达式
         $search = $this->search();
         if ($search) {
