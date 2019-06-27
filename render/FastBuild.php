@@ -813,6 +813,17 @@ EOF;
                             $end = UnixTime::instance()->endDay($value);
                             $condition[$name] = ['between', [$start, $end]];
                             break;
+                        case 'range':
+                            $value = explode('~', $value);
+                            if (count($value) == 2) {
+                                $start = UnixTime::instance()->startDay(trim($value[0]));
+                                $end = UnixTime::instance()->endDay(trim($value[1]));
+                            } else {
+                                $start = UnixTime::instance()->startDay();
+                                $end = UnixTime::instance()->endDay();
+                            }
+                            $condition[$name] = ['between', [$start, $end]];
+                            break;
                         case 'exp':
                             $condition[$name] = ['exp', $value];
                             break;
