@@ -69,7 +69,7 @@ class Main extends Controller
      * 当前访问菜单
      * @var array
      */
-    protected $active_menu = ['node' => [], 'url' => ''];
+    protected $active_menu = ['node' => [], 'url' => '', 'pid' => 0];
 
     /**
      * 当前用户登录信息
