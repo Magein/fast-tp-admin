@@ -33,7 +33,7 @@
 
                 {if $tips}
                 {foreach $tips as $item}
-                <blockquote class="layui-elem-quote layui-bg-{$item.color}">{$item.message}</blockquote>
+                <blockquote class="layui-elem-quote layui-bg-{$item.color|default='green'}">{$item.message}</blockquote>
                 {/foreach}
                 {/if}
 
