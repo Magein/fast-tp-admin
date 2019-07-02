@@ -1,7 +1,7 @@
 {if $formItems}
 <caption class="margin-bottom-10 text-left">
     <fieldset>
-        <legend class="layui-bg-cyan layui-bg-green">条件搜索</legend>
+        <legend class="layui-bg-green">条件搜索</legend>
         <form class="layui-form layui-form-pane form-search"
               action="{:url('index')}"
               onsubmit="return false"
@@ -105,7 +105,8 @@
                 {/* 地区筛选开始 */ }
                 {case region}
                 <div class="layui-input-inline">
-                    <select name="province_id" lay-filter="province_id" data-value="{$Think.get.province_id}" lay-search>
+                    <select name="province_id" lay-filter="province_id" data-value="{$Think.get.province_id}"
+                            lay-search>
                         <option value="">请选择省份</option>
                     </select>
                 </div>
