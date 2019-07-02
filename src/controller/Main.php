@@ -67,9 +67,13 @@ class Main extends Controller
 
     /**
      * 当前访问菜单
+     * pid是当前菜单的上级ID
+     * ppid是当前菜单的上上级ID
+     *
+     * pid ppid都是用于左侧二级菜单的展示，默认打开还是关闭
      * @var array
      */
-    protected $active_menu = ['node' => [], 'url' => '', 'pid' => 0];
+    protected $active_menu = ['node' => [], 'url' => '', 'pid' => 0, 'ppid' => 0];
 
     /**
      * 当前用户登录信息
@@ -142,6 +146,7 @@ class Main extends Controller
         } else {
             $left = array_shift($menus)['child'];
         }
+
 
         View::share(
             [
@@ -329,6 +334,8 @@ class Main extends Controller
 
         if (count($this->active_menu['node']) > 3) {
             $this->active_menu['url'] = $removeAction($this->active_menu['url']) . '/index';
+            $node = $this->active_menu['node'];
+            $this->active_menu['ppid'] = $node[1];
         }
 
         if (isset($this->active_menu['title'])) {
