@@ -9,6 +9,7 @@ use magein\php_tools\common\Variable;
 use magein\php_tools\object\QueryResult;
 use magein\php_tools\think\Dictionary;
 use magein\php_tools\think\Logic;
+use think\Exception;
 use think\Request;
 use think\Validate;
 
@@ -121,6 +122,11 @@ trait FastBuild
      * @var string
      */
     protected $searchTime = '';
+
+    /**
+     * @var bool
+     */
+    protected $debug = false;
 
     /**
      * 获取对应的类
@@ -406,8 +412,11 @@ EOF;
             }
 
             $classLogic->setOrder($this->order);
-
             $items = call_user_func_array([$classLogic, $query_type], [$this->limit]);
+
+            if (false === $items && $this->debug) {
+                throw new Exception($classLogic->getError());
+            }
 
             $page = $classLogic->getPageParams();
         }
