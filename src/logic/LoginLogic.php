@@ -9,17 +9,6 @@ class LoginLogic
 {
     use Instance;
 
-    public function __construct()
-    {
-        Session::init(
-            [
-                'expire' => 86400,
-                // 'id' => 'admin-user-' . date('Ymd'),
-                'prefix' => 'user_',
-            ]
-        );
-    }
-
     /**
      * @param null $data
      * @return $this
