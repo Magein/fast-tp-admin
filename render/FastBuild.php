@@ -464,9 +464,11 @@ EOF;
      * @param null $callback 处理表头的回调函数
      * @return array
      */
-    protected function buildTable($callback = null)
+    protected function buildTable($headers = [], $callback = null)
     {
-        $headers = $this->header();
+        if (empty($headers)) {
+            $headers = $this->header();
+        }
 
         if ($headers) {
 
