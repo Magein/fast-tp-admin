@@ -25,7 +25,8 @@
                 {if isset($item['child'])}
                 <dl class="layui-nav-child">
                     {foreach $item['child'] as $vo}
-                    <dd class='{if $vo.url==$active_menu.url }layui-this{/if}'>
+                    <!--兼容四级菜单显示的时候，选中三级菜单-->
+                    <dd class='{if $vo.url==$active_menu.url || $vo.id==$active_menu.pid}layui-this{/if}'>
                         <a data-target-tips="{$vo.title}" href="/{$vo.url}">
                             <span class='nav-icon padding-left-5 {$vo.icon|default="layui-icon layui-icon-link"}'></span>
                             <span class="nav-text padding-left-5">{$vo.title}</span>

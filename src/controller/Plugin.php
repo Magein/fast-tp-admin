@@ -4,6 +4,7 @@ namespace app\admin\controller;
 
 use magein\php_tools\extra\Upload;
 use magein\php_tools\extra\UEditor;
+use magein\render\admin\Cdn;
 use think\Request;
 use think\response\Json;
 use traits\controller\Jump;
@@ -11,6 +12,7 @@ use traits\controller\Jump;
 class Plugin
 {
     use Jump;
+    use Cdn;
 
     /**
      * @return \think\Response|Json|\think\response\Jsonp|\think\response\Redirect|\think\response\View|\think\response\Xml
@@ -48,7 +50,11 @@ class Plugin
     public function icon()
     {
         $field = input('field');
-        return view('admin@base/main/icon', ['field' => $field]);
+        return view('admin@base/main/icon',
+            [
+                'field' => $field,
+                'cdn' => $this->cdn()
+            ]);
     }
 
 }
