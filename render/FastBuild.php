@@ -761,16 +761,17 @@ EOF;
             }
         }
 
+
         if (empty($data)) {
             return [];
         }
-
         /**
          * 参数所用的表达式
          */
         $express = isset($data['express']) ? $data['express'] : [];
         unset($data['express']);
 
+        $condition = [];
         /**
          * 处理时间，
          * 处理多字段作为筛选时间，值只有一个，
@@ -784,7 +785,6 @@ EOF;
             unset($data['time_field'], $data['end_time'], $data['start_time']);
         }
 
-        $condition = [];
         if ($data) {
             foreach ($data as $name => $value) {
 
