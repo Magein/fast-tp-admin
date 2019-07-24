@@ -205,9 +205,10 @@ class Main extends Controller
 
         $module = $request->module();
         $controller = $request->controller();
-        $action = $request->action();
+        $action = $request->action(true);
 
         $controller = (new Variable())->transToUnderline($controller);
+        $action = (new Variable())->transToUnderline($action);
         $this->path = $module . '/' . $controller . '/' . $action;
 
         return $this->path;
@@ -236,7 +237,6 @@ class Main extends Controller
 
             return $item;
         }, 4);
-
 
         $menu_url = [];
         if ($menus) {
@@ -330,7 +330,6 @@ class Main extends Controller
             $path = str_replace('/', '/', $path);
             return $path;
         };
-
 
         if (count($this->active_menu['node']) > 3) {
             $this->active_menu['url'] = $removeAction($this->active_menu['url']) . '/index';
