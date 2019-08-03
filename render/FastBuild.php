@@ -428,7 +428,7 @@ EOF;
      * @param string $id
      * @return array|bool
      */
-    public function getData($id = '')
+    protected function getData($id = '')
     {
         $data = [];
 
@@ -461,6 +461,7 @@ EOF;
 
     /**
      * 构建表格数据
+     * @param array $headers
      * @param null $callback 处理表头的回调函数
      * @return array
      */
