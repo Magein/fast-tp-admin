@@ -10,8 +10,11 @@
 
             {foreach $formItems as $item}
 
-            <input type="hidden" name="express[{$item.field}]" value="{$item.origin.express|default='eq'}">
+            {if $item['type']=='hidden'}
+            <input type="hidden" name="{$item.field}" value="{$item.value}">
+            {else/}
 
+            <input type="hidden" name="express[{$item.field}]" value="{$item.origin.express|default='eq'}">
             <div class="layui-form-item layui-inline">
                 <label class="layui-form-label">
                     {$item.title}
@@ -132,6 +135,8 @@
                 </div>
                 {/switch}
             </div>
+            {/if}
+
             {/foreach}
 
             <div class="layui-form-item layui-inline">
