@@ -461,7 +461,6 @@ EOF;
 
     /**
      * 构建表格数据
-     * @param array $headers
      * @param null $callback 处理表头的回调函数
      * @return array
      */
@@ -779,7 +778,7 @@ EOF;
          *
          * 则一个表示使用的字段信息，另一个表示时间值
          */
-        if (isset($data['time_field'])) {
+        if (isset($data['time_field']) && $data['time_field']) {
             $start = UnixTime::instance()->unix($data['start_time']) ?: -1;
             $end = UnixTime::instance()->unix($data['end_time']) ?: -1;
             $condition[$data['time_field']] = ['between', [$start, $end]];
