@@ -244,7 +244,7 @@ trait FastBuild
         }
 
         $default = [
-            'edit' => $this->setButton('编辑', 'edit', ['id' => '__id__', 'page_id' => input('page_id', 1), 'page_size' => input('page_size', 15)], $this->buttonType),
+            'edit' => $this->setButton('编辑', 'edit', ['id' => '__id__'], $this->buttonType),
             'del' => $this->setButton('删除', 'del', ['id' => '__id__'], 'del', '', 'layui-btn-danger'),
         ];
 
@@ -428,7 +428,7 @@ EOF;
      * @param string $id
      * @return array|bool
      */
-    public function getData($id = '')
+    protected function getData($id = '')
     {
         $data = [];
 
@@ -761,30 +761,35 @@ EOF;
             }
         }
 
+
         if (empty($data)) {
             return [];
         }
-
         /**
          * 参数所用的表达式
          */
         $express = isset($data['express']) ? $data['express'] : [];
         unset($data['express']);
 
+        $condition = [];
         /**
          * 处理时间，
          * 处理多字段作为筛选时间，值只有一个，
          *
          * 则一个表示使用的字段信息，另一个表示时间值
          */
-        if (isset($data['time_field'])) {
-            $start = UnixTime::instance()->unix($data['start_time']) ?: -1;
-            $end = UnixTime::instance()->unix($data['end_time']) ?: -1;
-            $condition[$data['time_field']] = ['between', [$start, $end]];
+        if (isset($data['time_field']) && $data['time_field']) {
+
+            $start = UnixTime::instance()->unix($data['start_time']) ?: 0;
+            $end = UnixTime::instance()->unix($data['end_time']) ?: 0;
+
+            if ($start && $end) {
+                $condition[$data['time_field']] = ['between', [$start, $end]];
+            }
+
             unset($data['time_field'], $data['end_time'], $data['start_time']);
         }
 
-        $condition = [];
         if ($data) {
             foreach ($data as $name => $value) {
 
@@ -820,6 +825,7 @@ EOF;
                             break;
                         case 'day':
                             $value = substr($value, 0, 10);
+
                             $start = UnixTime::instance()->startDay($value);
                             $end = UnixTime::instance()->endDay($value);
                             $condition[$name] = ['between', [$start, $end]];
