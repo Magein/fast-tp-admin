@@ -1,6 +1,6 @@
 ### 依赖
 
- * thinkphp5.0~
+ * thinkphp5.0~  5.0.10的Request类中的action() 方法跟5.0.24的有所区别，请注意
  * php-tools   github地址：https://github.com/Magein/php-tools
 
  > php-tools 已经加入包依赖中， thinkphp5.0未加入后包依赖中，请安装~th5.0后，使用composer安装
