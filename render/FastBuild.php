@@ -22,6 +22,12 @@ trait FastBuild
     protected $list = [];
 
     /**
+     * 数据对象，编辑的时候使用
+     * @var array
+     */
+    protected $data = [];
+
+    /**
      * 分页参数
      * @var array
      */
@@ -446,6 +452,8 @@ EOF;
 
             $data = $class->get($id);
         }
+
+        $this->data = $data;
 
         return $data;
     }
