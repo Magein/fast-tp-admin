@@ -122,9 +122,25 @@
             if (obj.event === 'LAYTABLE_COLS' || obj.event === 'LAYTABLE_EXPORT') {
                 return false;
             }
-            let data = getData($(this), obj);
-            transData(data);
-            return false;
+
+            let _this = $(this);
+
+            let callback = function () {
+                let data = getData(_this, obj);
+                transData(data);
+                return false;
+            };
+
+            let confirm = $(this).data('confirm');
+
+            if (confirm) {
+                $.msg.confirm(confirm, function () {
+                    return callback();
+                });
+                return false;
+            }
+
+            return callback();
         });
 
         /**
@@ -141,6 +157,7 @@
             };
 
             let confirm = $(this).data('confirm');
+
             if (confirm) {
                 $.msg.confirm(confirm, function () {
                     return callback();
@@ -212,18 +229,26 @@
             if (reg.test(url)) {
                 url = url.replace('?', '');
             }
+
+            // 获取批量选中的值
+            let ids = getSelectedId();
+
             switch (data.type) {
                 case 'modal':
                     // 模态对话框
                     data.param.modal = 1;
+                    if (data.param.id && ids) {
+                        data.param.id.concat(ids);
+                    } else {
+                        console.log(ids);
+                        data.param.id = ids;
+                    }
                     $.form.modal(data.url, data.param, data.title);
                     break;
                 case 'update':
                     $.form.load(data.url, data.param, 'post', callback);
                     break;
                 case 'del':
-                    let ids = getSelectedId();
-                    console.log(data.param);
                     if (data.param.id && ids) {
                         data.param.id.concat(ids);
                     } else {
