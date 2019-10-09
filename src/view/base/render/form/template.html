@@ -43,6 +43,7 @@
            name="{$item.field}"
            value="{$k}"
            title="{$option}"
+           lay-filter="{$item.field}"
            {if condition="$k eq $item['value']" }
            checked
            {/if}
@@ -62,6 +63,7 @@
            name="{$item.field}[]"
            value="{$k}"
            title="{$option}"
+           lay-filter="{$item.field}"
            {if $item.required }required{/if}
     {if $item['value'] && is_array($item['value']) && in_array($k,$item['value'])}
     checked
@@ -101,7 +103,7 @@
     {else}
     <option value="{$k}"
             {if $item[
-    'value'] && in_array($k,$item['value'])}
+    'value'] && is_array($item['value']) && in_array($k,$item['value'])}
     selected="selected"
     {/if}
 
