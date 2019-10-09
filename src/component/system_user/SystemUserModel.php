@@ -2,7 +2,6 @@
 
 namespace app\admin\component\system_user;
 
-use magein\php_tools\common\Password;
 use magein\php_tools\think\Model;
 use app\admin\component\system_role\SystemRoleLogic;
 
@@ -15,10 +14,6 @@ class SystemUserModel extends Model
         'create_time',
     ];
 
-    protected $insert = [
-        'password'
-    ];
-    
     /**
      * @param $value
      * @param $data
@@ -40,8 +35,8 @@ class SystemUserModel extends Model
      */
     protected function getRoleAttr($value, $data)
     {
-        if ($data['role']){
-            return explode(',',$data['role']);
+        if ($data['role']) {
+            return explode(',', $data['role']);
         }
 
         return [];

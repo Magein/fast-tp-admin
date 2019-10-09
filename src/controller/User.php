@@ -12,6 +12,7 @@ use app\admin\component\system_role\SystemRoleLogic;
 use app\admin\component\system_user\SystemUserLogic;
 use app\admin\component\system_user\SystemUserValidate;
 use magein\render\admin\Constant;
+use think\Db;
 use think\Request;
 
 /**
@@ -62,8 +63,20 @@ class User extends Main
         return [
             'username',
             'phone',
+            ['role', SystemRoleLogic::instance()->getTitle()],
             ['status', SystemUserLogic::instance()->transStatus()]
         ];
+    }
+
+    protected function getCondition($data = [])
+    {
+        $condition = parent::getCondition();
+
+        if (isset($condition['role'])) {
+            $condition['role'] = Db::raw('find_in_set(' . $condition['role'] . ',`role`)');
+        }
+
+        return $condition;
     }
 
     /**
@@ -86,8 +99,9 @@ class User extends Main
     {
         return [
             ['role', 'checkbox', SystemRoleLogic::instance()->getTitle()],
-            'username',
             'nickname',
+            'username',
+            ['field' => 'password', 'required' => false],
             'phone',
             ['field' => 'email', 'required' => false],
             ['status', 'radio', SystemUserLogic::instance()->transStatus()],
@@ -100,6 +114,8 @@ class User extends Main
         if (!Phone::instance()->checkPhone($data['phone'])) {
             $this->error('请输入正确的手机号码');
         }
+
+        $data['uid'] = UID;
 
         return parent::save($data);
     }
