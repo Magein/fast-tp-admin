@@ -137,6 +137,7 @@
             // 显示失败类型的消息
             this.error = function (msg, time, callback) {
                 var index = layer.msg(msg, {
+                    icon: 2,
                     shade: this.shade,
                     scrollbar: false,
                     time: (time || 3) * 1000,
@@ -709,14 +710,15 @@
                 return false;
             }
             let child_name = $(this).data('child-name');
+            let child_title = $(this).data('child-title') || '';
             let value = $(this).val();
-            linkage(value, child_data, child_name);
+            linkage(value, child_data, child_name, child_title);
         });
 
         /**
          * 二级联动的方法
          */
-        function linkage(key, data, name) {
+        function linkage(key, data, name, child_title) {
             try {
                 if (typeof data === "string") {
                     data = JSON.parse(data);
@@ -732,8 +734,12 @@
                 return false;
             }
 
+            if (!child_title || child_title.length === 0) {
+                child_title = ' --全部--';
+            }
+
             let child = $('select[name=' + name + ']');
-            let option = '<option value=""> --全部-- </option>';
+            let option = '<option value=""> ' + child_title + ' </option>';
 
             if (category) {
                 let value = parseInt(child.data('value'));
