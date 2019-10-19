@@ -49,8 +49,21 @@
 {/block}
 
 <script>
-    // 定义上传图片路径
-    let upload_file_path = {$upload|json_encode};
+    /**
+     * 字符串转化为对象
+     */
+    function stringToObject(string) {
+        if (typeof string === "string") {
+            try {
+                let result = JSON.parse(string);
+                if (typeof result === "object") {
+                    return result;
+                }
+            } catch (e) {
+                console.log('字符串转化为对象失败');
+            }
+        }
+    }
 </script>
 
 {include file="admin@base/script"}
