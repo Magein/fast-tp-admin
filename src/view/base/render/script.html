@@ -8,113 +8,118 @@
 
     $(function () {
 
-        if (renderData.page.per_page === undefined) {
-            renderData.page.per_page = 9999;
-        }
-
-        layui.use('laypage', function () {
-
-            if (renderData.page.total === undefined) {
-                return false;
+        try {
+            if (renderData.page.per_page === undefined) {
+                renderData.page.per_page = 9999;
             }
 
-            layui.laypage.render({
-                // 分页容器
-                elem: 'page-container',
-                layout: ['prev', 'page', 'next', 'count', 'limit'],
-                //数据总数，从服务端得到
-                count: renderData.page.total,
-                // 每页数量
-                limit: renderData.page.per_page,
-                limits: [15, 30, 50, 100, 500],
-                // 当前页
-                curr: renderData.page.current_page,
-                prev: '<',
-                next: '>',
-                jump: function (obj, first) {
+            layui.use('laypage', function () {
 
-                    //首次不执行
-                    if (first) {
-                        return false;
-                    }
-
-                    let href = window.location.href;
-
-                    if (href.indexOf('?') === -1) {
-                        href += '?';
-                    }
-
-                    /**
-                     * 处理分页字段
-                     */
-                    let var_page = '&' + renderData.page.var_page + '=';
-                    if (href.indexOf(var_page) === -1) {
-                        href += var_page + obj.curr;
-                    } else {
-                        href = href.replace(new RegExp(var_page + '[0-9]+'), var_page + obj.curr);
-                    }
-
-                    /**
-                     * 处理每页显示数量
-                     */
-                    let page_size = '&page_size=';
-                    if (href.indexOf(page_size) === -1) {
-                        href += page_size + obj.limit;
-                    } else {
-                        href = href.replace(new RegExp(page_size + '[0-9]+'), page_size + obj.limit);
-                    }
-
-                    window.location.href = href;
+                if (renderData.page.total === undefined) {
+                    return false;
                 }
+
+                layui.laypage.render({
+                    // 分页容器
+                    elem: 'page-container',
+                    layout: ['prev', 'page', 'next', 'count', 'limit'],
+                    //数据总数，从服务端得到
+                    count: renderData.page.total,
+                    // 每页数量
+                    limit: renderData.page.per_page,
+                    limits: [15, 30, 50, 100, 500],
+                    // 当前页
+                    curr: renderData.page.current_page,
+                    prev: '<',
+                    next: '>',
+                    jump: function (obj, first) {
+
+                        //首次不执行
+                        if (first) {
+                            return false;
+                        }
+
+                        let href = window.location.href;
+
+                        if (href.indexOf('?') === -1) {
+                            href += '?';
+                        }
+
+                        /**
+                         * 处理分页字段
+                         */
+                        let var_page = '&' + renderData.page.var_page + '=';
+                        if (href.indexOf(var_page) === -1) {
+                            href += var_page + obj.curr;
+                        } else {
+                            href = href.replace(new RegExp(var_page + '[0-9]+'), var_page + obj.curr);
+                        }
+
+                        /**
+                         * 处理每页显示数量
+                         */
+                        let page_size = '&page_size=';
+                        if (href.indexOf(page_size) === -1) {
+                            href += page_size + obj.limit;
+                        } else {
+                            href = href.replace(new RegExp(page_size + '[0-9]+'), page_size + obj.limit);
+                        }
+
+                        window.location.href = href;
+                    }
+                });
             });
-        });
 
-        /**
-         * 根据数据数量，计算表格的高度
-         * @type {Array}
-         */
-        renderData.list = renderData.list ? renderData.list : [];
-        var dataCount = renderData.list.length;
-        var height = 0;
-        if (dataCount) {
+            /**
+             * 根据数据数量，计算表格的高度
+             * @type {Array}
+             */
+            renderData.list = renderData.list ? renderData.list : [];
+            var dataCount = renderData.list.length;
+            var height = 0;
+            if (dataCount) {
 
-            var offset = 3;
-            if (dataCount < 8) {
-                offset = 5;
-            } else {
-                offset = 6;
+                var offset = 3;
+                if (dataCount < 8) {
+                    offset = 5;
+                } else {
+                    offset = 6;
+                }
+                height = (dataCount + 2) * 50 + offset;
+                if (height > 610) {
+                    height = 610;
+                } else if (height < 200) {
+                    height = 200;
+                }
+
             }
-            height = (dataCount + 2) * 50 + offset;
-            if (height > 610) {
-                height = 610;
-            } else if (height < 200) {
-                height = 200;
-            }
 
+            //执行渲染
+            table.render({
+                id: tableId,
+                //指定原始表格元素选择器
+                elem: '#data-list',
+                // 分页参数
+                page: false,
+                limit: renderData.page.per_page,
+                //容器高度
+                height: height,
+                text: {
+                    none: '暂无相关数据'
+                },
+                toolbar: '#leftTopButtons',
+                defaultToolbar: ['filter', 'exports'],
+                cols: [renderData.header],
+                data: renderData.list,
+                //开启隔行背景
+                even: true,
+                //小尺寸的表格
+                size: 'lg',
+            });
+        } catch (e) {
+            console.log(e);
         }
 
-        //执行渲染
-        table.render({
-            id: tableId,
-            //指定原始表格元素选择器
-            elem: '#data-list',
-            // 分页参数
-            page: false,
-            limit: renderData.page.per_page,
-            //容器高度
-            height: height,
-            text: {
-                none: '暂无相关数据'
-            },
-            toolbar: '#leftTopButtons',
-            defaultToolbar: ['filter', 'exports'],
-            cols: [renderData.header],
-            data: renderData.list,
-            //开启隔行背景
-            even: true,
-            //小尺寸的表格
-            size: 'lg',
-        });
         /**
          * 监听工具栏事件
          */

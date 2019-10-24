@@ -420,10 +420,6 @@ EOF;
             $classLogic->setOrder($this->order);
             $items = call_user_func_array([$classLogic, $query_type], [$this->limit]);
 
-            if (false === $items && $this->debug) {
-                throw new Exception($classLogic->getError());
-            }
-
             $page = $classLogic->getPageParams();
         }
 
