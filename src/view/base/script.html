@@ -175,11 +175,10 @@
              */
             this.auto = function (ret, time) {
 
-                var url = ret.url || (typeof ret.data === 'string' ? ret.data : '');
-                var msg = ret.msg || (typeof ret.info === 'string' ? ret.info : '');
+                let url = ret.url ? ret.url : '';
+                let msg = ret.msg || (typeof ret.info === 'string' ? ret.info : '');
 
-                var code = parseInt(ret.code);
-
+                let code = parseInt(ret.code);
                 if (code === 1) {
                     if (time === 'false') {
                         return url ? (window.location.href = url) : $.form.reload();
@@ -187,6 +186,8 @@
                     return this.success(msg, time, function () {
                         if (url) {
                             window.location.href = url;
+                        } else {
+                            window.location.reload();
                         }
                         for (var i in that.indexs) {
                             layer.close(that.indexs[i]);
@@ -277,8 +278,12 @@
                             return false;
                         }
 
-                        // 返回的如果是静态页面，则调用show方法
-                        return typeof ret === 'object' ? $.msg.auto(ret, time || ret.wait || undefined) : that.show(ret);
+                        if (typeof ret === 'object') {
+                            return $.msg.auto(ret, time || ret.wait || undefined);
+                        } else {
+                            // 返回的如果是静态页面，则调用show方法
+                            return that.show(ret)
+                        }
                     },
                     complete: function () {
                         $.msg.close(index);
@@ -455,6 +460,7 @@
                         let tips = this.getAttribute('data-tips') || undefined;
                         let time = this.getAttribute('data-time') || undefined;
                         let href = this.getAttribute('action') || window.location.href;
+                        // 提交 tijiao
                         $.form.load(href, data, type, window[call] || undefined, true, tips, time);
                     })
                 }
