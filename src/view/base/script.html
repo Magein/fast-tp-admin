@@ -550,6 +550,37 @@
             $.form.load(url, this, 'post');
         });
 
+        /*! 注册 数据下载 */
+        $('.form-search [type=button]').on('click', function () {
+
+            let _this = $(this);
+            let url = _this.parents('form').data('download-url');
+            let split = url.indexOf('?') === -1 ? '?' : '&';
+            let method = _this.parents('form').attr('method') || 'get';
+
+            let form_data = _this.parents('form').serializeArray();
+            console.log(form_data);
+            let param = [];
+            if (form_data) {
+                for (let i in form_data) {
+                    let data = form_data[i];
+                    param.push(data.name + '=' + $.trim(data.value));
+                }
+            }
+
+            if (param) {
+                param = param.join('&');
+            } else {
+                param = '';
+            }
+
+            url = url + split + param;
+
+            window.location.href = url + split + param;
+
+            return false;
+        });
+
         /*! 注册 data-serach 表单搜索的重置行为 */
         $body.on('click', '[type=reset]', function () {
             let form = $(this).parents('form');

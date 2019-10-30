@@ -2,6 +2,7 @@
 
 namespace magein\render\admin;
 
+use magein\php_tools\common\Csv;
 use magein\php_tools\common\UnixTime;
 use magein\render\admin\component\Button;
 use magein\render\admin\component\Property;
@@ -466,6 +467,7 @@ EOF;
     /**
      * 构建表格数据
      * @param null $callback 处理表头的回调函数
+     * @param $headers
      * @return array
      */
     protected function buildTable($headers = [], $callback = null)
@@ -903,5 +905,30 @@ EOF;
         $this->operationAfter($result, [], $classLogic);
 
         return $result;
+    }
+
+    /**
+     * 下载数据
+     */
+    public function download()
+    {
+        $data = $this->buildTable($this->header());
+
+        $result = $this->getList($this->getCondition(), Constant::QUERY_TYPE_SELECT);
+
+        $list = $result->getList();
+
+        $header = [];
+        if ($data) {
+            foreach ($data as $item) {
+                if ($item['field']) {
+                    $header[$item['field']] = $item['title'];
+                }
+            }
+        }
+
+        $csv = new Csv();
+        $records = $csv->correcting($header, $list);
+        $csv->export($header, $records);
     }
 }
