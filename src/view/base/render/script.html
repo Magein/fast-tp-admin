@@ -70,30 +70,6 @@
                 });
             });
 
-            /**
-             * 根据数据数量，计算表格的高度
-             * @type {Array}
-             */
-            renderData.list = renderData.list ? renderData.list : [];
-            var dataCount = renderData.list.length;
-            var height = 0;
-            if (dataCount) {
-
-                var offset = 3;
-                if (dataCount < 8) {
-                    offset = 5;
-                } else {
-                    offset = 6;
-                }
-                height = (dataCount + 2) * 50 + offset;
-                if (height > 610) {
-                    height = 610;
-                } else if (height < 200) {
-                    height = 200;
-                }
-
-            }
-
             //执行渲染
             table.render({
                 id: tableId,
@@ -103,7 +79,7 @@
                 page: false,
                 limit: renderData.page.per_page,
                 //容器高度
-                height: height,
+                height: parseInt('{$height|default=0}'),
                 text: {
                     none: '暂无相关数据'
                 },

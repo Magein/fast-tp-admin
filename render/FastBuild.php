@@ -95,6 +95,12 @@ trait FastBuild
     protected $operationButton = true;
 
     /**
+     * 表格容器高度
+     * @var int
+     */
+    protected $height = 0;
+
+    /**
      * 页面提示信息
      * @var array
      */

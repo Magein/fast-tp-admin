@@ -205,10 +205,9 @@ class Main extends Controller
 
         $module = $request->module();
         $controller = $request->controller();
-        $action = $request->action(true);
+        $action = $request->action();
 
         $controller = (new Variable())->transToUnderline($controller);
-        $action = (new Variable())->transToUnderline($action);
         $this->path = $module . '/' . $controller . '/' . $action;
 
         return $this->path;
@@ -237,6 +236,7 @@ class Main extends Controller
 
             return $item;
         }, 4);
+
 
         $menu_url = [];
         if ($menus) {
@@ -331,6 +331,7 @@ class Main extends Controller
             return $path;
         };
 
+
         if (count($this->active_menu['node']) > 3) {
             $this->active_menu['url'] = $removeAction($this->active_menu['url']) . '/index';
             $node = $this->active_menu['node'];
@@ -389,6 +390,7 @@ class Main extends Controller
 
         $this->assign('page', $page);
         $this->assign('list', $list ? array_values($list) : []);
+        $this->assign('height', $this->height);
 
         // 表格列中的操作按钮
         $this->assign('operationButtons', $this->getOperationButton());
