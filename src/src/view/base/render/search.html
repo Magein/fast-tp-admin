@@ -1,0 +1,150 @@
+{if $formItems}
+<caption class="margin-bottom-10 text-left">
+    <fieldset>
+        <legend class="layui-bg-green">条件搜索</legend>
+        <form class="layui-form layui-form-pane form-search"
+              action="{:url('index')}"
+              onsubmit="return false"
+              method="get"
+              autocomplete="off">
+
+            {foreach $formItems as $item}
+
+            <input type="hidden" name="express[{$item.field}]" value="{$item.origin.express|default='eq'}">
+
+            <div class="layui-form-item layui-inline">
+                <label class="layui-form-label">
+                    {$item.title}
+                </label>
+
+                {switch name='item.type'}
+                {case value='select' break="1"}
+                <div class="layui-input-inline">
+                    <select class="layui-select" name="{$item.field}"
+                            data-child-data='{$item.origin.child_data|default=""|json_encode}'
+                            data-child-name="{$item.origin.child_name|default=''}"
+                            data-value="{$item.value}"
+                            lay-filter="{$item.field}"
+                            lay-search
+                    >
+                        <option value="">-- 全部 --</option>
+                        {if $item['option']}
+
+                        {foreach $item['option'] as $key=>$option}
+
+                        {if strlen($item.value) >0 && $item.value == $key}
+                        <option value="{$key}" selected>{$option}</option>
+                        {else/}
+                        <option value="{$key}">{$option}</option>
+                        {/if}
+
+                        {/foreach}
+                        {/if}
+                    </select>
+                </div>
+                {/case}
+
+                {/* 多选下拉框开始 */ }
+                {case select-checked}
+                <div class="layui-input-inline">
+                    <select name="{$item.field}"
+                            class="layui-select"
+                            xm-select-search
+                            xm-select-height="36px"
+                            xm-select="select_{$item.field}"
+                            lay-filter="{$item.field}"
+                    >
+                        <option value="">全部</option>
+                        {if $item['option']}
+                        {foreach $item['option'] as $k=>$val }
+
+                        {if is_array($val)}
+                        <option value="{$val.value}"
+                                {if $item[
+                        'value'] && in_array($k,$item['value'])}
+                        selected="selected"
+                        {/if}
+
+                        {if isset($val['disabled'])}disabled="disabled"{/if}
+                        >
+                        {$val['name']}
+                        {else}
+                        <option value="{$k}"
+                                {if $item[
+                        'value'] && in_array($k,$item['value'])}
+                        selected="selected"
+                        {/if}
+
+                        {if isset($val['disabled'])}disabled="disabled"{/if}
+                        >{$val}{/if}</option>
+
+
+                        {/foreach}
+                        {/if}
+                    </select>
+                </div>
+                {/case}
+                {/* 多选下拉框结束 */ }
+
+                {/* 时间框开始 */ }
+                {case datetime}
+                <div class="layui-input-inline">
+                    <input type="text"
+                           name="{$item.field}"
+                           value="{$item.value}"
+                           title="{$item.title}"
+                           class="layui-input date-time-field"
+                           {$item.attrs}
+                           data-format="{$item.origin.format|default=''}"
+                           data-range="{$item.origin.range|default=''}"
+                    >
+                </div>
+                {/case}
+                {/* 时间框结束 */ }
+
+                {/* 地区筛选开始 */ }
+                {case region}
+                <div class="layui-input-inline">
+                    <select name="province_id" lay-filter="province_id" data-value="{$Think.get.province_id}"
+                            lay-search>
+                        <option value="">请选择省份</option>
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <input type="hidden" name="express[city_id]" value="eq">
+                    <select name="city_id" lay-filter="city_id" data-value="{$Think.get.city_id}" lay-search>
+                        <option value="">请选择市</option>
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <input type="hidden" name="express[area_id]" value="eq">
+                    <select name="area_id" lay-filter="area_id" data-value="{$Think.get.area_id}" lay-search>
+                        <option value="">请选择县/区</option>
+                    </select>
+                </div>
+                {/case}
+                {/* 地区筛选结束 */ }
+
+                {default /}
+                <div class="layui-input-inline">
+                    <input type="{$item.type}" name="{$item.field}" value="{$item.value}" placeholder="请输入{$item.title}"
+                           class="layui-input">
+                </div>
+                {/switch}
+            </div>
+            {/foreach}
+
+            <div class="layui-form-item layui-inline">
+
+                <button type="submit" class="layui-btn layui-btn-primary">
+                    <i class="layui-icon"></i> 搜 索
+                </button>
+
+                <button type="reset" class="layui-btn layui-btn-primary">
+                    <i class="layui-icon layui-icon-refresh"></i>重 置
+                </button>
+            </div>
+        </form>
+    </fieldset>
+</caption>
+{/if}

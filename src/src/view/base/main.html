@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+{/* 包含头部信息 */}
+{include file='admin@base/header'}
+
+{block name="style"}
+
+{/block}
+
+<body class="layui-layout-body">
+{block name='body'}
+<div class="layui-layout layui-layout-admin">
+
+    <!-- 顶部菜单 开始 -->
+    {include file="admin@base/top"}
+    <!-- 顶部菜单 结束 -->
+
+    <!-- 左则菜单 开始 -->
+    {include file="admin@base/left"}
+    <!-- 左则菜单 结束 -->
+
+    <!-- 主体内容 开始 -->
+    <div class="layui-body">
+        <div class="layui-card">
+            {notempty name='title'}
+            <div class="layui-card-header layui-anim layui-anim-fadein notselect">
+                <span class="layui-icon font-s10 color-desc margin-right-5">&#xe65b;</span>{$title|default=''}
+                <div class="pull-right">{block name='button'}{/block}</div>
+            </div>
+            {/notempty}
+            <div class="layui-card-body layui-anim layui-anim-fadein">
+
+                {if $tips}
+                {foreach $tips as $item}
+                <blockquote class="layui-elem-quote layui-bg-{$item.color|default='green'}" style="border-left: none;;">
+                    {$item.message}
+                </blockquote>
+                {/foreach}
+                {/if}
+
+                {block name='content'}{/block}
+            </div>
+        </div>
+    </div>
+    <!-- 主体内容 结束 -->
+
+</div>
+{/block}
+
+
+{include file="admin@base/script"}
+
+{block name="script"}
+
+{/block}
+</body>
+</html>

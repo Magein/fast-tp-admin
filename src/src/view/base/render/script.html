@@ -1,0 +1,272 @@
+<script type="text/javascript">
+
+    /**
+     * 这两个参数放到外面来，保证后续代码可以正确调用到
+     */
+    var table = layui.table;
+    var tableId = 'data-list';
+
+    $(function () {
+
+        if (renderData.page.per_page === undefined) {
+            renderData.page.per_page = 9999;
+        }
+
+        layui.use('laypage', function () {
+
+            if (renderData.page.total === undefined) {
+                return false;
+            }
+
+            layui.laypage.render({
+                // 分页容器
+                elem: 'page-container',
+                layout: ['prev', 'page', 'next', 'count', 'limit'],
+                //数据总数，从服务端得到
+                count: renderData.page.total,
+                // 每页数量
+                limit: renderData.page.per_page,
+                limits: [15],
+                // 当前页
+                curr: renderData.page.current_page,
+                prev: '<',
+                next: '>',
+                jump: function (obj, first) {
+
+                    //首次不执行
+                    if (first) {
+                        return false;
+                    }
+
+                    let href = window.location.href;
+
+                    if (href.indexOf('?') === -1) {
+                        href += '?';
+                    }
+
+                    /**
+                     * 处理分页字段
+                     */
+                    let var_page = '&' + renderData.page.var_page + '=';
+                    if (href.indexOf(var_page) === -1) {
+                        href += var_page + obj.curr;
+                    } else {
+                        href = href.replace(new RegExp(var_page + '[0-9]+'), var_page + obj.curr);
+                    }
+
+                    /**
+                     * 处理每页显示数量
+                     */
+                    let page_size = '&page_size=';
+                    if (href.indexOf(page_size) === -1) {
+                        href += page_size + obj.limit;
+                    } else {
+                        href = href.replace(new RegExp(page_size + '[0-9]+'), page_size + obj.limit);
+                    }
+
+                    window.location.href = href;
+                }
+            });
+        });
+
+        /**
+         * 根据数据数量，计算表格的高度
+         * @type {Array}
+         */
+        renderData.list = renderData.list ? renderData.list : [];
+        var dataCount = renderData.list.length;
+        var height = 0;
+        if (dataCount) {
+
+            var offset = 3;
+            if (dataCount < 8) {
+                offset = 5;
+            } else {
+                offset = 6;
+            }
+            height = (dataCount + 2) * 50 + offset;
+            if (height > 610) {
+                height = 610;
+            } else if (height < 200) {
+                height = 200;
+            }
+
+        }
+
+        //执行渲染
+        table.render({
+            id: tableId,
+            //指定原始表格元素选择器
+            elem: '#data-list',
+            // 分页参数
+            page: false,
+            limit: renderData.page.per_page,
+            //容器高度
+            height: height,
+            text: {
+                none: '暂无相关数据'
+            },
+            toolbar: '#leftTopButtons',
+            defaultToolbar: ['filter'],
+            cols: [renderData.header],
+            data: renderData.list,
+            //开启隔行背景
+            even: true,
+            //小尺寸的表格
+            size: 'lg',
+        });
+        /**
+         * 监听工具栏事件
+         */
+        table.on('toolbar(data-list)', function (obj) {
+            if (obj.event === 'LAYTABLE_COLS') {
+                return false;
+            }
+            let data = getData($(this), obj);
+            transData(data);
+            return false;
+        });
+
+        /**
+         * 监听操作栏事件
+         */
+        table.on('tool(data-list)', function (obj) {
+
+            let _this = $(this);
+
+            let callback = function () {
+                let data = getData(_this, obj);
+                transData(data);
+                return false;
+            };
+
+            let confirm = $(this).data('confirm');
+            if (confirm) {
+                $.msg.confirm(confirm, function () {
+                    return callback();
+                });
+                return false;
+            }
+
+            return callback();
+        });
+
+        /**
+         * 监听单元格编辑
+         */
+        table.on('edit(data-list)', function (obj) {
+            let data = {};
+            data.type = 'update';
+            data.url = updateFieldUrl;
+            data.param = {
+                id: obj.data.id,
+                field: obj.field,
+                value: obj.value,
+            };
+            transData(data);
+        });
+
+        /**
+         * 获取点击事件可以得到的相关数值
+         * @param _this 点击的对象 用于获取额外属性
+         * @param obj   layui-table 监听事件返回的参数
+         */
+        function getData(_this, obj) {
+            let data = {};
+            let param = _this.data('param');
+            let postData = {};
+            if (param) {
+                for (let i in param) {
+                    let value = param[i];
+                    let reg = /__[\w]+__/;
+                    if (reg.test(value)) {
+                        value = value.slice(2, -2);
+                        try {
+                            postData[i] = $.trim(obj.data[value]);
+                        } catch (e) {
+
+                        }
+                    } else {
+                        postData[i] = param[i];
+                    }
+                }
+            }
+
+            data.title = _this.data('title');
+            data.type = _this.data('type');
+            data.url = _this.data('url');
+            data.param = postData;
+
+            return data;
+        }
+
+        function transData(data, callback) {
+            let url = data.url;
+            if (data.param) {
+                url += '?';
+                for (let i in data.param) {
+                    url += i + '=' + data.param[i] + '&';
+                }
+            }
+            let reg = /\?$/;
+            if (reg.test(url)) {
+                url = url.replace('?', '');
+            }
+            switch (data.type) {
+                case 'modal':
+                    // 模态对话框
+                    data.param.modal = 1;
+                    $.form.modal(data.url, data.param, data.title);
+                    break;
+                case 'update':
+                    $.form.load(data.url, data.param, 'post', callback);
+                    break;
+                case 'del':
+                    let ids = getSelectedId();
+                    console.log(data.param);
+                    if (data.param.id && ids) {
+                        data.param.id.concat(ids);
+                    } else {
+                        console.log(ids);
+                        data.param.id = ids;
+                    }
+                    $.form.load(data.url, data.param, 'get', callback);
+                    break;
+                case 'open':
+                    window.location.href = url;
+                    break;
+                case 'redirect':
+                    window.open(url);
+                    break;
+                default:
+                    $.form.load(data.url, data.param, 'post', callback);
+            }
+            return false;
+        }
+
+        //监听指定开关
+        window.form.on('switch()', function (data) {
+            let elem = data.elem;
+            let name = $(elem).attr('name');
+            let value = this.checked ? 1 : 0;
+            let id = $(elem).data('id');
+            $.form.load('{:url("updateField")}', {id: id, field: name, value: value}, 'post');
+        });
+    });
+
+    /**
+     * 获取选中的数据的id
+     * @returns {Array}
+     */
+    function getSelectedId() {
+        let all = table.checkStatus(tableId);
+        let data = all.data;
+        let ids = [];
+        if (data) {
+            for (let i in data) {
+                ids.push(data[i].id);
+            }
+        }
+        return ids;
+    }
+</script>
