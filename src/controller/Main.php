@@ -279,6 +279,10 @@ class Main extends Controller
             $role_id = isset($this->user['role']) ? $this->user['role'] : [];
         }
 
+        if ($this->user['id'] == 1) {
+            return [];
+        }
+
         $cache_name = 'user_auth_menu_id_list_' . $this->user['id'];
 
         $menu_ids = \think\Cache::store('file')->tag('ADMIN_USER_AUTH_MENU_ID_LIST')->get($cache_name);

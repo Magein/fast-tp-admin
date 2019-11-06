@@ -2,6 +2,7 @@
 
 namespace magein\render\admin;
 
+use app\admin\component\system_log\SystemLogLogic;
 use magein\php_tools\common\Csv;
 use magein\php_tools\common\UnixTime;
 use magein\render\admin\component\Button;
@@ -712,10 +713,11 @@ EOF;
                 $msg = $class;
             }
         }
-        
+
         if ($result) {
             $code = 1;
             $msg = $msg ?: '保存成功';
+            SystemLogLogic::instance()->create(UID);
         } else {
             $code = 0;
             $msg = $msg ?: '保存失败';
