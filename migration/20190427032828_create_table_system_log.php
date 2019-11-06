@@ -32,8 +32,10 @@ class CreateTableSystemLog extends Migrator
             $this->table('system_log'),
             [
                 ['uid', 'integer', ['limit' => 11, 'comment' => '管理员']],
+                ['controller', 'string', ['limit' => 11, 'comment' => '控制器']],
                 ['action', 'string', ['limit' => 50, 'comment' => '行为']],
-                ['content', 'string', ['limit' => 255, 'comment' => '行为描述']],
+                ['get', 'string', ['limit' => 1500, 'comment' => 'get参数']],
+                ['post', 'text', ['comment' => 'post参数']],
                 ['ip', 'string', ['limit' => 30, 'comment' => 'IP地址']]
             ]
         );

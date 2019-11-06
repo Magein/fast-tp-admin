@@ -10,9 +10,13 @@ use magein\php_tools\common\Variable;
 use magein\php_tools\object\QueryResult;
 use magein\php_tools\think\Dictionary;
 use magein\php_tools\think\Logic;
-use think\Exception;
+use think\Config;
+use think\exception\HttpResponseException;
+use think\Response;
+use think\Url;
 use think\Request;
 use think\Validate;
+use think\View;
 
 trait FastBuild
 {
@@ -140,6 +144,15 @@ trait FastBuild
      * @var bool
      */
     protected $debug = false;
+
+    /**
+     * 操作成功后的动作
+     *
+     * 支持两种 __RELOAD__、__GO_BACK__、__INDEX__
+     *
+     * @var string
+     */
+    protected $success_action = '__RELOAD__';
 
     /**
      * 获取对应的类
@@ -658,7 +671,7 @@ EOF;
     protected function save($data = [], $validate = null)
     {
         if (empty($data)) {
-            $this->operationAfter(false, $data, '');
+            $this->operationAfter(false, '请输入表单参数', $data);
         }
 
         if ($validate === null) {
@@ -676,20 +689,94 @@ EOF;
 
         $result = $class->save($data);
 
-        $this->operationAfter($result, $data, $class);
+        $this->operationAfter($result, $class, $data);
 
         return $result;
     }
 
     /**
      * 操作数据后的动作
-     * @param mixed $result
+     * @param $result
+     * @param null|Logic $class
      * @param array $data
-     * @param Logic $class
+     * @param int $wait
+     * @param array $header
      */
-    protected function operationAfter($result, $data = [], $class = null)
+    protected function operationAfter($result, $class = null, $data = [], $wait = 3, array $header = [])
     {
+        $msg = '';
+        if ($class) {
+            if (is_object($class)) {
+                $msg = $class->getError();
+            } else {
+                $msg = $class;
+            }
+        }
+        
+        if ($result) {
+            $code = 1;
+            $msg = $msg ?: '保存成功';
+        } else {
+            $code = 0;
+            $msg = $msg ?: '保存失败';
+        }
 
+        $type = $this->getResponseType();
+
+        $url = $this->success_action;
+        if ($url == '__INDEX__') {
+            $url = Url::build('index');
+        }
+
+        $result = [
+            'code' => $code,
+            'msg' => $msg,
+            'data' => $data,
+            'url' => $url,
+            'wait' => $wait,
+        ];
+
+        if ('html' == strtolower($type)) {
+            $template = Config::get('template');
+            $view = Config::get('view_replace_str');
+
+            $result = View::instance($template, $view)
+                ->fetch(Config::get('dispatch_success_tmpl'), $result);
+        }
+
+        $response = Response::create($result, $type)->header($header);
+
+        throw new HttpResponseException($response);
+    }
+
+    /**
+     * @param string $msg
+     * @param array $data
+     * @param int $wait
+     * @param array $header
+     */
+    protected function reload($msg = '', $data = [], $wait = 3, array $header = [])
+    {
+        $msg = $msg ?: '操作成功';
+
+        $this->success_action = '__RELOAD__';
+
+        $this->operationAfter(true, $msg, $data, $wait, $header);
+    }
+
+    /**
+     * @param string $msg
+     * @param array $data
+     * @param int $wait
+     * @param array $header
+     */
+    protected function back($msg = '', $data = [], $wait = 3, array $header = [])
+    {
+        $msg = $msg ?: '操作成功';
+
+        $this->success_action = '__GO_BACK__';
+
+        $this->operationAfter(true, $msg, $data, $wait, $header);
     }
 
     /**
@@ -885,7 +972,7 @@ EOF;
 
         $result = $classLogic->updateField($field, $value, $id);
 
-        $this->operationAfter($result, [], $classLogic);
+        $this->operationAfter($result, $classLogic, []);
 
         return $result;
     }
@@ -908,7 +995,7 @@ EOF;
 
         $result = $classLogic->delete($id);
 
-        $this->operationAfter($result, [], $classLogic);
+        $this->operationAfter($result, $classLogic, []);
 
         return $result;
     }

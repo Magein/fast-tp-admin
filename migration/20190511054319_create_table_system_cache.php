@@ -32,6 +32,7 @@ class CreateTableSystemCache extends Migrator
             $this->table('system_cache'),
             [
                 ['title', 'string', ['comment' => '名称']],
+                ['tag', 'string', ['comment' => '标签']],
                 ['key', 'string', ['comment' => '键']],
                 ['store', 'string', ['comment' => '驱动方式']],
                 ['description', 'string', ['default' => '', 'comment' => '描述']]
