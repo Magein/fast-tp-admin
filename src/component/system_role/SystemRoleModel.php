@@ -13,7 +13,6 @@ class SystemRoleModel extends Model
         'create_time',
     ];
 
-
     /**
      * @param $value
      * @param $data

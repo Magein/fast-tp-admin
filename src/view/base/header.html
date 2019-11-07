@@ -1,6 +1,9 @@
 <head>
     <title>
-        {$title|default=''}-{$config.app_name}
+        {if $title}
+        {$title}-
+        {/if}
+        {$config.app_name|default=''}
     </title>
     <meta charset="utf-8">
     <meta name="renderer" content="webkit">

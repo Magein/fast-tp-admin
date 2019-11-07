@@ -9,7 +9,7 @@ use think\Request;
 
 class Role extends Main
 {
-    protected $operationColWidth = 70;
+    protected $operationColWidth = 160;
 
     /**
      * @param string $type
@@ -27,9 +27,11 @@ class Role extends Main
      */
     protected function getOperationButton()
     {
+        $button = parent::getOperationButton();
+
         return [
-            $this->setButton('授权', 'access')
-        ];
+                $this->setButton('授权', 'access')
+            ] + $button;
     }
 
     /**
@@ -40,7 +42,7 @@ class Role extends Main
         return [
             'id',
             'title',
-            'description',
+            'desc',
             'status_text',
             'create_time'
         ];
@@ -50,7 +52,7 @@ class Role extends Main
     {
         return [
             'title',
-            'description',
+            'desc',
             [
                 'field' => 'status',
                 'type' => 'radio',
