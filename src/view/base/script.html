@@ -1,6 +1,6 @@
 <script src="{$cdn.layui_all_js}"></script>
-<script src="{$cdn.layui_all_js}"></script>
 <script src="{$cdn.require_js}"></script>
+<script src="{$cdn.region}"></script>
 
 {include file="admin@base/region"}
 
@@ -38,7 +38,8 @@
             'jquery': ['{$cdn.jquery}'],
             'jquery.ztree': ['{$cdn.jquery_ztree_js}'],
             // 需要注意版本信息
-            'jquery.migrate': ['{$cdn.jquery_migrate}']
+            'jquery.migrate': ['{$cdn.jquery_migrate}'],
+            'jquery.cookie': ['{$cdn.jquery_cookie}'],
         },
         shim: {
             'ZeroClipboard': {
@@ -80,22 +81,7 @@
                 if ($menu.hasClass(miniClass)) $(this).attr('index', layer.tips($(this).attr('data-target-tips') || '', this));
             }).mouseleave(function () {
                 layer.close($(this).attr('index'));
-            });
-
-            /**
-             * 左侧菜单，点击显示隐藏
-             */
-            $('.layui-side li.layui-nav-item a').on('click', function () {
-
-                let li = $(this).parent('li');
-
-                if (li.hasClass('layui-nav-itemed')) {
-                    li.removeClass('layui-nav-itemed');
-                } else {
-                    li.addClass('layui-nav-itemed');
-                }
             })
-
         })($('.layui-layout-admin'), 'layui-layout-left-mini');
 
         /*! 消息组件实例 */
@@ -122,21 +108,28 @@
                 });
                 return index;
             };
-            // 显示成功类型的消息
+            /**
+             * 显示成功类型的消息
+             * 传递的callback，会执行两次
+             */
             this.success = function (msg, time, callback) {
-                var index = layer.msg(msg, {
+                let index = layer.msg(msg, {
                     icon: 1,
                     shade: this.shade,
                     scrollbar: false,
                     end: callback,
-                    time: (time || 2) * 1000,
+                    time: (time || 3) * 1000,
                     shadeClose: true
                 });
-                return this.indexs.push(index), index;
+
+                this.indexs.push(index);
+
+                return index;
             };
             // 显示失败类型的消息
             this.error = function (msg, time, callback) {
                 var index = layer.msg(msg, {
+                    icon: 2,
                     shade: this.shade,
                     scrollbar: false,
                     time: (time || 3) * 1000,
@@ -173,28 +166,45 @@
              * @returns {*}
              */
             this.auto = function (ret, time) {
+                let url = ret.url ? ret.url : '';
+                let msg = ret.msg || (typeof ret.info === 'string' ? ret.info : '');
 
-                var url = ret.url || (typeof ret.data === 'string' ? ret.data : '');
-                var msg = ret.msg || (typeof ret.info === 'string' ? ret.info : '');
+                if (time === undefined) {
+                    time = ret.time || 3;
+                }
 
-                var code = parseInt(ret.code);
-
+                let code = parseInt(ret.code);
                 if (code === 1) {
-                    if (time === 'false') {
-                        return url ? (window.location.href = url) : $.form.reload();
-                    }
                     return this.success(msg, time, function () {
-                        if (url) {
-                            window.location.href = url;
+                        switch (url) {
+                            case '__GO_BACK__':
+                                window.history.back();
+                                break;
+                            case '__RELOAD__':
+                                window.location.reload();
+                                break;
+                            default:
+                                window.location.href = url;
+                                break;
                         }
-                        for (var i in that.indexs) {
+                        for (let i in that.indexs) {
                             layer.close(that.indexs[i]);
                         }
                         that.indexs = [];
-                    })
+                        return false;
+                    });
                 }
                 return this.error(msg, 3, function () {
-                    url ? window.location.href = url : '';
+                    switch (url) {
+                        case '__GO_BACK__':
+                        case '__RELOAD__':
+                            break;
+                        default:
+                            if (url) {
+                                window.location.href = url;
+                            }
+                            break;
+                    }
                 });
             };
         };
@@ -235,7 +245,7 @@
              * @param url       请求地址
              * @param data      请求的数组
              * @param method    请求的方法
-             * @param callback  回调函数
+             * @param callback  回调函数  model方法有可能会返回一个对象，多为此次请求的结果，如保存成功还是失败等等
              * @param loading   提示方法
              * @param tips      提示内容
              * @param time      延迟时间
@@ -271,13 +281,19 @@
                         }
                     },
                     success: function (ret) {
-
-                        if (typeof callback === 'function' && callback.call(that, ret) === false) {
-                            return false;
+                        /**
+                         * 注意modal方法传递的值，如果返回的是一个对象，那么表示成功或者失败的结果，
+                         */
+                        if (typeof callback === 'function') {
+                            return callback.call(that, ret);
                         }
 
-                        // 返回的如果是静态页面，则调用show方法
-                        return typeof ret === 'object' ? $.msg.auto(ret, time || ret.wait || undefined) : that.show(ret);
+                        if (typeof ret === 'object') {
+                            return $.msg.auto(ret, time || ret.wait || undefined);
+                        } else {
+                            // 返回的如果是静态页面，则调用show方法
+                            return that.show(ret)
+                        }
                     },
                     complete: function () {
                         $.msg.close(index);
@@ -454,6 +470,7 @@
                         let tips = this.getAttribute('data-tips') || undefined;
                         let time = this.getAttribute('data-time') || undefined;
                         let href = this.getAttribute('action') || window.location.href;
+                        // 提交 tijiao
                         $.form.load(href, data, type, window[call] || undefined, true, tips, time);
                     })
                 }
@@ -541,6 +558,37 @@
             }
 
             $.form.load(url, this, 'post');
+        });
+
+        /*! 注册 数据下载 */
+        $('.form-search [type=button]').on('click', function () {
+
+            let _this = $(this);
+            let url = _this.parents('form').data('download-url');
+            let split = url.indexOf('?') === -1 ? '?' : '&';
+            let method = _this.parents('form').attr('method') || 'get';
+
+            let form_data = _this.parents('form').serializeArray();
+            console.log(form_data);
+            let param = [];
+            if (form_data) {
+                for (let i in form_data) {
+                    let data = form_data[i];
+                    param.push(data.name + '=' + $.trim(data.value));
+                }
+            }
+
+            if (param) {
+                param = param.join('&');
+            } else {
+                param = '';
+            }
+
+            url = url + split + param;
+
+            window.location.href = url + split + param;
+
+            return false;
         });
 
         /*! 注册 data-serach 表单搜索的重置行为 */
@@ -709,14 +757,15 @@
                 return false;
             }
             let child_name = $(this).data('child-name');
+            let child_title = $(this).data('child-title') || '';
             let value = $(this).val();
-            linkage(value, child_data, child_name);
+            linkage(value, child_data, child_name, child_title);
         });
 
         /**
          * 二级联动的方法
          */
-        function linkage(key, data, name) {
+        function linkage(key, data, name, child_title) {
             try {
                 if (typeof data === "string") {
                     data = JSON.parse(data);
@@ -732,8 +781,12 @@
                 return false;
             }
 
+            if (!child_title || child_title.length === 0) {
+                child_title = ' --全部--';
+            }
+
             let child = $('select[name=' + name + ']');
-            let option = '<option value=""> --全部-- </option>';
+            let option = '<option value=""> ' + child_title + ' </option>';
 
             if (category) {
                 let value = parseInt(child.data('value'));
