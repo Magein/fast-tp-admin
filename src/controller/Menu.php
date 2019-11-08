@@ -115,6 +115,11 @@ class Menu extends Main
                         $title = '删除';
                         $icon = 'layui-icon layui-icon-delete';
                         break;
+                    case 'download':
+                        $url[] = 'download';
+                        $title = '导出';
+                        $icon = 'layui-icon layui-icon-download-circle';
+                        break;
                 }
 
                 if (empty($title)) {
