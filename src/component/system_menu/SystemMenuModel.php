@@ -3,6 +3,7 @@
 namespace app\admin\component\system_menu;
 
 use magein\php_tools\common\TreeStructure;
+use magein\php_tools\common\Variable;
 use magein\php_tools\think\Model;
 
 class SystemMenuModel extends Model
@@ -37,6 +38,8 @@ class SystemMenuModel extends Model
             if (!preg_match('/^admin/', $value)) {
                 $value = 'admin/' . $value;
             }
+
+            $value = (new Variable())->transToUnderline($value);
 
             return $value;
         }
