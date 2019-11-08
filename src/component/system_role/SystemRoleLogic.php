@@ -31,9 +31,9 @@ class SystemRoleLogic extends Logic
      */
     public function getTitle($withTrashed = false)
     {
-        return $this->setWithTrashed($withTrashed)->getFileStorageList('system_role_title_list', 'id,title');
+        return $this->setWithTrashed($withTrashed)->getFileStorageList('id,title', 'system_role_title_list');
     }
-    
+
     /**
      * @param mixed $status
      * @return array|mixed|string

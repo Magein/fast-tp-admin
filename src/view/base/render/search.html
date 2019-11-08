@@ -4,7 +4,7 @@
         <legend class="layui-bg-green">条件搜索</legend>
         <form class="layui-form layui-form-pane form-search"
               action="{:url()}"
-              data-download-url="{if $download_url}{$download_url}{else}{:url('download')}{/if}"
+              data-download-url="{if isset($download_url)}{$download_url}{else}{:url('download')}{/if}"
               onsubmit="return false"
               method="get"
               autocomplete="off">
@@ -19,9 +19,11 @@
                     <i class="layui-icon"></i> 搜 索
                 </button>
 
+                {if isset($downloadButton) && is_bool($downloadButton) && $downloadButton}
                 <button type="button" class="layui-btn layui-btn-primary download">
                     <i class="layui-icon layui-icon-download-circle"></i>导 出
                 </button>
+                {/if}
 
                 <button type="reset" class="layui-btn layui-btn-primary">
                     <i class="layui-icon layui-icon-refresh"></i>重 置

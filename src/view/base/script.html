@@ -1,9 +1,3 @@
-<script src="{$cdn.layui_all_js}"></script>
-<script src="{$cdn.require_js}"></script>
-<script src="{$cdn.region}"></script>
-
-{include file="admin@base/region"}
-
 <script type="text/javascript">
     // IE兼容提示
     (function (w) {
@@ -21,44 +15,44 @@
     window.layer = layui.layer;
     window.laydate = layui.laydate;
 
-    // require 配置参数
-    require.config({
-        waitSeconds: 60,
-        baseUrl: '/static/',
-        map: {
-            '*':
-                {
-                    css: '{$cdn.require_css}'
-                }
-        },
-        paths: {
-            'ueditor': ['plugin/ueditor/ueditor.all.min'],
-            'ueditor.config': ['plugin/ueditor/ueditor.config'],
-            'ZeroClipboard': ['plugin/ueditor/third-party/zeroclipboard/ZeroClipboard'],
-            'jquery': ['{$cdn.jquery}'],
-            'jquery.ztree': ['{$cdn.jquery_ztree_js}'],
-            // 需要注意版本信息
-            'jquery.migrate': ['{$cdn.jquery_migrate}'],
-            'jquery.cookie': ['{$cdn.jquery_cookie}'],
-        },
-        shim: {
-            'ZeroClipboard': {
-                deps: ['ueditor.config', 'ueditor']
-            },
-            'jquery.ztree': {
-                deps: ['jquery', 'jquery.migrate', 'css!{$cdn.jquery_ztree_css}']
-            }
-        },
-        //禁止缓存
-        urlArgs: "bust=" + (new Date()).getTime()
-    });
-
-    // 注册jquery到require模块
-    define('jquery', [], function () {
-        return layui.$;
-    });
-
     $(function () {
+
+        // require 配置参数
+        require.config({
+            waitSeconds: 60,
+            baseUrl: '/static/',
+            map: {
+                '*':
+                    {
+                        css: window.cdn.js.require_css_js
+                    }
+            },
+            paths: {
+                'ueditor': ['plugin/ueditor/ueditor.all.min'],
+                'ueditor.config': ['plugin/ueditor/ueditor.config'],
+                'ZeroClipboard': ['plugin/ueditor/third-party/zeroclipboard/ZeroClipboard'],
+                'jquery': window.cdn.js.jquery_js,
+                'jquery.ztree': window.cdn.js.jquery_ztree_js,
+                // 需要注意版本信息
+                'jquery.migrate': window.cdn.js.jquery_migrate_js,
+                'jquery.cookie': window.cdn.js.jquery_cookie_js,
+            },
+            shim: {
+                'ZeroClipboard': {
+                    deps: ['ueditor.config', 'ueditor']
+                },
+                'jquery.ztree': {
+                    deps: ['jquery', 'jquery.migrate', 'css!'+ window.cdn.css.jquery_ztree_css]
+                }
+            },
+            //禁止缓存
+            urlArgs: "bust=" + (new Date()).getTime()
+        });
+
+        // 注册jquery到require模块
+        define('jquery', [], function () {
+            return layui.$;
+        });
 
         window.$body = $('body');
         /**
@@ -818,15 +812,3 @@
         }
     });
 </script>
-
-{if isset($cdn.script) && is_array($cdn.script)}
-
-{foreach $cdn['script'] as $item}
-
-{if isset($item['src'])}
-<script src="{$item.src}"></script>
-{/if}
-
-{/foreach}
-
-{/if}

@@ -100,6 +100,12 @@ trait FastBuild
     protected $operationButton = true;
 
     /**
+     * 下载按钮
+     * @var bool
+     */
+    protected $downLoadButton = true;
+
+    /**
      * 表格容器高度
      * @var int
      */
@@ -293,6 +299,14 @@ trait FastBuild
         }
 
         return $default;
+    }
+
+    /**
+     * @return array|mixed
+     */
+    protected function getDownloadButton()
+    {
+        return $this->downLoadButton;
     }
 
     /**

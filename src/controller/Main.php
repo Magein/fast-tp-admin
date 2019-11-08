@@ -353,6 +353,8 @@ class Main extends Controller
             $this->active_menu['url'] = $removeAction($this->active_menu['url']) . '/index';
             $node = $this->active_menu['node'];
             $this->active_menu['ppid'] = $node[1];
+        } else {
+            $this->active_menu['ppid'] = 0;
         }
 
         if (isset($this->active_menu['title'])) {
@@ -414,6 +416,9 @@ class Main extends Controller
 
         // 左上角操作按钮
         $this->assign('leftTopButtons', $this->getLeftTopButton());
+
+        // 下载按钮
+        $this->assign('downloadButton', $this->downLoadButton);
 
         return $this->fetch(self::PUBLIC_TABLE);
     }
