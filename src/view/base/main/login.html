@@ -2,8 +2,14 @@
 <html>
 
 {include file="admin@base/header"}
-<link href="__STATIC__/theme/css/login.css" type="text/css" rel="stylesheet">
 
+<link rel="stylesheet" href="{$cdn.login.login_css}">
+
+{if isset($cdn.js) && is_array($cdn.js)}
+{foreach $cdn.js as $item}
+<script src="{$item}"></script>
+{/foreach}
+{/if}
 <body>
 <div class="login">
     <div class="message">{$config.app_name}-用户登录</div>
@@ -33,7 +39,5 @@
         <button type="submit" class="layui-btn layui-btn-fluid">登 录</button>
     </form>
 </div>
-
-{include file="admin@base/script"}
 </body>
 </html>
