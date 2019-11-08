@@ -29,7 +29,6 @@ trait Cdn
             // 不稳定的CDN
             'layui_css' => 'https://cdn.90so.net/layui/2.4.5/css/layui.css',
             'console_css' => '/static/theme/css/console.css',
-            'jquery_ztree_css' => 'https://cdn.staticfile.org/zTree.v3/3.5.40/css/zTreeStyle/zTreeStyle.css',
             'form_select_css' => '/static/plugin/formSelect/formSelects-v4.css',
         ];
 
@@ -43,6 +42,7 @@ trait Cdn
             'jquery_ztree_js' => 'https://cdn.staticfile.org/zTree.v3/3.5.40/js/jquery.ztree.all.min',
             'jquery_migrate_js' => 'https://cdn.staticfile.org/jquery-migrate/1.3.0/jquery-migrate.min',
             'jquery_cookie_js' => 'https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min',
+            'jquery_ztree_css' => 'https://cdn.staticfile.org/zTree.v3/3.5.40/css/zTreeStyle/zTreeStyle.css',
         ];
 
         $resource['js'] = array_merge($js, $resource['js'] ?? []);
