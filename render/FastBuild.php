@@ -156,6 +156,19 @@ trait FastBuild
     protected $success_action = '__RELOAD__';
 
     /**
+     * 唯一验证
+     *
+     * [
+     *
+     *  "phone"=>'手机号码已被占用',
+     *  "code"=>'编号已经被占用',
+     *
+     * ]
+     * @var array
+     */
+    protected $unique = [];
+
+    /**
      * 获取对应的类
      * 可选项: logic(业务类),dictionary(字典类),validate(验证类)
      * @param string $type
@@ -683,6 +696,29 @@ EOF;
          * @var Logic $class
          */
         $class = $this->getClass();
+
+        /**
+         * 唯一验证
+         */
+        if ($this->unique) {
+            $id = $data['id'] ?? 0;
+            foreach ($this->unique as $field => $error) {
+                $value = $data[$field] ?? null;
+                if (empty($value)) {
+                    continue;
+                }
+                $record = $class->setCondition([$field => $value])->find();
+                if ($record) {
+                    if (empty($id)) {
+                        $this->operationAfter(false, $error, $data);
+                    }
+                    // 编辑
+                    if ($id && $record['id'] != $id) {
+                        $this->operationAfter(false, $error, $data);
+                    }
+                }
+            }
+        }
 
         if ($validate) {
             $class->setValidate($validate);
