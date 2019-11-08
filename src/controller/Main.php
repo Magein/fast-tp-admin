@@ -235,9 +235,10 @@ class Main extends Controller
 
         $module = $request->module();
         $controller = $request->controller();
-        $action = $request->action();
+        $action = $request->action(true);
 
         $controller = (new Variable())->transToUnderline($controller);
+        $action = (new Variable())->transToUnderline($action);
         $this->path = $module . '/' . $controller . '/' . $action;
 
         return $this->path;
@@ -316,8 +317,21 @@ class Main extends Controller
             return true;
         }
 
+        $skip_auth_check = \think\Config::get('skip_auth_check') ?: [];
+
+        if (is_array($skip_auth_check)) {
+            $skip_auth_check = array_merge($skip_auth_check, [
+                'user/info',
+                'user/password',
+            ]);
+            $path = preg_replace('/admin/', '', $this->path);
+            if (in_array(trim($path, '/'), $skip_auth_check)) {
+                return true;
+            }
+        }
+
         if (!in_array($this->path, $menu_url)) {
-            $this->error('您尚未获得访问该路劲的权限');
+            $this->error('您尚未获得访问该路径的权限');
         }
 
         return true;
