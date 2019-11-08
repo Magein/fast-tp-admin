@@ -32,26 +32,17 @@ class SystemIpLogic extends Logic
      */
     public function getTitle($withTrashed = false)
     {
-        return $this->setWithTrashed($withTrashed)->column('id,title');
+        return $this->setWithTrashed($withTrashed)->getFileStorageList('id,title');
     }
 
     /**
      * 获取ip地址列表
+     * @param bool $withTrashed
      * @return array|mixed
      */
-    public function getIpAddrList()
+    public function getIp($withTrashed)
     {
-        $records = Cache::store('file')->get(SystemIpConstant::SYSTEM_ALLOW_LOGIN_IP_LIST_NAME);
-
-        if ($records) {
-            return $records;
-        }
-
-        $records = $this->column('id,ip');
-
-        Cache::store('file')->set(SystemIpConstant::SYSTEM_ALLOW_LOGIN_IP_LIST_NAME, $records);
-
-        return $records;
+        return $this->setWithTrashed($withTrashed)->getFileStorageList('id,ip', __FUNCTION__);
     }
 
     /**
@@ -64,7 +55,7 @@ class SystemIpLogic extends Logic
             $ip = Request::instance()->ip();
         }
 
-        $allowIp = $this->getIpAddrList();
+        $allowIp = $this->getIp();
 
         if ($allowIp) {
 

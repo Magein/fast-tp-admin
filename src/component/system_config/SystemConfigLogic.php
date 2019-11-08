@@ -27,19 +27,11 @@ class SystemConfigLogic extends Logic
      */
     public function getName($withTrashed = false)
     {
-        return $this->setWithTrashed($withTrashed)->column('id,name');
-    }
-
-    /**
-     * @return array|mixed
-     */
-    public function getList()
-    {
-        return $this->select();
+        return $this->setWithTrashed($withTrashed)->getFileStorageList('id,name');
     }
 
     public function getValue()
     {
-        return $this->getFileStorageList(__FUNCTION__, 'name,value');
+        return $this->getFileStorageList('name,value');
     }
 }
