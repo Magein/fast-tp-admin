@@ -39,6 +39,12 @@ class SystemMenuModel extends Model
                 $value = 'admin/' . $value;
             }
 
+            $value = str_replace('/^admin/', '', $value);
+
+            $value = trim($value, '/');
+
+            $value = lcfirst($value);
+
             $value = (new Variable())->transToUnderline($value);
 
             return $value;

@@ -766,7 +766,7 @@ EOF;
 
         if ($result) {
             $code = 1;
-            $msg = $msg ?: '保存成功';
+            $msg = '保存成功';
             SystemLogLogic::instance()->create(UID);
         } else {
             $code = 0;

@@ -101,7 +101,7 @@ class Role extends Main
             $this->error('保存失败');
         }
 
-        \think\Cache::store('file')->clear('admin_user_auth_menu');
+        \think\Cache::store('file')->clear('ADMIN_USER_AUTH_MENU_ID_LIST');
 
         $this->success('保存成功');
     }

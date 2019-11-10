@@ -11,7 +11,7 @@ class Cache extends Main
     /**
      * @var int
      */
-    protected $operationColWidth = 70;
+    protected $operationColWidth = 170;
 
     /**
      * @param array $data
@@ -31,9 +31,11 @@ class Cache extends Main
      */
     protected function getOperationButton()
     {
-        return [
-            $this->setButtonConfirm('清除', 'clear', '请再次确定是否删除？', ['key' => '__key__', 'store' => '__store__', 'tag' => '__tag__'])
-        ];
+        $buttons = parent::getOperationButton();
+
+        $buttons[] = $this->setButtonConfirm('清除', 'clear', '请再次确定是否删除？', ['key' => '__key__', 'store' => '__store__', 'tag' => '__tag__']);
+
+        return $buttons;
     }
 
     /**
