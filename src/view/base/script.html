@@ -707,7 +707,7 @@
 
                 upload.render({
                     elem: '#' + id,
-                    url: '{$upload.file|default=""}',
+                    url: window.UPLOAD_PATH,
                     field: field,
                     accept: accept,
                     exts: ext,
