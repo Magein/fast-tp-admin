@@ -261,7 +261,7 @@
            name="{$item.field}"
            value="{$item.value}"
            title="{$item.title}"
-           placeholder="{$item.placeholder}"
+           placeholder="{$item.placeholder?:$item.title}"
            class="layui-input"
            {if $item.required }required{/if}
     {$item['attrs']}

@@ -117,7 +117,8 @@
 
     {default /}
     <div class="layui-input-inline">
-        <input type="{$item.type}" name="{$item.field}" value="{$item.value}" placeholder="请输入{$item.title}"
+        <input type="{$item.type}" name="{$item.field}" value="{$item.value}"
+               placeholder="{$item.placeholder?:'请输入'.$item.title}"
                class="layui-input">
     </div>
     {/switch}
