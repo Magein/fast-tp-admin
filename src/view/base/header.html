@@ -32,13 +32,63 @@
         function stringToObject(string) {
             if (typeof string === "string") {
                 try {
+                    string = string.replace(/[\n\r]/g, '', string);
                     let result = JSON.parse(string);
                     if (typeof result === "object") {
                         return result;
                     }
                 } catch (e) {
+                    console.log(string);
                     console.log('字符串转化为对象失败');
                 }
+            }
+        }
+
+        /**
+         * 时间转化为unix时间
+         */
+        function dateToUnix(string) {
+            let f = string.split(' ', 2);
+            let d = (f[0] ? f[0] : '').split('-', 3);
+            let t = (f[1] ? f[1] : '').split(':', 3);
+            return (new Date(
+                parseInt(d[0], 10) || null,
+                (parseInt(d[1], 10) || 1) - 1,
+                parseInt(d[2], 10) || null,
+                parseInt(t[0], 10) || null,
+                parseInt(t[1], 10) || null,
+                parseInt(t[2], 10) || null
+            )).getTime() / 1000;
+        }
+
+        /**
+         * unix时间戳转化为日期
+         */
+        function unixToDate(timestamp, format) {
+            let concat = function (value) {
+                value = parseInt(value);
+                if (value < 10) {
+                    value = '0' + value;
+                }
+                return value;
+            };
+
+            let date = new Date(timestamp);
+            date.setTime(timestamp * 1000);
+            let year = date.getFullYear();
+            let month = concat(date.getMonth() + 1);
+            let day = concat(date.getDate());
+            let hour = concat(date.getHours());
+            let min = concat(date.getMinutes());
+            let sec = concat(date.getSeconds());
+            date = year + '-' + month + '-' + day;
+            let time = hour + ':' + min + ':' + sec;
+            if (format === 'date') {
+                return date;
+            } else if (format === 'time') {
+                return time;
+            } else {
+                return date + ' ' + time;
             }
         }
     </script>
