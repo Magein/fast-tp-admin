@@ -201,11 +201,24 @@ trait FastBuild
         // 类型使用帕斯卡方式
         $class = $variable->transToPascal($class);
 
-        // 获取命名空间
-        $namespace .= '\\' . $dirName . '\\' . $class . ucfirst($type);
+        // 获取一级目录命名空间
+        $classNamespace = $namespace . '\\' . $dirName . '\\' . $class . ucfirst($type);
 
-        if (class_exists($namespace)) {
-            return new $namespace();
+        if (class_exists($classNamespace)) {
+            return new $classNamespace();
+        }
+
+        // 获取二级目录命名空间
+        $separator = strpos($dirName, '_');
+        if ($separator) {
+            $dirName = substr($dirName, 0, 4) . '\\' . $dirName;
+        } else {
+            // 这里兼容如会员模块 member\member\xx
+            $dirName .= '\\' . $dirName;
+        }
+        $classNamespace = $namespace . '\\' . $dirName . '\\' . $class . ucfirst($type);
+        if (class_exists($classNamespace)) {
+            return new $classNamespace();
         }
 
         return null;
