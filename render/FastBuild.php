@@ -211,7 +211,7 @@ trait FastBuild
         // 获取二级目录命名空间
         $separator = strpos($dirName, '_');
         if ($separator) {
-            $dirName = substr($dirName, 0, 4) . '\\' . $dirName;
+            $dirName = substr($dirName, 0, $separator) . '\\' . $dirName;
         } else {
             // 这里兼容如会员模块 member\member\xx
             $dirName .= '\\' . $dirName;
