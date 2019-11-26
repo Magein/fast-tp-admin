@@ -33,7 +33,7 @@ class CreateTableSystemRole extends Migrator
             [
                 ['title', 'string', ['limit' => 50, 'comment' => '名称']],
                 ['desc', 'string', ['comment' => '描述']],
-                ['auth', 'text', ['limit' => \Phinx\Db\Adapter\MysqlAdapter::TEXT_REGULAR, 'comment' => '权限', 'default' => '']],
+                ['auth', 'text', ['limit' => \Phinx\Db\Adapter\MysqlAdapter::TEXT_REGULAR, 'comment' => '权限']],
                 ['status', 'integer', ['limit' => \Phinx\Db\Adapter\MysqlAdapter::INT_TINY, 'comment' => '状态 0 禁用 forbid 1 启用 open']]
             ]
         );
