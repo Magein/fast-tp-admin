@@ -25,7 +25,7 @@ trait Cdn
 
         $css = [
             // 稳定的CDN
-            'font_awesome' => 'https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css',
+            'font_awesome_css' => 'https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css',
             // 不稳定的CDN
             'layui_css' => 'https://cdn.90so.net/layui/2.4.5/css/layui.css',
             'console_css' => '/static/admin/theme/css/console.css',

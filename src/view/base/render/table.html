@@ -41,29 +41,6 @@
 {/if}
 {/* 分页代码 */}
 
-{/* 表格渲染的数据信息 */}
-<script type="text/javascript">
-    /**
-     * 表格数据
-     * @type {{header: string, page: string, list: string}}
-     */
-    var renderData = {
-        // 数据列表
-        list: {$list|json_encode},
-        // 头部信息
-        header: {$header|json_encode},
-        // 分页数据
-        page: JSON.parse('{$page|json_encode}')
-    };
-
-    /**
-     * 更新字段请求连接
-     * @type {string}
-     */
-    var updateFieldUrl = "{:url('updateField')}";
-</script>
-{/* 表格渲染的数据信息 */}
-
 {/* 左侧顶部按钮 */}
 <script type="text/html" id="leftTopButtons">
     <div class="layui-btn-container">
@@ -76,7 +53,7 @@
                 data-param='{$item.param|default=[]|json_encode}'
                 {$item.attrs|default="" }
                 lay-event="{$item.event|default='leftTopButtonEvent'}">
-            <i class="{$item.icon}"></i>{$item.title}
+            <i class="{$item.icon}"></i> {$item.title}
         </button>
         {/foreach}
         {/if}

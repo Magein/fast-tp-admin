@@ -14,8 +14,41 @@
 
 {block name="script"}
 
-{include file="admin@base/render/script"}
+<script>
+    $(function () {
 
-{include file="admin@base/render/form/script"}
+        let header = {$header|json_encode};
+
+        let tableStyle = '{$tableStyle}';
+
+        /**
+         * 实例化渲染类
+         */
+        let render = new Render();
+        render.params = {
+            height: '{$height}',
+            page: stringToObject('{$page|json_encode}'),
+            list: stringToObject('{$list|json_encode}'),
+            header: header
+        };
+
+        /**
+         * 更新字段请求连接
+         * @type {string}
+         */
+        render.updateFieldUrl = "{:url('updateField')}";
+
+        if (tableStyle === 'normal') {
+            render.table();
+        } else {
+            render.treeTable();
+        }
+
+        /**
+         * 绑定表格事件
+         */
+        render.tableEvent();
+    })
+</script>
 
 {/block}

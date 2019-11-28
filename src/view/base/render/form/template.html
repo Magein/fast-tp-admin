@@ -14,11 +14,15 @@
 <div class="layui-input-block">
     <select name="{$item.field}"
             lay-filter="{$item.field}"
+            lay-search
             data-value="{$item['value']}"
-            data-child-data='{$item.origin.child_data|default=""|json_encode}'
+
+            {if isset($item.origin.child_data)}
+            data-child-data='{$item.origin.child_data|json_encode}'
             data-child-name="{$item.origin.child_name|default=''}"
             data-child-title="{$item.origin.child_name|default=''}"
-            lay-search
+            {/if}
+
             {if $item.required }required{/if}
     {$item['attrs']}
     >
@@ -46,7 +50,7 @@
             {if $item.required }required{/if}
     {$item['attrs']}
     >
-    <option value="">请选择{$item['value']}</option>
+    <option value="">请选择</option>
 
     {if $item['option']}
 
@@ -275,3 +279,7 @@
 {/if}
 {/foreach}
 {/if}
+
+<script>
+    window.form.render();
+</script>
