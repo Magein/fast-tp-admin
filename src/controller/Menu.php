@@ -9,7 +9,7 @@ use think\Request;
 class Menu extends Main
 {
 
-    protected $title = '系统菜单';
+    protected $tableStyle = 'tree';
 
     /**
      * @param string $type
@@ -29,8 +29,8 @@ class Menu extends Main
      */
     protected function getList($condition = [], $query_type = 'paginate')
     {
-        $menus = SystemMenuLogic::instance()->floor(null, 4);
-
+        $menus = SystemMenuLogic::instance()->floor(null, 4, '');
+        
         return array_values($menus);
     }
 

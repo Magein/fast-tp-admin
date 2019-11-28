@@ -410,6 +410,7 @@ class Main extends Controller
         $this->assign('page', $page);
         $this->assign('list', $list ? array_values($list) : []);
         $this->assign('height', $this->height);
+        $this->assign('tableStyle', $this->tableStyle);
 
         // 表格列中的操作按钮
         $this->assign('operationButtons', $this->getOperationButton());

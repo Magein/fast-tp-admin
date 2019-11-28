@@ -28,12 +28,12 @@ trait Cdn
             'font_awesome' => 'https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css',
             // 不稳定的CDN
             'layui_css' => 'https://cdn.90so.net/layui/2.4.5/css/layui.css',
-            'console_css' => '/static/theme/css/console.css',
-            'form_select_css' => '/static/plugin/formSelect/formSelects-v4.css',
+            'console_css' => '/static/admin/theme/css/console.css',
+            'form_select_css' => '/static/plugin/layui-extend/formSelect/formSelects-v4.css',
         ];
 
         $login = [
-            'login_css' => '/static/theme/css/login.css',
+            'login_css' => '/static/admin/theme/css/login.css',
         ];
 
         $require = [

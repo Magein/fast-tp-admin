@@ -85,7 +85,7 @@ class SystemMenuLogic extends Logic
      * @param $limit
      * @return array|mixed
      */
-    public function floor($ids = null, $limit = 3)
+    public function floor($ids = null, $limit = 3, $sign = '|--')
     {
         $records = $this->getList();
 
@@ -97,7 +97,7 @@ class SystemMenuLogic extends Logic
             }
         }
 
-        $records = TreeStructure::instance()->floor($records, null, $limit);
+        $records = TreeStructure::instance()->setSign($sign)->floor($records, null, $limit);
 
         return $records;
     }

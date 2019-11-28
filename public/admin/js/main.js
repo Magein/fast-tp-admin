@@ -696,9 +696,6 @@ $(function () {
             _this.after(template);
 
             if (value) {
-                if (typeof value !== 'string') {
-                    value = '' + value;
-                }
                 value = value.split(',');
                 if (value.length > 0) {
                     for (let i in value) {

@@ -1,0 +1,64 @@
+* {
+    font: 13px/1.5 '寰蒋闆呴粦', Verdana, Helvetica, Arial, sans-serif;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    box-sizing: border-box;
+}
+
+body, html {
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    background: url(../image/login/web_login_bg.jpg) no-repeat center;
+    background-size: cover;
+}
+
+a {
+    color: #27A9E3;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.login {
+    margin: 150px auto 0 auto;
+    min-height: 420px;
+    max-width: 420px;
+    padding: 40px;
+    background-color: #ffffff;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 4px;
+    /* overflow-x: hidden; */
+    box-sizing: border-box;
+}
+
+a.logo {
+    display: block;
+    height: 58px;
+    width: 167px;
+    margin: 0 auto 30px auto;
+    background-size: 167px 42px;
+}
+
+.message {
+    margin: 10px 0 0 -58px;
+    padding: 18px 10px 18px 60px;
+    background: #009688;
+    position: relative;
+    color: #fff;
+    font-size: 16px;
+}
+
+#darkbannerwrap {
+    background: url(../image/login/aiwrap.png);
+    width: 18px;
+    height: 10px;
+    margin: 0 0 20px -58px;
+    position: relative;
+}

@@ -30,4 +30,13 @@ class Constant
      */
     const QUERY_TYPE_SELECT = 'select';
 
+    /**
+     * 普通表格样式
+     */
+    const TABLE_STYLE_NORMAL = 'normal';
+
+    /**
+     * 树结构表格
+     */
+    const TABLE_STYLE_TREE = 'tree';
 }

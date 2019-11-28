@@ -106,6 +106,16 @@ trait FastBuild
     protected $downLoadButton = true;
 
     /**
+     *
+     * normal 普通
+     *
+     * tree   树结构
+     *
+     * @var string
+     */
+    protected $tableStyle = Constant::TABLE_STYLE_NORMAL;
+
+    /**
      * 表格容器高度
      * @var int
      */
@@ -263,7 +273,7 @@ trait FastBuild
         if (empty($dictionary)) {
             $dictionary = $this->getDictionary();
         }
-
+        
         if ($dictionary) {
             return $dictionary->word;
         }
@@ -280,17 +290,30 @@ trait FastBuild
             return [];
         }
 
-
         $default = [
             'add' => $this->setButton('新增', 'add', [], $this->buttonType, 'layui-icon layui-icon-add-1'),
             'del' => $this->setButton('批量删除', 'del', [], 'del', 'layui-icon layui-icon-delete', 'layui-btn layui-btn-sm layui-btn-danger'),
         ];
 
-        if (is_string($this->leftTopButton)) {
-            return isset($default[$this->leftTopButton]) ? [$default[$this->leftTopButton]] : [];
+        if ($this->tableStyle == Constant::TABLE_STYLE_TREE) {
+            $default['open'] = $this->setButton('展开', '', [], 'tree-open', 'fa fa-arrows', 'layui-btn layui-btn-sm layui-btn-normal');
+            $default['close'] = $this->setButton('隐藏', '', [], 'tree-close', 'fa fa-close', 'layui-btn layui-btn-sm layui-btn-normal');
         }
 
-        return $default;
+        $result = [];
+        if (is_string($this->leftTopButton)) {
+            $result = $default[$this->leftTopButton] ?? [];
+        } elseif (is_array($this->leftTopButton)) {
+            foreach ($this->leftTopButton as $item) {
+                if (isset($default[$item])) {
+                    $result[$item] = $default[$item];
+                }
+            }
+        } else {
+            $result = $default;
+        }
+
+        return $result;
     }
 
     /**
