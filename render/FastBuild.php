@@ -301,7 +301,7 @@ trait FastBuild
 
         $result = [];
         if (is_string($this->leftTopButton)) {
-            $result = $default[$this->leftTopButton] ?? [];
+            $result[] = $default[$this->leftTopButton] ?? [];
         } elseif (is_array($this->leftTopButton)) {
             foreach ($this->leftTopButton as $item) {
                 if (isset($default[$item])) {

@@ -48,12 +48,12 @@
         {foreach $leftTopButtons as $item}
         <button class="layui-btn {$item.cla|default='layui-btn-sm'}"
                 data-type="{$item.type|default='modal'}"
-                data-url="{:url($item.url)}"
-                data-title="{$item.title}"
+                data-url="{if isset($item.url)}{:url($item.url)}{/if}"
+                data-title="{$item.title|default=''}"
                 data-param='{$item.param|default=[]|json_encode}'
                 {$item.attrs|default="" }
                 lay-event="{$item.event|default='leftTopButtonEvent'}">
-            <i class="{$item.icon}"></i> {$item.title}
+            <i class="{$item.icon|default=''}"></i> {$item.title|default=''}
         </button>
         {/foreach}
         {/if}
