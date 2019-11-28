@@ -273,7 +273,7 @@ trait FastBuild
         if (empty($dictionary)) {
             $dictionary = $this->getDictionary();
         }
-        
+
         if ($dictionary) {
             return $dictionary->word;
         }
@@ -296,8 +296,7 @@ trait FastBuild
         ];
 
         if ($this->tableStyle == Constant::TABLE_STYLE_TREE) {
-            $default['open'] = $this->setButton('展开', '', [], 'tree-open', 'fa fa-arrows', 'layui-btn layui-btn-sm layui-btn-normal');
-            $default['close'] = $this->setButton('隐藏', '', [], 'tree-close', 'fa fa-close', 'layui-btn layui-btn-sm layui-btn-normal');
+            $default['open'] = $this->setButton('展开', '', [], 'tree', 'fa fa-arrows', 'layui-btn layui-btn-sm layui-btn-normal');
         }
 
         $result = [];

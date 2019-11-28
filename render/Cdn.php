@@ -17,14 +17,10 @@ trait Cdn
             // 不稳定的CDN
             'layui_all_js' => 'https://cdn.90so.net/layui/2.4.5/layui.all.js',
             'require_js' => 'https://cdn.staticfile.org/require.js/2.3.6/require.min.js',
-
-            // 后台主要的交互脚本文件
             'admin_main_js' => '/static/admin/js/main.js',
-            // 后台主要的渲染脚本文件
-            'admin_render_js' => '/static/admin/js/render.js',
             'region_js' => '/static/js/region.js',
             // 多选框组件
-            'form_select_js' => '/static/plugin/formSelect/formSelects-v4.js',
+            'form_select_js' => '/static/plugin/layui-extend/formSelects-v4.js',
         ];
 
         $css = [
@@ -33,7 +29,7 @@ trait Cdn
             // 不稳定的CDN
             'layui_css' => 'https://cdn.90so.net/layui/2.4.5/css/layui.css',
             'console_css' => '/static/admin/theme/css/console.css',
-            'form_select_css' => '/static/plugin/layui-extend/formSelect/formSelects-v4.css',
+            'form_select_css' => '/static/plugin/layui-extend/formSelects-v4.css',
         ];
 
         $login = [

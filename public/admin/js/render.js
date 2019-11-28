@@ -26,7 +26,7 @@ function Render() {
 
         let elem = _this.params.elem ? _this.params.elem : 'data-list';
         let height = _this.params.height ? _this.params.height : null;
-        let limit = _this.params.limit ? _this.params.limit : 15;
+        let limit = _this.params.page.per_page ? _this.params.per_page : 99999999;
         let header = _this.params.header ? _this.params.header : {};
         let list = _this.params.list ? _this.params.list : {};
         let even = _this.params.even ? _this.params.even : true;
@@ -215,13 +215,18 @@ function Render() {
                     window.open(url);
                     break;
                 // 树结构展示
-                case 'tree-open':
-                    $('tbody [data-pid]').parents('tr').removeClass('layui-hide');
-                    break;
-                // 树结构隐藏
-                case 'tree-close':
-                    $('tbody [data-pid]').parents('tr').addClass('layui-hide');
-                    $('tbody [data-pid=0]').parents('tr').removeClass('layui-hide');
+                case 'tree':
+                    let first = $('tbody [data-pid]').eq(1).parents('tr');
+                    let status = 'hide';
+                    if (first.hasClass('layui-hide')) {
+                        status = 'show';
+                    }
+                    if (status === 'show') {
+                        $('tbody [data-pid]').parents('tr').removeClass('layui-hide');
+                    } else {
+                        $('tbody [data-pid]').parents('tr').addClass('layui-hide');
+                        $('tbody [data-pid=0]').parents('tr').removeClass('layui-hide');
+                    }
                     break;
                 default:
                     $.form.load(data.url, data.param, 'post', callback);
