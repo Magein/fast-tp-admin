@@ -18,6 +18,7 @@
     $(function () {
 
         let header = {$header|json_encode};
+        let list={$list|json_encode};
 
         let tableStyle = '{$tableStyle}';
 
@@ -28,7 +29,7 @@
         render.params = {
             height: '{$height}',
             page: stringToObject('{$page|json_encode}'),
-            list: stringToObject('{$list|json_encode}'),
+            list:list,
             header: header
         };
 
