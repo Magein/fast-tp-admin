@@ -23,7 +23,7 @@
             data-child-title="{$item.origin.child_name|default=''}"
             {/if}
 
-            {if $item.required }required{/if}
+    {if $item.required }required{/if}
     {$item['attrs']}
     >
     {if condition="$item['option']"}
@@ -57,7 +57,7 @@
     {foreach $item['option'] as $option}
     <optgroup label="{$option.title}">
 
-        {if $option['child']}
+        {if isset($option['child']) && $option['child']}
 
         {foreach $option['child'] as $child}
 
