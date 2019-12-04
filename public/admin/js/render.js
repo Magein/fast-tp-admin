@@ -253,12 +253,12 @@ function Render() {
             let level = 1;
             for (let i in header) {
                 let data = header[i];
-                if (data.field === 'title') {
+                if (category_tree_list.indexOf(data.field) >= 0) {
                     data.templet = '<div>' +
                         '<div class="category-switch" data-id="{{ d.id }}" data-pid="{{ d.pid }}" data-node="{{ d.node }}" style="padding-left: {{ (d.level-1)*25 }}px;">' +
                         '{{# if (d.level == ' + level + '){ }}' +
                         '<i class="fa fa-arrows"></i>{{# }; }} ' +
-                        '{{ d.title.replace(/\|--/g,"") }}' +
+                        '{{ d.' + data.field + '.replace(/\|--/g,"") }}' +
                         '</div>' +
                         '</div>';
                     $('body').on('click', '.category-switch', function () {

@@ -4,6 +4,7 @@ namespace magein\render\admin;
 
 use app\admin\component\system_log\SystemLogLogic;
 use magein\php_tools\common\Csv;
+use magein\php_tools\common\TreeStructure;
 use magein\php_tools\common\UnixTime;
 use magein\render\admin\component\Button;
 use magein\render\admin\component\Property;
@@ -501,9 +502,17 @@ EOF;
             }
 
             $classLogic->setOrder($this->order);
-            $items = call_user_func_array([$classLogic, $query_type], [$this->limit]);
 
-            $page = $classLogic->getPageParams();
+            if ($this->tableStyle == Constant::TABLE_STYLE_TREE) {
+                $items = call_user_func_array([$classLogic, Constant::QUERY_TYPE_SELECT], []);
+                if ($items) {
+                    $items = TreeStructure::instance()->setSign('')->floor($items);
+                }
+            } else {
+                $items = call_user_func_array([$classLogic, $query_type], [$this->limit]);
+                $page = $classLogic->getPageParams();
+            }
+
         }
 
         return new QueryResult($items ?: [], $page);
