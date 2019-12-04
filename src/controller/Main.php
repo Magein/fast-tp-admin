@@ -88,6 +88,11 @@ class Main extends Controller
     protected $config = [];
 
     /**
+     * @var string
+     */
+    protected $static_version = 'v1.0.1';
+
+    /**
      * 初始化
      */
     protected function _initialize()
@@ -196,6 +201,7 @@ class Main extends Controller
                 'active_menu' => $this->active_menu,
                 // 静态资源文件
                 'cdn' => $this->cdn(),
+                'version' => $this->static_version,
                 // 上传路径
                 'upload' => $this->upload(),
                 // 右上角的导航信息
@@ -253,18 +259,18 @@ class Main extends Controller
          * 获取系统的菜单列表，以及获取系统菜单的链接
          */
         $menus = SystemMenuLogic::instance()->getList();
+
         $menus = TreeStructure::instance()->floor($menus, function ($item, $data) {
-            if ($item['pid'] == 0) {
-                $item['node'][] = $item['id'];
-            } else {
-                $item['node'] = $data[$item['pid']]['node'];
-                $item['node'][] = $item['id'];
-            }
-
             $item['title'] = trim($item['title'], '|--');
-
             return $item;
         }, 4);
+
+        if ($menus) {
+            foreach ($menus as &$item) {
+                $item['node'] = explode('_', $item['node']);
+            }
+            unset($item);
+        }
 
         return $menus;
     }
