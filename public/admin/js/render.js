@@ -57,6 +57,8 @@ function Render() {
             //小尺寸的表格
             size: 'lg',
         });
+
+        _this.page();
     };
 
     this.tableEvent = function () {
@@ -290,6 +292,9 @@ function Render() {
     this.page = function () {
 
         let data = _this.params.page;
+
+        console.log(data);
+
         let limit = data.per_page ? data.per_page : 999;
         let total = data.total ? data.total : 0;
         let current_page = data.current_page ? data.current_page : 1;
@@ -324,7 +329,7 @@ function Render() {
                 /**
                  * 处理分页字段
                  */
-                let var_page = '&' + var_page + '=';
+                var_page = '&' + var_page + '=';
                 if (href.indexOf(var_page) === -1) {
                     href += var_page + obj.curr;
                 } else {
@@ -351,9 +356,6 @@ function Render() {
      * @return {Array}
      */
     this.getSelectedId = function (field) {
-        if (!field) {
-            field = 'id';
-        }
         let all = table.checkStatus(this.id);
         let data = all.data;
         let ids = [];
