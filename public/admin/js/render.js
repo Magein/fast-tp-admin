@@ -351,6 +351,9 @@ function Render() {
      * @return {Array}
      */
     this.getSelectedId = function (field) {
+        if (!field) {
+            field = 'id';
+        }
         let all = table.checkStatus(this.id);
         let data = all.data;
         let ids = [];
