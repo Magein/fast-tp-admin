@@ -696,6 +696,9 @@ $(function () {
             _this.after(template);
 
             if (value) {
+                if (typeof value !== 'string') {
+                    value = '' + value;
+                }
                 value = value.split(',');
                 if (value.length > 0) {
                     for (let i in value) {
@@ -804,8 +807,17 @@ $(function () {
         require(['ZeroClipboard'], function (ZeroClipboard) {
             window.ZeroClipboard = ZeroClipboard;
             $('textarea.editor').map(function () {
-                console.log($(this).attr('id'));
-                var ue = UE.getEditor($(this).attr('id'));
+                let ue = UE.getEditor($(this).attr('id'), {
+                    zIndex: 1,
+                }).addListener('beforefullscreenchange', function (event, isFullScreen) {
+                    if (isFullScreen) {
+                        $('.layui-layout-admin>.layui-header').addClass('layui-hide');
+                        $('.layui-layout-admin>.layui-side').addClass('layui-hide');
+                    } else {
+                        $('.layui-layout-admin>.layui-header').removeClass('layui-hide');
+                        $('.layui-layout-admin>.layui-side').removeClass('layui-hide');
+                    }
+                });
             });
         })
     }
