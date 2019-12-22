@@ -35,6 +35,8 @@ function Render() {
             height = 'full-20';
         }
 
+        console.log(limit);
+
         //执行渲染
         table.render({
             id: _this.id,
@@ -293,8 +295,6 @@ function Render() {
 
         let data = _this.params.page;
 
-        console.log(data);
-
         let limit = data.per_page ? data.per_page : 999;
         let total = data.total ? data.total : 0;
         let current_page = data.current_page ? data.current_page : 1;
@@ -356,6 +356,9 @@ function Render() {
      * @return {Array}
      */
     this.getSelectedId = function (field) {
+        if (!field) {
+            field = 'id';
+        }
         let all = table.checkStatus(this.id);
         let data = all.data;
         let ids = [];
