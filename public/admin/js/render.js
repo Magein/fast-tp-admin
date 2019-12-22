@@ -26,7 +26,7 @@ function Render() {
 
         let elem = _this.params.elem ? _this.params.elem : 'data-list';
         let height = _this.params.height ? _this.params.height : null;
-        let limit = _this.params.page.per_page ? _this.params.per_page : 99999999;
+        let limit = _this.params.page.per_page ? _this.params.page.per_page : 99999999;
         let header = _this.params.header ? _this.params.header : {};
         let list = _this.params.list ? _this.params.list : {};
         let even = _this.params.even ? _this.params.even : true;
