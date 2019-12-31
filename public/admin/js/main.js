@@ -527,7 +527,8 @@ $(function () {
     /*! 注册 data-serach 表单搜索行为 */
     $body.on('submit', 'form.form-search', function () {
         let _this = $(this);
-        let url = _this.attr('action').replace(/&?page=\d+/g, '');
+        let url = window.location.href;
+        url = url.replace(/&?page=\d+/g, '');
         let split = url.indexOf('?') === -1 ? '?' : '&';
         let method = _this.attr('method') || 'get';
 
@@ -558,9 +559,13 @@ $(function () {
 
         let _this = $(this);
         let url = _this.parents('form').data('download-url');
+
+        if (url === undefined) {
+            return false;
+        }
+
         let split = url.indexOf('?') === -1 ? '?' : '&';
         let method = _this.parents('form').attr('method') || 'get';
-
         let form_data = _this.parents('form').serializeArray();
         console.log(form_data);
         let param = [];
