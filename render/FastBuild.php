@@ -885,6 +885,14 @@ EOF;
     }
 
     /**
+     * @return mixed
+     */
+    protected function searchData()
+    {
+        return Request::instance()->get();
+    }
+
+    /**
      * @param array|string $params
      * @param array $other
      * @return array

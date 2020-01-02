@@ -381,7 +381,7 @@ class Main extends Controller
         /**
          * 处理搜索的条件信息
          */
-        $searchData = Request::instance()->get();
+        $searchData = $this->searchData();
         $condition = $this->getCondition($searchData);
 
         $searchItem = $this->dateSearch($this->searchTime, $this->search());
