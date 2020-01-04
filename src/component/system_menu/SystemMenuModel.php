@@ -45,7 +45,7 @@ class SystemMenuModel extends Model
 
             $value = lcfirst($value);
 
-            $value = (new Variable())->transToUnderline($value);
+            $value = (new Variable())->transToCamelCase($value);
 
             return $value;
         }

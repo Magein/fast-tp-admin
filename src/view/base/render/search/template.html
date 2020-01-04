@@ -40,7 +40,7 @@
         <select name="{$item.field}"
                 class="layui-select"
                 xm-select-search
-                xm-select-height="36px"
+                xm-select-height="30px"
                 xm-select="select_{$item.field}"
                 lay-filter="{$item.field}"
         >
@@ -75,6 +75,46 @@
     </div>
     {/case}
     {/* 多选下拉框结束 */ }
+
+    {/* 分组下拉框开始 */ }
+    {case select-group}
+    <div class="layui-input-inline">
+        <select name="{$item.field}"
+                lay-filter="{$item.field}"
+                data-value="{$item['value']}"
+                lay-search
+                {if $item.required }required{/if}
+        {$item['attrs']}
+        >
+        <option value="">请选择</option>
+
+        {if $item['option']}
+
+        {foreach $item['option'] as $option}
+        <optgroup label="{$option.title}">
+
+            {if $option['child']}
+
+            {foreach $option['child'] as $child}
+
+            {if $child.id==$item.value}
+            <option value="{$child.id}" selected>{$child.title}</option>
+            {else/}
+            <option value="{$child.id}">{$child.title}</option>
+            {/if}
+            {/foreach}
+
+            {/if}
+
+        </optgroup>
+        {/foreach}
+
+        {/if}
+
+        </select>
+    </div>
+    {/case}
+    {/* 分组下拉框结束 */ }
 
     {/* 时间框开始 */ }
     {case datetime}

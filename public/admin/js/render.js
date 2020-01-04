@@ -30,18 +30,19 @@ function Render() {
         let header = _this.params.header ? _this.params.header : {};
         let list = _this.params.list ? _this.params.list : {};
         let even = _this.params.even ? _this.params.even : true;
+        let align = _this.params.align ? _this.params.align : 'left';
 
         if (height == "0") {
             height = 'full-20';
         }
-
-        console.log(limit);
 
         //执行渲染
         table.render({
             id: _this.id,
             //指定原始表格元素选择器
             elem: '#' + elem,
+            // 单元格排列方式
+            align: align,
             // 分页参数
             page: false,
             limit: limit,
@@ -58,6 +59,7 @@ function Render() {
             even: even,
             //小尺寸的表格
             size: 'lg',
+
         });
 
         _this.page();
@@ -173,6 +175,7 @@ function Render() {
         }
 
         function transData(data, callback) {
+
             let url = data.url;
             if (data.param) {
                 url += '?';
@@ -187,7 +190,6 @@ function Render() {
 
             // 获取批量选中的值
             let ids = _this.getSelectedId();
-
             switch (data.type) {
                 case 'modal':
                     // 模态对话框
@@ -213,6 +215,9 @@ function Render() {
                     $.form.load(data.url, data.param, 'get', callback);
                     break;
                 case 'open':
+                    window.open(url);
+                    break;
+                case 'href':
                     window.location.href = url;
                     break;
                 case 'redirect':
