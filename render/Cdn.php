@@ -12,13 +12,13 @@ trait Cdn
         // 配置文件中的
         $resource = Config::get('resource') ?: [];
 
-
         $js = [
+
+            'region_js' => '/static/js/region.js',
             // 不稳定的CDN
             'layui_all_js' => 'https://cdn.90so.net/layui/2.4.5/layui.all.js',
             'require_js' => 'https://cdn.staticfile.org/require.js/2.3.6/require.min.js',
             'admin_main_js' => '/static/admin/js/main.js',
-            'region_js' => '/static/js/region.js',
             // 多选框组件
             'form_select_js' => '/static/plugin/layui-extend/formSelects-v4.js',
         ];

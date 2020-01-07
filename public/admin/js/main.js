@@ -827,3 +827,165 @@ $(function () {
         })
     }
 });
+
+/**
+ * 绑定时间插件
+ */
+(function () {
+    let date_time_input_num = 1;
+    $('input.date-time-field').each(function () {
+        /**
+         * 这里使用了动态设置id的属性,使用样式(.)选择器的话多个时间框的时候只有第一个能用
+         * @type {string}
+         */
+        let id = 'datetime-field-' + date_time_input_num;
+        $(this).attr('id', id);
+
+        /**
+         * 获取时间格式,通过input的date-format设置
+         * @type {jQuery}
+         */
+        let dateFormat = $(this).data('format');
+        if (dateFormat === '') {
+            dateFormat = 'datetime';
+        }
+
+        /**
+         * 是否使用时间区间
+         * @type {jQuery}
+         */
+        let range = $(this).data('range');
+        if (range === '') {
+            range = false;
+        }
+
+        /**
+         * 绑定时间插件
+         */
+        //日期时间范围
+        laydate.render({
+            elem: '#' + id,
+            type: dateFormat,
+            range: range
+        });
+
+        /**
+         * 用于区别id值
+         */
+        date_time_input_num++;
+    })
+})();
+
+/**
+ * 城市数据联动，并且回填数据
+ *
+ * 1. 用于表单回填，表单回填的值从 data中去
+ * 2. 回填搜索框的值，搜索框的值从 url中获取
+ */
+let province_id = parseInt($("[name=province_id]").val());
+window.form.on('select(province_id)', function (data) {
+    province_id = data.value;
+    changeCity(province_id);
+});
+window.form.on('select(city_id)', function (data) {
+    changeArea(province_id, data.value);
+});
+
+getProvince(province_id);
+
+/**
+ * 获取省份数据
+ */
+function getProvince(province_id) {
+
+    let obj = $('[name=province_id]');
+
+    if (obj.find('option').length > 1) {
+        return false;
+    }
+
+    let option = '<option value="">请选择省份</option>';
+    for (let i in REGION) {
+        let data = REGION[i];
+        option += '<option value="' + data.id + '">' + data.name + '</option>';
+    }
+
+    obj.html(option);
+
+    // 回填数据
+    if (province_id) {
+        $('[name=province_id] option[value=' + province_id + ']').attr('selected', 'selected');
+    }
+
+    window.form.render();
+}
+
+/**
+ * 切换城市
+ */
+function changeCity(province_id, value) {
+
+    if (!province_id) {
+        return false;
+    }
+
+    let data = REGION[province_id];
+    if (data === undefined) {
+        return false;
+    }
+
+    let children = data.children;
+
+    if (children === undefined) {
+        return false;
+    }
+
+    let option = '<option value="">请选择市</option>';
+    for (let i in children) {
+        let data = children[i];
+        option += '<option value="' + data.id + '">' + data.name + '</option>';
+    }
+
+    $('[name=city_id]').html(option);
+
+    // 回填数据
+    if (value) {
+        $('[name=city_id] option[value=' + value + ']').attr('selected', 'selected');
+    }
+
+    window.form.render();
+}
+
+/**
+ * 切换区域信息
+ * @param province_id
+ * @param city_id
+ * @param value
+ * @returns {boolean}
+ */
+function changeArea(province_id, city_id, value) {
+
+    if (!province_id || !city_id) {
+        return false;
+    }
+
+    let children = REGION[province_id]['children'][city_id]['children'];
+    if (children === undefined) {
+        return false;
+    }
+
+    let option = '<option value="">请选择县/区</option>';
+    for (let i in children) {
+        let data = children[i];
+        option += '<option value="' + data.id + '">' + data.name + '</option>';
+    }
+
+    $('[name=area_id]').html(option);
+
+    // 回填数据
+    if (value) {
+        $('[name=area_id] option[value=' + value + ']').attr('selected', 'selected');
+    }
+
+    window.form.render();
+}

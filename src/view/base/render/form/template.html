@@ -57,7 +57,7 @@
     {foreach $item['option'] as $option}
     <optgroup label="{$option.title}">
 
-        {if isset($option['child']) && $option['child']}
+        {if $option['child']}
 
         {foreach $option['child'] as $child}
 
@@ -279,6 +279,8 @@
 {/if}
 {/foreach}
 {/if}
+
+<script src="/static/admin/js/main.js"></script>
 
 <script>
     window.form.render();
