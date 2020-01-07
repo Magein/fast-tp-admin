@@ -231,8 +231,10 @@
 {/* 地区筛选开始 */ }
 {case region}
 <div class="layui-input-inline">
-    <select name="province_id" lay-filter="province_id" data-value="{$item.value}" lay-search {if $item.required
-            }required{/if}>
+    <select name="province_id" lay-filter="province_id"
+            data-value="{if $data.province_id}{$data.province_id|default=0}{else}{$item.value}{/if}" lay-search
+            {if $item.required}required{/if}
+    >
     <option value="">请选择省份</option>
     {if condition="$item['option']"}
     {foreach name="$item['option']" item="option" key="k"}
@@ -246,12 +248,12 @@
     </select>
 </div>
 <div class="layui-input-inline">
-    <select name="city_id" lay-filter="city_id" data-value="{$item.value}" lay-search>
+    <select name="city_id" lay-filter="city_id" data-value="{$data.city_id|default=0}" lay-search>
         <option value="">请选择市</option>
     </select>
 </div>
 <div class="layui-input-inline">
-    <select name="area_id" lay-filter="area_id" data-value="{$item.value}" lay-search>
+    <select name="area_id" lay-filter="area_id" data-value="{$data.area_id|default=0}" lay-search>
         <option value="">请选择县/区</option>
     </select>
 </div>
