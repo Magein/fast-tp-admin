@@ -11,25 +11,27 @@
     {case value='select' break="1"}
     <div class="layui-input-inline">
         <select class="layui-select" name="{$item.field}"
-                data-child-data='{$item.origin.child_data|default=""|json_encode}'
+                {if $item.origin.child_data}
+                data-child-data='{$item.origin.child_data|json_encode}'
                 data-child-name="{$item.origin.child_name|default=''}"
-                data-value="{$item.value}"
-                lay-filter="{$item.field}"
-                lay-search
+                {/if}
+        data-value="{$item.value}"
+        lay-filter="{$item.field}"
+        lay-search
         >
-            <option value="">-- 全部 --</option>
-            {if $item['option']}
+        <option value="">-- 全部 --</option>
+        {if $item['option']}
 
-            {foreach $item['option'] as $key=>$option}
+        {foreach $item['option'] as $key=>$option}
 
-            {if strlen($item.value) >0 && $item.value == $key}
-            <option value="{$key}" selected>{$option}</option>
-            {else/}
-            <option value="{$key}">{$option}</option>
-            {/if}
+        {if strlen($item.value) >0 && $item.value == $key}
+        <option value="{$key}" selected>{$option}</option>
+        {else/}
+        <option value="{$key}">{$option}</option>
+        {/if}
 
-            {/foreach}
-            {/if}
+        {/foreach}
+        {/if}
         </select>
     </div>
     {/case}
