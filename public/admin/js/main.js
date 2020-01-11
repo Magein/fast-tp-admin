@@ -826,6 +826,17 @@ $(function () {
             });
         })
     }
+
+
+    window.form.on('select(province_id)', function (data) {
+        province_id = data.value;
+        changeCity(province_id);
+    });
+    window.form.on('select(city_id)', function (data) {
+        changeArea(province_id, data.value);
+    });
+
+    regionFetch();
 });
 
 /**
@@ -882,35 +893,32 @@ $(function () {
  * 1. 用于表单回填，表单回填的值从 data中去
  * 2. 回填搜索框的值，搜索框的值从 url中获取
  */
-let province_id = parseInt($("[name=province_id]").val());
-if (isNaN(province_id)) {
-    province_id = parseInt($("[name=province_id]").data('value'));
-}
-getProvince(province_id);
+function regionFetch() {
 
-let city_id = parseInt($("[name=city_id]").val());
-if (isNaN(city_id)) {
-    city_id = parseInt($("[name=city_id]").data('value'));
-}
-if (city_id) {
-    changeCity(province_id, city_id);
-}
+    let province_id = parseInt($("[name=province_id]").val());
+    if (isNaN(province_id)) {
+        province_id = parseInt($("[name=province_id]").data('value'));
+    }
+    getProvince(province_id);
 
-let area_id = parseInt($("[name=area_id]").val());
-if (isNaN(area_id)) {
-    area_id = parseInt($("[name=area_id]").data('value'));
-}
-if (area_id) {
-    changeArea(province_id, city_id, area_id);
-}
+    let city_id = parseInt($("[name=city_id]").val());
+    if (isNaN(city_id)) {
+        city_id = parseInt($("[name=city_id]").data('value'));
+    }
+    if (city_id) {
+        changeCity(province_id, city_id);
+    }
 
-window.form.on('select(province_id)', function (data) {
-    province_id = data.value;
-    changeCity(province_id);
-});
-window.form.on('select(city_id)', function (data) {
-    changeArea(province_id, data.value);
-});
+    let area_id = parseInt($("[name=area_id]").val());
+    if (isNaN(area_id)) {
+        area_id = parseInt($("[name=area_id]").data('value'));
+    }
+    if (area_id) {
+        changeArea(province_id, city_id, area_id);
+    }
+
+
+}
 
 /**
  * 获取省份数据
