@@ -837,12 +837,12 @@ $(function () {
     });
 
     regionFetch();
+
+    bindDateTimePlugin();
 });
 
-/**
- * 绑定时间插件
- */
-(function () {
+
+function bindDateTimePlugin() {
     let date_time_input_num = 1;
     $('input.date-time-field').each(function () {
         /**
@@ -885,7 +885,7 @@ $(function () {
          */
         date_time_input_num++;
     })
-})();
+}
 
 /**
  * 城市数据联动，并且回填数据
