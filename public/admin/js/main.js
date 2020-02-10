@@ -526,29 +526,57 @@ $(function () {
 
     /*! 注册 data-serach 表单搜索行为 */
     $body.on('submit', 'form.form-search', function () {
+
         let _this = $(this);
-        let url = window.location.href;
-        url = url.replace(/&?page=\d+/g, '');
-        let split = url.indexOf('?') === -1 ? '?' : '&';
         let method = _this.attr('method') || 'get';
 
+        let param = {};
+
+        let url = window.location.href;
+
+        url = url.replace(/&?page=\d+/g, '');
+
+        let question_mark = url.indexOf('?');
+
+        if (question_mark !== -1) {
+            let url_params = url.substr(question_mark + 1);
+            url_params = url_params.split('&');
+            if (url_params && url_params.length > 0) {
+                for (let i in url_params) {
+                    let value = url_params[i];
+                    value = value.split('=');
+                    let name = value[0];
+                    param[name] = $.trim(value[1]);
+                }
+            }
+        }
+
         let form_data = _this.serializeArray();
-        let param = [];
+
         if (form_data) {
             for (let i in form_data) {
                 let data = form_data[i];
-                param.push(data.name + '=' + $.trim(data.value));
+                let name = data.name;
+                let value = $.trim(data.value);
+                param[name] = value;
             }
         }
 
         if (param) {
-            param = param.join('&');
-        } else {
-            param = '';
+            let action = url;
+            if (question_mark !== -1) {
+                action = url.substr(0, question_mark+1);
+            } else {
+                action = action + '?';
+            }
+            for (let i in param) {
+                action += i + '=' + param[i] + '&';
+            }
+            url = action.substr(0, action.length - 1);
         }
 
         if (method.toLowerCase() === 'get') {
-            return window.location.href = url + split + param;
+            return window.location.href = url;
         }
 
         $.form.load(url, this, 'post');
