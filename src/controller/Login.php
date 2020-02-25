@@ -48,6 +48,9 @@ class Login extends Controller
         $password = Request::instance()->param('password');
         $remember_me = Request::instance()->param('remember_me');
 
+        $username = trim($username);
+        $password = trim($password);
+
         if (empty($username) || empty($password)) {
             $this->error('请输入账号密码');
         }
