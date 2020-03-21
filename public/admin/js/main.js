@@ -167,6 +167,7 @@ $(function () {
             }
 
             let code = parseInt(ret.code);
+            let data = ret.data;
             if (code === 1) {
                 return this.success(msg, time, function () {
                     switch (url) {
@@ -175,6 +176,17 @@ $(function () {
                             break;
                         case '__RELOAD__':
                             window.location.reload();
+                            break;
+                        case '__HREF__':
+                            if (data.target === '_self') {
+                                window.location.href = data.url;
+                            } else {
+                                window.open(data.url);
+                                return false;
+                            }
+                            break;
+                        case '__WAIT__':
+                            return false;
                             break;
                         default:
                             window.location.href = url;
@@ -565,7 +577,7 @@ $(function () {
         if (param) {
             let action = url;
             if (question_mark !== -1) {
-                action = url.substr(0, question_mark+1);
+                action = url.substr(0, question_mark + 1);
             } else {
                 action = action + '?';
             }

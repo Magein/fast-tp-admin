@@ -17,12 +17,8 @@
 <script>
     $(function () {
 
-        let header = {$header | json_encode
-    }
-        ;
-        let list = {$list | json_encode
-    }
-        ;
+        let header = {$header|json_encode};
+        let list={$list|json_encode};
 
         let tableStyle = '{$tableStyle}';
 
@@ -33,7 +29,7 @@
         render.params = {
             height: '{$height}',
             page: stringToObject('{$page|json_encode}'),
-            list: list,
+            list:list,
             header: header
         };
 
@@ -46,7 +42,6 @@
         if (tableStyle === 'normal') {
             render.table();
         } else {
-            render.params.limit = list.length;
             render.treeTable();
         }
 

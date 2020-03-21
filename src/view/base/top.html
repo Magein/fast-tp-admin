@@ -9,7 +9,7 @@
     <ul class="layui-nav layui-layout-left">
         {foreach $top as $item}
         <li class="layui-nav-item {if in_array($item.id,$active_menu['node'])}layui-this{/if}">
-            <a data-menu-node="m-{$item.id}" href="{if $item.url}/{$item.url}{else/}javascript:void(0){/if}">
+            <a data-menu-node="m-{$item.id}" href="/{if $item.first}{$item.first}{else}{$item.url|default=''}{/if}">
                 {notempty name='item.icon'}
                 <span class='{$item.icon|} padding-right-5'></span>
                 {/notempty}

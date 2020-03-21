@@ -169,7 +169,7 @@ class User extends Main
 
             $instance = new Password();
 
-            if (!$instance->check($oldPassword, $data)) {
+            if (!$instance->check($oldPassword, $data['password'])) {
                 $this->error('您的旧密码不正确，请重试');
             }
 

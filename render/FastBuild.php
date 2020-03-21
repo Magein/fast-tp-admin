@@ -166,7 +166,11 @@ trait FastBuild
     /**
      * 操作成功后的动作
      *
-     * 支持两种 __RELOAD__、__GO_BACK__、__INDEX__
+     * 支持
+     * __RELOAD__   重载
+     * __GO_BACK__  返回到上一页
+     * __INDEX__    跳转到index
+     * __WAIT__     等待，一般用于快速操作
      *
      * @var string
      */
@@ -1028,7 +1032,6 @@ EOF;
                             break;
                         case 'day':
                             $value = substr($value, 0, 10);
-
                             $start = UnixTime::instance()->startDay($value);
                             $end = UnixTime::instance()->endDay($value);
                             $condition[$name] = ['between', [$start, $end]];
@@ -1036,8 +1039,20 @@ EOF;
                         case 'range':
                             $value = explode('~', $value);
                             if (count($value) == 2) {
-                                $start = UnixTime::instance()->startDay(trim($value[0]));
-                                $end = UnixTime::instance()->endDay(trim($value[1]));
+                                $start = trim($value[0]);
+                                $end = trim($value[1]);
+                                if (strlen($start) > 10) {
+                                    $start = UnixTime::instance()->unix($start);
+                                    $end = UnixTime::instance()->unix($end);
+                                } else {
+                                    if ($start == $end) {
+                                        $start = UnixTime::instance()->startDay($start);
+                                        $end = UnixTime::instance()->endDay($end);
+                                    } else {
+                                        $start = UnixTime::instance()->unix($start);
+                                        $end = UnixTime::instance()->unix($end);
+                                    }
+                                }
                             } else {
                                 $start = UnixTime::instance()->startDay();
                                 $end = UnixTime::instance()->endDay();

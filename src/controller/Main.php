@@ -14,6 +14,7 @@ use magein\render\admin\Cdn;
 use magein\render\admin\FastBuild;
 use magein\render\admin\RenderForm;
 use think\Controller;
+use think\Cookie;
 use think\Hook;
 use think\Request;
 use think\View;
@@ -106,6 +107,11 @@ class Main extends Controller
         $this->init();
     }
 
+    protected function getUser()
+    {
+        return Cookie::get('user_login_data');
+    }
+
     /**
      * 检测用户登录信息
      */
@@ -113,13 +119,17 @@ class Main extends Controller
     {
         if (!defined('UID')) {
             $param = Request::instance();
-            $result = Hook::exec('app\admin\behavior\CheckLogin', 'run', $param);
+            $check_login_behavior = \think\Config::get('check_login_behavior');
+            if (empty($check_login_behavior)) {
+                $check_login_behavior = 'app\admin\behavior\CheckLogin';
+            }
+            $result = Hook::exec($check_login_behavior, 'run', $param);
             if (false === $result) {
                 $this->error('行为异常');
             }
         }
 
-        $this->user = LoginLogic::instance()->getLogin();
+        $this->user = $this->getUser();
     }
 
     /**
@@ -140,7 +150,6 @@ class Main extends Controller
         if (\think\Config::get('system_menu_use_cache') || true) {
             $system_menus = \think\Cache::store('file')->get(SystemMenuConstant::SYSTEM_MENU_LIST);
         }
-
         if (empty($system_menus)) {
             $system_menus = $this->checkMenus();
             \think\Cache::store('file')->set(SystemMenuConstant::SYSTEM_MENU_LIST, $system_menus);
@@ -171,6 +180,14 @@ class Main extends Controller
 
             // 顶部菜单
             $top = TreeStructure::instance()->getParent();
+
+            if ($top) {
+                foreach ($top as &$item) {
+                    $first = $menus[$item['id']]['child'][0]['child'][0]['url'];
+                    $item['first'] = $first;
+                }
+                unset($item);
+            }
         }
 
         $this->checkAuth($menu_url);
@@ -243,8 +260,8 @@ class Main extends Controller
         $controller = $request->controller();
         $action = $request->action(true);
 
-        $controller = (new Variable())->transToUnderline($controller);
-        $action = (new Variable())->transToUnderline($action);
+        $controller = (new Variable())->transToCamelCase($controller);
+
         $this->path = $module . '/' . $controller . '/' . $action;
 
         return $this->path;
@@ -315,10 +332,6 @@ class Main extends Controller
             return true;
         }
 
-        if ($this->path == 'admin/index/index') {
-            return true;
-        }
-
         if ($this->user['id'] == 1) {
             return true;
         }
@@ -334,6 +347,10 @@ class Main extends Controller
             if (in_array(trim($path, '/'), $skip_auth_check)) {
                 return true;
             }
+        }
+
+        if ($this->path == 'admin/index/index') {
+            $this->redirect($menu_url[2]);
         }
 
         if (!in_array($this->path, $menu_url)) {
