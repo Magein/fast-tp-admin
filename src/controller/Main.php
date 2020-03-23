@@ -183,7 +183,7 @@ class Main extends Controller
 
             if ($top) {
                 foreach ($top as &$item) {
-                    $first = $menus[$item['id']]['child'][0]['child'][0]['url'];
+                    $first = $menus[$item['id']]['child'][0]['child'][0]['url'] ?? '';
                     $item['first'] = $first;
                 }
                 unset($item);
