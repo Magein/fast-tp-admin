@@ -13,6 +13,7 @@ use magein\php_tools\object\QueryResult;
 use magein\render\admin\Cdn;
 use magein\render\admin\FastBuild;
 use magein\render\admin\RenderForm;
+use think\Session;
 use think\Controller;
 use think\Cookie;
 use think\Hook;
@@ -109,7 +110,7 @@ class Main extends Controller
 
     protected function getUser()
     {
-        return Cookie::get('user_login_data');
+        return Session::get('user');
     }
 
     /**
@@ -350,7 +351,13 @@ class Main extends Controller
         }
 
         if ($this->path == 'admin/index/index') {
-            $this->redirect($menu_url[2]);
+            $menu_url = array_filter($menu_url);
+            if (isset($menu_url[2])) {
+                $redirect = $menu_url[2];
+            } else {
+                $redirect = $menu_url[0];
+            }
+            $this->redirect($redirect);
         }
 
         if (!in_array($this->path, $menu_url)) {
