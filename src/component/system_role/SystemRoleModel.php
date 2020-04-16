@@ -13,6 +13,19 @@ class SystemRoleModel extends Model
         'create_time',
     ];
 
+    protected $insert = [
+        'uid',
+        'auth',
+    ];
+
+    /**
+     * @return int|null
+     */
+    protected function setUidAttr()
+    {
+        return defined('UID') ? UID : 0;
+    }
+
     /**
      * @param $value
      * @param $data
@@ -38,7 +51,7 @@ class SystemRoleModel extends Model
             $value = implode(',', $value);
         }
 
-        return $value;
+        return $value ? $value : '';
     }
 
     /**
