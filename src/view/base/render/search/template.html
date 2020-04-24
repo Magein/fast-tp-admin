@@ -11,7 +11,7 @@
     {case value='select' break="1"}
     <div class="layui-input-inline">
         <select class="layui-select" name="{$item.field}"
-                {if $item.origin.child_data}
+                {if isset($item.origin.child_data)}
                 data-child-data='{$item.origin.child_data|json_encode}'
                 data-child-name="{$item.origin.child_name|default=''}"
                 {/if}
