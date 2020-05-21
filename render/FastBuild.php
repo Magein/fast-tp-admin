@@ -1133,14 +1133,17 @@ EOF;
         $header = [];
         if ($data) {
             foreach ($data as $item) {
-                if ($item['field']) {
-                    $header[$item['field']] = $item['title'];
+                $field = $item['field'] ?? '';
+                $title = $item['title'] ?? '';
+                if ($field) {
+                    $header[$field] = $title;
                 }
             }
         }
 
         $csv = new Csv();
         $records = $csv->correcting($header, $list);
+
         $csv->export($header, $records);
     }
 }
