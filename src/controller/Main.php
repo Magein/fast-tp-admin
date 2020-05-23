@@ -108,9 +108,23 @@ class Main extends Controller
         $this->init();
     }
 
+    /**
+     * 获取用户信息
+     * @return mixed
+     */
     protected function getUser()
     {
-        return Session::get('user');
+        $get_login_user_info = \think\Config::get('get_login_user_info');
+
+        if (is_array($get_login_user_info)) {
+
+            $method = $get_login_user_info[1];
+
+            return (new $get_login_user_info[0])->$method();
+
+        } else {
+            return Session::get('user');
+        }
     }
 
     /**

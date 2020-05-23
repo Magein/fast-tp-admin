@@ -115,6 +115,10 @@ class User extends Main
             $this->error('请输入正确的手机号码');
         }
 
+        if (isset($data['password']) && empty($data['password'])) {
+            unset($data['password']);
+        }
+
         $data['uid'] = UID;
 
         return parent::save($data);
