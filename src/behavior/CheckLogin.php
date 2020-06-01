@@ -22,7 +22,8 @@ class CheckLogin
 
         $id = LoginLogic::instance()->id();
         if (empty($id)) {
-            throw new HttpResponseException(redirect('admin/login/index'));
+            $redirect = Request::instance()->path();
+            throw new HttpResponseException(redirect('admin/login/index', ['redirect' => $redirect]));
         }
 
         !defined('UID') && define('UID', $id);
@@ -32,11 +33,6 @@ class CheckLogin
         if ($system_log) {
             $controller = strtolower($param->controller());
             $action = strtolower($param->action());
-
-//            var_dump($controller);
-//            var_dump($action);
-//            die();
-
             if (in_array($controller . '/' . $action, $system_log) || in_array($controller . '/*', $system_log)) {
                 SystemLogLogic::instance()->create(UID);
             }

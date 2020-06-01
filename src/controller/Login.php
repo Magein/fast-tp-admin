@@ -22,6 +22,11 @@ class Login extends Controller
 {
     use Cdn;
 
+    /**
+     * @var null
+     */
+    protected $login_user_data = null;
+
     public function index()
     {
         $loginInfo = LoginLogic::instance()->getLogin();
@@ -45,6 +50,7 @@ class Login extends Controller
         $username = Request::instance()->param('username');
         $password = Request::instance()->param('password');
         $remember_me = Request::instance()->param('remember_me');
+        $redirect = Request::instance()->param('redirect');
 
         $username = trim($username);
         $password = trim($password);
@@ -89,21 +95,26 @@ class Login extends Controller
             cookie('user_login_user_pass', $password);
         }
 
-        (new LoginLogic())->setLogin($record);
+        $this->login_user_data = $record;
+        $this->setLogin();
 
         SystemLogLogic::instance()->create($record['id']);
 
-        $this->success('登录成功', $this->loginSuccessRedirect());
+        if ($redirect) {
+            $url = $redirect;
+        } else {
+            $url = $this->loginSuccessRedirect();
+        }
+
+        $this->success('登录成功', $url);
     }
 
-    public function logout()
+    protected function setLogin()
     {
-        LoginLogic::instance()->setLogin();
-
-        $this->success('success', 'index');
+        (new LoginLogic())->setLogin($this->login_user_data);
     }
 
-    private function loginSuccessRedirect()
+    protected function loginSuccessRedirect()
     {
         $redirect = \think\Config::get('login_success_redirect');
 
@@ -112,5 +123,12 @@ class Login extends Controller
         }
 
         return $redirect;
+    }
+
+    public function logout()
+    {
+        LoginLogic::instance()->setLogin();
+
+        $this->success('success', 'index');
     }
 }
