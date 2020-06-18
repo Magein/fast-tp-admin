@@ -80,7 +80,7 @@ class SystemLogModel extends Model
     protected function setActionAttr($value)
     {
         if (empty($value)) {
-            $value = Request::instance()->action();
+            $value = Request::instance()->action(true);
         }
 
         $value = preg_replace('/.html/', '', $value);

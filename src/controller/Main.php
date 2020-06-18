@@ -322,15 +322,13 @@ class Main extends Controller
             return [];
         }
 
-        $cache_name = 'user_auth_menu_id_list_' . $this->user['id'];
-
-        $menu_ids = \think\Cache::store('file')->tag('ADMIN_USER_AUTH_MENU_ID_LIST')->get($cache_name);
+        $menu_ids = \think\Cache::store('file')->tag('ADMIN_USER_AUTH_MENU_ID_LIST')->get($this->getUserAuthMenuCacheName());
 
         if (empty($menu_ids)) {
 
             $menu_ids = SystemRoleLogic::instance()->getMenuIdByRoleIds($role_id);
 
-            \think\Cache::store('file')->tag('ADMIN_USER_AUTH_MENU_ID_LIST')->set($cache_name, $menu_ids);
+            \think\Cache::store('file')->tag('ADMIN_USER_AUTH_MENU_ID_LIST')->set($this->getUserAuthMenuCacheName(), $menu_ids);
         }
 
         return $menu_ids;
@@ -373,6 +371,7 @@ class Main extends Controller
             }
             $this->redirect($redirect);
         }
+
 
         if (!in_array($this->path, $menu_url)) {
             $this->error('您尚未获得访问该路径的权限');
@@ -524,14 +523,33 @@ class Main extends Controller
         }
 
         $id = Request::instance()->param('id');
-        $data = $this->getData($id);
-        $render = $this->buildForm($this->form(), $data);
+        $this->getData($id);
+        $render = $this->buildForm($this->form(), $this->data);
         $render->setHidden('id', $id);
         $this->setFormItems($render);
 
         // 把获取到的值传递到前段，以适应其他的各种交互操作
-        $this->assign('data', $data);
+        $this->assign('data', $this->data);
 
         return $this->fetch($this->formTemplate());
+    }
+
+    /**
+     * @return string
+     */
+    protected function getUserAuthMenuCacheName()
+    {
+        return 'user_auth_menu_id_list_' . $this->user['id'];
+    }
+
+    /**
+     * 清除系统内置的缓存
+     */
+    public function clearSystemCache()
+    {
+        \think\Cache::store('file')->rm(SystemMenuConstant::SYSTEM_MENU_LIST);
+        \think\Cache::store('file')->tag('ADMIN_USER_AUTH_MENU_ID_LIST')->set($this->getUserAuthMenuCacheName(), null);
+
+        $this->success('清除缓存成功', '');
     }
 }
