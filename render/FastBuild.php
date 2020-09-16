@@ -968,7 +968,6 @@ EOF;
             }
         }
 
-
         if (empty($data)) {
             return [];
         }
@@ -987,15 +986,40 @@ EOF;
          */
         if (isset($data['time_field']) && $data['time_field']) {
 
-            $start = UnixTime::instance()->unix($data['start_time']) ?: 0;
-            $end = UnixTime::instance()->unix($data['end_time']) ?: 0;
+            $get_end = function ($end) {
+
+                $end = trim($end);
+
+                if (strlen($end) > 11) {
+                    $end = UnixTime::instance()->unix($end) ?: 0;
+                } else {
+                    $end = UnixTime::instance()->endDay($end) ?: 0;
+                }
+
+                return $end;
+
+            };
+
+            if (isset($data['start_time']) && isset($data['end_time'])) {
+                $start = UnixTime::instance()->unix($data['start_time']) ?: 0;
+                $end = $get_end($data['end_time']);
+            } elseif (isset($data['start_time'])) {
+                $start = UnixTime::instance()->unix($data['start_time']) ?: 0;
+                $end = $get_end($data['start_time']);
+            } elseif (isset($data['time_range'])) {
+                $time_range = explode('~', $data['time_range']);
+                $start = UnixTime::instance()->unix(trim($time_range[0])) ?: 0;
+                $end = $get_end($time_range[1]);
+            } else {
+                $start = $end = 0;
+            }
 
             if ($start && $end) {
                 $condition[$data['time_field']] = ['between', [$start, $end]];
             }
-
-            unset($data['time_field'], $data['end_time'], $data['start_time']);
+            unset($data['time_field'], $data['end_time'], $data['start_time'], $data['time_range']);
         }
+
 
         if ($data) {
             foreach ($data as $name => $value) {
@@ -1050,7 +1074,7 @@ EOF;
                                         $end = UnixTime::instance()->endDay($end);
                                     } else {
                                         $start = UnixTime::instance()->unix($start);
-                                        $end = UnixTime::instance()->unix($end);
+                                        $end = UnixTime::instance()->endDay($end);
                                     }
                                 }
                             } else {
