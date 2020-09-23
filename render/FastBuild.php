@@ -814,7 +814,7 @@ EOF;
 
         if ($result) {
             $code = 1;
-            $msg = '保存成功';
+            $msg = $msg ?: '保存成功';
             SystemLogLogic::instance()->create(UID);
         } else {
             $code = 0;
@@ -860,6 +860,22 @@ EOF;
         $msg = $msg ?: '操作成功';
 
         $this->success_action = '__RELOAD__';
+
+        $this->operationAfter(true, $msg, $data, $wait, $header);
+    }
+
+    /**
+     * 操作完成后，页面等待即不进行任何操作
+     * @param string $msg
+     * @param array $data
+     * @param int $wait
+     * @param array $header
+     */
+    protected function wait($msg = '', $data = [], $wait = 3, array $header = [])
+    {
+        $msg = $msg ?: '操作成功';
+
+        $this->success_action = '__WAIT__';
 
         $this->operationAfter(true, $msg, $data, $wait, $header);
     }
