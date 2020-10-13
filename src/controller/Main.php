@@ -548,7 +548,7 @@ class Main extends Controller
     public function clearSystemCache()
     {
         \think\Cache::store('file')->rm(SystemMenuConstant::SYSTEM_MENU_LIST);
-        \think\Cache::store('file')->tag('ADMIN_USER_AUTH_MENU_ID_LIST')->set($this->getUserAuthMenuCacheName(), null);
+        \think\Cache::store('file')->clear('ADMIN_USER_AUTH_MENU_ID_LIST');
 
         $this->success('清除缓存成功', '');
     }
