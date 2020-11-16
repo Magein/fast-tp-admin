@@ -27,6 +27,12 @@
         <li class="layui-nav-item">
             <dl class="layui-nav-child">
                 <dd lay-unselect>
+                    <a data-confirm="请再次确认是否清除缓存？" data-modal="{:url('clearSystemCache')}">
+                        <i class="layui-icon layui-icon-fonts-clear"></i>
+                        清除缓存
+                    </a>
+                </dd>
+                <dd lay-unselect>
                     <a data-modal="{:url('admin/user/info',['id'=>$user.id])}">
                         <i class="layui-icon layui-icon-set-fill margin-right-5"></i>
                         基本资料
